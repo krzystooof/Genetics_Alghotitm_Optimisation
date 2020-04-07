@@ -1,3 +1,3 @@
 https://www.hindawi.com/journals/jmath/2016/4015845/
-https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_quick_guide.htm
-https://en.wikipedia.org/wiki/Genetic_algorithm
+https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_quick_guide.htm <- best, easy language, many cases an every step described + additional books titles
+https://en.wikipedia.org/wiki/Genetic_algorithm <- wiki, not easy to understand
