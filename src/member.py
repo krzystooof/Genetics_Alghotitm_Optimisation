@@ -24,14 +24,15 @@ class Member:
             self.input[i] = 0
         elif operator == 2:  # swap mutation - swap two elements
             self.input[i], self.input[j] = self.input[j], self.input[i]
-        elif operator == 3:  # scramble mutation - shuffle part of list
+        elif operator == 3:  # scramble mutation - shuffle random part
             new_list = self.input[i:j]
             random.shuffle(new_list)
             self.input[i:j] = new_list
-        elif operator == 4:  # inversion mutation
+        elif operator == 4:  # inversion mutation - invert random part
             self.input[i:j] = reversed(self.input[i:j])
 
     def crossover(self, operator, parent):
+        # returns a child
         # self.input - list
         i = 0
         j = 0
@@ -41,7 +42,7 @@ class Member:
                 length = len(parent.input)
             i = random.randint(0, length)
             j = random.randint(i, length)
-        if operator == 1: #one point
+        if operator == 1:  # one point
             return self.input[:i] + parent.input[i:]
-        elif operator == 2: # multi point
+        elif operator == 2:  # multi point
             return self.input[:i] + parent.input[i:j] + self.input[j:]
