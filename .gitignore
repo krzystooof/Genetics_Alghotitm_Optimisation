@@ -1,2 +1,4 @@
 pycache/
 src/.idea/
+venv/
+.idea/
