@@ -29,7 +29,7 @@ class Member:
             random.shuffle(new_list)
             self.input[i:j] = new_list
         elif operator == 4:  # inversion mutation - invert random part
-            self.input[i:j] = reversed(self.input[i:j])
+            self.input[i:j] = list(reversed(self.input[i:j]))
 
     def crossover(self, operator, parent):
         # returns a child
