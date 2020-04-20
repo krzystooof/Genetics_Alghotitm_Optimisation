@@ -3,59 +3,67 @@ import random
 
 
 class Member:
-    def get_fitness(self):
+    fitness = 1
+
+    def mutate(self):
         pass
 
 
 class Population(object):
+    members_to_mutate: int = 0
     member_list = []
-    __population_size = 0
-    __population_discard = 0.0
-    __noise = 0.0
+    population_size = 100
+    population_discard = 0.0
+    noise = 0.0
     generation = 0
     total_mutations = 0
     random_fill = 0
+    prev_best_fitness = 0
 
     def __init__(self):  # Create random population
-        self.__load_population_size()
-        self.__load_population_discard()
+        # Filling variables
+        self.population_discard = self.__load_population_size__()
+        self.population_discard = self.__load_population_discard__()
         self.generation = 0
-        for x in range(0, self.__population_size):
+
+        # Filling population with random members
+        for x in range(0, self.population_size):
             self.member_list.append(Member())
 
-        ## TODO screen info printing
-        print("gen 0 created!")
+        # Printing info
+        self.__print_generation__()
 
-    def __init__(self, population):  # Create new population by mutating given population
+    def new_gen(self, population):  # Create new population by mutating given population
         # Rewriting variables that won't change in new population
-        self.__population_discard = population.get_population_discard()
-        self.__population_discard = population.get_population_size()
+        self.population_discard = population.population_discard
+        self.population_size = population.population_size
         self.generation = population.generation + 1
+        self.member_list.clear()
 
         # Calculating total members to discard and first discard index
-        discard_members = math.floor(self.__population_discard * self.get_population_size())
-        discard_index_start = self.__population_size - discard_members
+        discard_members = math.floor(self.population_discard * self.get_population_size())
+        discard_index_start = self.population_size - discard_members
 
         # Sorting population by fitness
-        sorted_list = sorted(population.member_list, key=lambda member: member.get_fitness())
+        sorted_list = sorted(population.member_list, key=lambda member: member.fitness)
 
         # Discarding unfit members
-        for x in range(discard_index_start, self.__population_size):
+        for x in range(discard_index_start, self.population_size):
             sorted_list.pop(x)
 
         # Calculating total fitness of remaining members
         fitness_sum = 0
         for x in range(0, len(sorted_list)):
-            fitness_sum += sorted_list[x].calculate_fitness()
+            fitness_sum += sorted_list[x].fitness
 
         # Calculating tickets for each remaining member. One ticket allows member for one "child"
         ticket_list = []
         for x in range(0, len(sorted_list)):
-            tickets = sorted_list[x].get_fitness() / fitness_sum
+            tickets = sorted_list[x].fitness / fitness_sum
             tickets = math.floor(tickets)
             ticket_list.insert(x, tickets)
 
-        ## TODO print best member fitness
+        # self.prev_best_fitness = sorted_list[0].fitness TODO debug
 
         # Rewriting fit members to new population
         for x in range(0, len(sorted_list)):
@@ -72,33 +80,45 @@ class Population(object):
                     mutations_made += 1
             self.total_mutations += mutations_made
 
-        ## TODO print mutations
-
         # Adding new random members to the list
-        self.random_fill = self.__population_size - len(self.member_list)
+        self.random_fill = self.population_size - len(self.member_list)
         for x in range(0, self.random_fill):
             self.member_list.append(Member())
 
         # Adding random noise
-        members_to_mutate = self.__noise * self.__population_size
-        for x in range(0, members_to_mutate):
-            index = random.randint(0, self.__population_size)
+        self.members_to_mutate = self.noise * self.population_size
+        for x in range(0, math.floor(self.members_to_mutate)):
+            index = random.randint(0, self.population_size)
             self.member_list[index].mutate()
 
-        ## TODO screen info printing
-        print("new gen")
+        self.__print_generation__()
 
-    def __load_population_size(self):
-        self.__population_size = 0
+    def __load_population_size__(self):
+        return 0
 
-    def __load_population_discard(self):
-        self.__population_discard = 0.0
+    def __load_population_discard__(self):
+        return 0.0
 
-    def __load_randomness(self):
-        self.__noise = 0.0
+    def __load_randomness__(self):
+        return 0.0
 
     def get_population_size(self):  # returns total members of population
-        return self.__population_size
+        return self.population_size
 
     def get_population_discard(self):  # returns percentage of discarded members for each population
-        return self.__population_discard
+        return self.population_discard
+
+    def __print_generation__(self):
+        print("==============================")
+        print("Generation: ", self.generation)
+        print("Population size: ", self.population_size)
+        print("Best fitness for previous generation: ", self.prev_best_fitness)
+        print("Total crossovers: ", self.total_mutations)
+        print("New random members: ", self.random_fill)
+        print("Total random mutations: ", self.members_to_mutate)
+
+
+population1 = Population()
+
+for x in range(0, 10):
+    population1.new_gen(population1)
