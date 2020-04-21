@@ -10,17 +10,20 @@ class Member:
 
 
 class Population(object):
-    members_to_mutate: int = 0
-    member_list = []
-    population_size = 100
-    population_discard = 0.0
-    noise = 0.0
-    generation = 0
-    total_mutations = 0
-    random_fill = 0
-    prev_best_fitness = 0
+
 
     def __init__(self):  # Create random population
+        # Crating variables
+        self.members_to_mutate: int = 0
+        self.member_list = []
+        self.population_size = 100
+        self.population_discard = 0.0
+        self.noise = 0.0
+        self.generation = 0
+        self.total_mutations = 0
+        self.random_fill = 0
+        self.prev_best_fitness = 0
+
         # Filling variables
         self.population_discard = self.__load_population_size__()
         self.population_discard = self.__load_population_discard__()
