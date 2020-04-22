@@ -15,11 +15,11 @@ Octave software implements genetic algorithms to solve complicated mathematical 
 
 Sources were gathered before coding started. It is important to know how genetic algorithms work. Links below provide general overview of this topic.
  
- - [Wikipedia](https://en.wikipedia.org/wiki/Genetic_algorithm "WikiPedia")
+ - [Wikipedia](https://en.wikipedia.org/wiki/Genetic_algorithm "Wikipedia")
  
- - [TutorialsPoint](https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_quick_guide.htm http:// "TutorialsPoint") 
+ - [TutorialsPoint](https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_quick_guide.htm TutorialsPoint") 
  
--  [Hindawi](https://www.hindawi.com/journals/jmath/2016/4015845/ "Hindawi")
+ -  [Hindawi](https://www.hindawi.com/journals/jmath/2016/4015845/ "Hindawi")
 
 ### Basic schema
 
