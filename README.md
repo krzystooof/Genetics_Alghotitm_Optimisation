@@ -17,7 +17,7 @@ Sources were gathered before coding started. It is important to know how genetic
  
  - [Wikipedia](https://en.wikipedia.org/wiki/Genetic_algorithm "Wikipedia")
  
- - [TutorialsPoint](https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_quick_guide.htm TutorialsPoint") 
+ - [TutorialsPoint](https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_quick_guide.htm "TutorialsPoint") 
  
  -  [Hindawi](https://www.hindawi.com/journals/jmath/2016/4015845/ "Hindawi")
 
