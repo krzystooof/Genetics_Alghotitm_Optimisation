@@ -26,3 +26,11 @@ Sources were gathered before coding started. It is important to know how genetic
 As work neared coding phase, a project overview was developed.
 
 ![uml_diagram](/media/diagram.png "uml_diagram")
+
+### Repository
+This repository is divided into 2 parts:
+ 
+ - ./media/ which contains all helpful articles and information
+ - ./pyb/ containing all the files that will be flashed on pyboard(repurposed Nucleo144 board)
+ 
+ All contributors are asked to maintain this order. Take note of pyb/ folder structure. It will be kept as-is on the board.
