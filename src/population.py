@@ -103,13 +103,3 @@ class Population:
         print("Total crossovers: ", self.total_mutations)
         print("New random members: ", self.random_fill)
         print("Total random mutations: ", self.members_to_mutate)
-
-
-# add to main
-population = Population()
-
-# TODO config population
-generations = 0
-
-for x in range(0, generations):
-    population.new_gen(population)
