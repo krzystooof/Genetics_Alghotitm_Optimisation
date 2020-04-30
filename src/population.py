@@ -1,37 +1,32 @@
 import math
 import random
 
-
-class Member:
-    fitness = 1
-
-    def mutate(self):
-        pass
-
-
-class Population(object):
+class Population:
 
 
     def __init__(self):  # Create random population
-        # Crating variables
+        # Variables to set
+        self.input = []
         self.members_to_mutate: int = 0
         self.member_list = []
         self.population_size = 100
         self.population_discard = 0.0
         self.noise = 0.0
+        self.randomness = 0.0
+        # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
+        self.mutation_options = []
+        # 1 - one point, 2 - multi point
+        self.crossover_options = []
+
+        # generations specific variables - don't change
         self.generation = 0
         self.total_mutations = 0
         self.random_fill = 0
         self.prev_best_fitness = 0
 
-        # Filling variables
-        self.population_discard = self.__load_population_size__()
-        self.population_discard = self.__load_population_discard__()
-        self.generation = 0
-
         # Filling population with random members
         for x in range(0, self.population_size):
-            self.member_list.append(Member())
+            self.member_list.append(Member(self.input))
 
         # Printing info
         self.__print_generation__()
@@ -44,7 +39,7 @@ class Population(object):
         self.member_list.clear()
 
         # Calculating total members to discard and first discard index
-        discard_members = math.floor(self.population_discard * self.get_population_size())
+        discard_members = math.floor(self.population_discard * self.population_size)
         discard_index_start = self.population_size - discard_members
 
         # Sorting population by fitness
@@ -73,43 +68,32 @@ class Population(object):
             self.member_list.append(sorted_list[x])
 
         # Adding mutations to new population
+        # TODO add mutations, crossover is not mutation
         mutations_made = -1
         while mutations_made != 0:
             mutations_made = 0
             for x in range(0, len(sorted_list) - 1):
-                # These mutations are crossover type
+                # mutations are crossover type
+                crossover_type = random.choice(self.crossover_options)
                 if ticket_list[x] >= 1 and ticket_list[x + 1] >= 1:
-                    self.member_list.append(sorted_list[x].crossover(sorted_list[x + 1]))
+                    self.member_list.append(sorted_list[x].crossover(crossover_type,sorted_list[x + 1]))
                     mutations_made += 1
             self.total_mutations += mutations_made
 
         # Adding new random members to the list
         self.random_fill = self.population_size - len(self.member_list)
         for x in range(0, self.random_fill):
-            self.member_list.append(Member())
+            self.member_list.append(Member(self.input))
 
         # Adding random noise
         self.members_to_mutate = self.noise * self.population_size
         for x in range(0, math.floor(self.members_to_mutate)):
             index = random.randint(0, self.population_size)
-            self.member_list[index].mutate()
+            mutation_type = random.choice(self.mutation_options)
+            self.member_list[index].mutate(mutation_type)
 
         self.__print_generation__()
 
-    def __load_population_size__(self):
-        return 0
-
-    def __load_population_discard__(self):
-        return 0.0
-
-    def __load_randomness__(self):
-        return 0.0
-
-    def get_population_size(self):  # returns total members of population
-        return self.population_size
-
-    def get_population_discard(self):  # returns percentage of discarded members for each population
-        return self.population_discard
 
     def __print_generation__(self):
         print("==============================")
@@ -121,7 +105,11 @@ class Population(object):
         print("Total random mutations: ", self.members_to_mutate)
 
 
-population1 = Population()
+# add to main
+population = Population()
 
-for x in range(0, 10):
-    population1.new_gen(population1)
+# TODO config population
+generations = 0
+
+for x in range(0, generations):
+    population.new_gen(population)

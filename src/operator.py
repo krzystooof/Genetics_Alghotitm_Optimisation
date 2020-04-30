@@ -1,4 +1,5 @@
 class Operator:
+    # TODO connect
     # polynomial = sum from i to n of a i * x to the power of i
     # ex 5x^5 - 4x2 + 1
     def __init__(self, values):
