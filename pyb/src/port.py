@@ -1,17 +1,31 @@
-from machine import SPI
+import pyb
+import ujson
+from pyb.src.inform import Inform
 
 
 class Port:
 
     def __init__(self):
-        spi = SPI(id=1, baundrate=100000, polarity=0, phase=0)
-        SPI.init(baudrate=1000000, *, polarity=0, phase=0, bits=8, firstbit=SPI.MSB, sck=None, mosi=None, miso=None, pins=(SCK, MOSI, MISO))
-        # line above will be corrected once access to dev board is given
-        self.listen_mode = True
+        self.usb = pyb.USB_VCP()
+        self.list: list = []
+        Inform.waiting()
+        while not self.usb.isconnected():
+            pyb.delay(100)
 
-    def send(self, arg: list):
-        self.listen_mode = False
-        for x in range(0,len(arg)):
-            buf = arg[x]
-            SPI.write(buf)
-        self.listen_mode = True
+    def attach(self, index, value):
+        self.list.insert(index, value)
+
+    def send(self):
+        dic = {
+            "type": "1",  # type of communication; more on that in __init__
+            "val": self.list
+        }
+        to_send = ujson.dump(dic)
+        print("Sent: ", self.usb.write(to_send), "bytes")
+
+    def read(self):
+        received: str = self.usb.readline()
+        dictionary = ujson.loads(received)
+        if dictionary["type"] == 9:
+            Inform.error()
+        return dictionary

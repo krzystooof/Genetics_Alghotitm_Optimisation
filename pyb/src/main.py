@@ -1,4 +1,5 @@
 # main.py -- put your code here!
+# Code below is essentialy hello world for pyboard
 import pyb
 
 switch = pyb.Switch()
