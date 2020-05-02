@@ -11,17 +11,17 @@ def sort_population_by_fitness(population):
 
 class Population:
 
-    def __init__(self):  # Create random population
+    def __init__(self, operator, population_size, population_discard, noise, mutation_options, crossover_options):  # Create random population
         # Variables to set
-        self.operator = Operator([])
-        self.population_size = 100
-        self.population_discard = 0.0
-        self.noise = 0.0
+        self.operator = operator
+        self.population_size = population_size
+        self.population_discard = population_discard
+        self.noise = noise
         # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble
         # mutation - shuffle random part, 4 - inversion mutation - invert random part
-        self.mutation_options = []
+        self.mutation_options = mutation_options
         # 1 - one point, 2 - multi point
-        self.crossover_options = []
+        self.crossover_options = crossover_options
 
         # generations specific variables - don't change
         self.generation = 0
@@ -45,7 +45,6 @@ class Population:
         self.generation = population.generation + 1
         self.mutation_options = population.mutation_options
         self.crossover_options = population.crossover_options
-        self.member_list.clear()
 
         # Calculate fitness
         for member in population.member_list:
@@ -53,13 +52,13 @@ class Population:
 
         # Calculating total members to discard and first discard index
         discard_members = math.floor(self.population_discard * self.population_size)
-        discard_index_start = self.population_size - discard_members
+        discard_index_start = self.population_size - discard_members-1
 
         # Sorting population by fitness
         sorted_list = sort_population_by_fitness(population)
 
         # Discarding unfit members
-        for x in range(discard_index_start, self.population_size):
+        for x in range(self.population_size, discard_index_start):
             sorted_list.pop(x)
 
         # Calculating total fitness of remaining members
