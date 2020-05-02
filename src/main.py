@@ -8,6 +8,7 @@ if __name__ == '__main__':
 
     # config population
     population.operator = Operator([-1, 1])  # x^2 -1
+    population.population_size = 100
     population.population_discard = 0.2
     population.noise = 0.1
     population.crossover_options = [1, 2]
