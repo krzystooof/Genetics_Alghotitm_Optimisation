@@ -2,7 +2,7 @@ import math
 import random
 
 from src.member import Member
-from src.operator import Operator
+from src.input import Operator
 
 
 def sort_population_by_fitness(population):
@@ -33,7 +33,7 @@ class Population:
 
         # Filling population with random members
         for x in range(0, self.population_size):
-            self.member_list.append(Member(self.input, self.operator))
+            self.member_list.append(Member(self.operator))
 
         # Printing info
         self.__print_generation__()
@@ -92,7 +92,7 @@ class Population:
         # Adding new random members to the list
         self.random_fill = self.population_size - len(self.member_list)
         for x in range(0, self.random_fill):
-            self.member_list.append(Member(self.input, self.operator))
+            self.member_list.append(Member(self.operator))
 
         # Adding random noise
         self.members_to_mutate = self.noise * self.population_size

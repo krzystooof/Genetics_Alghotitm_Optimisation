@@ -1,20 +1,17 @@
 import random
 
-from src.operator import Operator
+from src.input import Operator
 
 
 class Member:
     def __init__(self, operator):
-        # raw_input - info from STM pins
         self.fitness = 0
         self.operator = operator
 
     # calculating outside the code
-    # def calculate_fitness(self):
-    #     # TODO
-    #     # calculate fitness
-    #     self.fitness = len(self.input)  # primitive calculating method
-    #     return self.fitness
+    def calculate_fitness(self):
+        self.fitness = len(self.input)  # primitive calculating method
+        return self.fitness
 
     def mutate(self, mutation_method):
         # self.input - list

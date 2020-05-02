@@ -1,4 +1,4 @@
-from src.operator import Operator
+from src.input import Operator
 from src.population import Population
 
 if __name__ == '__main__':
