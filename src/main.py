@@ -7,7 +7,12 @@ if __name__ == '__main__':
     generations = 10
 
     # config population
-
+    population.operator = Operator([-1, 1])  # x^2 -1
+    population.population_discard = 0.2
+    population.noise = 0.1
+    population.crossover_options = [1, 2]
+    population.mutation_options = [1, 2, 3, 4]
 
     for x in range(0, generations):
-        population.new_gen(population)
+        best_result = population.new_gen(population)
+        print("Best result: ", best_result)
