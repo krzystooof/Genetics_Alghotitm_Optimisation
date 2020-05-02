@@ -1,9 +1,12 @@
 import math
 import random
 
-
 from src.member import Member
 from src.operator import Operator
+
+
+def sort_population_by_fitness(population):
+    return sorted(population.member_list, key=lambda member: member.fitness)
 
 
 class Population:
@@ -24,7 +27,7 @@ class Population:
         self.generation = 0
         self.total_mutations = 0
         self.random_fill = 0
-        self.prev_best_fitness = 0
+        self.best_fitness = 0
         self.member_list = []
         self.members_to_mutate = 0
 
@@ -44,12 +47,16 @@ class Population:
         self.crossover_options = population.crossover_options
         self.member_list.clear()
 
+        # Calculate fitness
+        for member in population.member_list:
+            member.calculate_fitness()
+
         # Calculating total members to discard and first discard index
         discard_members = math.floor(self.population_discard * self.population_size)
         discard_index_start = self.population_size - discard_members
 
         # Sorting population by fitness
-        sorted_list = sorted(population.member_list, key=lambda member: member.fitness)
+        sorted_list = sort_population_by_fitness(population)
 
         # Discarding unfit members
         for x in range(discard_index_start, self.population_size):
@@ -67,11 +74,8 @@ class Population:
             tickets = math.floor(tickets)
             ticket_list.insert(x, tickets)
 
-        # self.prev_best_fitness = sorted_list[0].fitness TODO debug
-
         # Rewriting fit members to new population
-        for x in range(0, len(sorted_list)):
-            self.member_list.append(sorted_list[x])
+        self.member_list = sorted_list
 
         # Adding mutations to new population
         mutations_made = -1
@@ -97,13 +101,19 @@ class Population:
             mutation_type = random.choice(self.mutation_options)
             self.member_list[index].mutate(mutation_type)
 
+        sort_population_by_fitness(self)
+        best_member = population.member_list[0]
+        self.best_fitness = best_member.fitness
+
         self.__print_generation__()
+
+        return best_member.operator
 
     def __print_generation__(self):
         print("==============================")
         print("Generation: ", self.generation)
         print("Population size: ", self.population_size)
-        print("Best fitness for previous generation: ", self.prev_best_fitness)
+        print("Best fitness: ", self.best_fitness)
         print("Total crossovers: ", self.total_mutations)
         print("New random members: ", self.random_fill)
         print("Total random mutations: ", self.members_to_mutate)
