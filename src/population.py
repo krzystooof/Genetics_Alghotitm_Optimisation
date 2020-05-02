@@ -14,7 +14,6 @@ class Population:
         self.population_size = 100
         self.population_discard = 0.0
         self.noise = 0.0
-        self.randomness = 0.0
         # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble
         # mutation - shuffle random part, 4 - inversion mutation - invert random part
         self.mutation_options = []
@@ -41,6 +40,8 @@ class Population:
         self.population_discard = population.population_discard
         self.population_size = population.population_size
         self.generation = population.generation + 1
+        self.mutation_options = population.mutation_options
+        self.crossover_options = population.crossover_options
         self.member_list.clear()
 
         # Calculating total members to discard and first discard index
