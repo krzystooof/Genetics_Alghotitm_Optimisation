@@ -24,7 +24,8 @@ class Port:
         print("Sent: ", self.usb.write(to_send), "bytes")
 
     def read(self):
-        received: str = self.usb.readline()
+        received: bytes = self.usb.readline()
+        str_rcv = received.decode('utf-8')
         dictionary = ujson.loads(received)
         if dictionary["type"] == 9:
             Inform.error()
