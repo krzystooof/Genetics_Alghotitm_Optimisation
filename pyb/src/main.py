@@ -1,14 +1,20 @@
-# main.py -- put your code here!
-# Code below is essentialy hello world for pyboard
-import pyb
+from src.input import Operator
+from src.population import Population
 
-switch = pyb.Switch()
-leds = [pyb.LED(i+1) for i in range(4)]
-accel = pyb.Accel()
+if __name__ == '__main__':
 
-i = 0
-while not switch():
-    y = accel.y()
-    i = (i + (1 if y > 0 else -1)) % len(leds)
-    leds[i].toggle()
-    pyb.delay(10 * max(1, 20 - abs(y)))
+    generations = 10
+
+    # config population
+    operator = Operator([-1, 1])  # x^2 -1
+    population_size = 100
+    population_discard = 0.2
+    noise = 0.1
+    mutation_options = [1, 2, 3, 4]
+    crossover_options = [1, 2]
+
+    population = Population(operator, population_size, population_discard, noise, mutation_options, crossover_options)
+
+    for x in range(0, generations):
+        best_result = population.new_gen(population)
+        print("Best result: ", best_result.values)
