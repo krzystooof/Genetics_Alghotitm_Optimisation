@@ -17,4 +17,4 @@ if __name__ == '__main__':
 
     for x in range(0, generations):
         best_result = population.new_gen(population)
-        print("Best result: ", best_result)
+        print("Best result: ", best_result.values)
