@@ -1,5 +1,7 @@
 import random
 
+from src.operator import Operator
+
 
 class Member:
     def __init__(self, operator):

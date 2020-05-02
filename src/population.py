@@ -1,19 +1,22 @@
 import math
 import random
 
-class Population:
 
+from src.member import Member
+from src.operator import Operator
+
+
+class Population:
 
     def __init__(self):  # Create random population
         # Variables to set
-        self.input = []
-        self.members_to_mutate: int = 0
-        self.member_list = []
+        self.operator = Operator([])
         self.population_size = 100
         self.population_discard = 0.0
         self.noise = 0.0
         self.randomness = 0.0
-        # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
+        # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble
+        # mutation - shuffle random part, 4 - inversion mutation - invert random part
         self.mutation_options = []
         # 1 - one point, 2 - multi point
         self.crossover_options = []
@@ -23,10 +26,12 @@ class Population:
         self.total_mutations = 0
         self.random_fill = 0
         self.prev_best_fitness = 0
+        self.member_list = []
+        self.members_to_mutate = 0
 
         # Filling population with random members
         for x in range(0, self.population_size):
-            self.member_list.append(Member(self.input))
+            self.member_list.append(Member(self.input, self.operator))
 
         # Printing info
         self.__print_generation__()
@@ -68,7 +73,6 @@ class Population:
             self.member_list.append(sorted_list[x])
 
         # Adding mutations to new population
-        # TODO add mutations, crossover is not mutation
         mutations_made = -1
         while mutations_made != 0:
             mutations_made = 0
@@ -76,14 +80,14 @@ class Population:
                 # mutations are crossover type
                 crossover_type = random.choice(self.crossover_options)
                 if ticket_list[x] >= 1 and ticket_list[x + 1] >= 1:
-                    self.member_list.append(sorted_list[x].crossover(crossover_type,sorted_list[x + 1]))
+                    self.member_list.append(sorted_list[x].crossover(crossover_type, sorted_list[x + 1]))
                     mutations_made += 1
             self.total_mutations += mutations_made
 
         # Adding new random members to the list
         self.random_fill = self.population_size - len(self.member_list)
         for x in range(0, self.random_fill):
-            self.member_list.append(Member(self.input))
+            self.member_list.append(Member(self.input, self.operator))
 
         # Adding random noise
         self.members_to_mutate = self.noise * self.population_size
@@ -93,7 +97,6 @@ class Population:
             self.member_list[index].mutate(mutation_type)
 
         self.__print_generation__()
-
 
     def __print_generation__(self):
         print("==============================")
