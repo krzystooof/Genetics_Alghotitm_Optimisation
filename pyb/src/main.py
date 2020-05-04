@@ -1,5 +1,5 @@
-from src.input import Operator
-from src.population import Population
+from input import Operator
+from population import Population
 
 if __name__ == '__main__':
 

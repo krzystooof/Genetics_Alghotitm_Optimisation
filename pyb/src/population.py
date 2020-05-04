@@ -1,9 +1,7 @@
 import math
 import random
 
-from src.member import Member
-from src.input import Operator
-
+from member import Member
 
 def sort_population_by_fitness(population):
     return sorted(population.member_list, key=lambda member: member.fitness)
