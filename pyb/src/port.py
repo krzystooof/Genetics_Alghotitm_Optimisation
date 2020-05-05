@@ -1,6 +1,6 @@
 import pyb
 import ujson
-from pyb.src.inform import Inform
+from inform import Inform
 
 
 class Port:

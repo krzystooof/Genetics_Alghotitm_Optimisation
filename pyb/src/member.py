@@ -1,6 +1,6 @@
 import random
 
-from src.input import Operator
+from input import Operator
 
 
 class Member:
