@@ -1,5 +1,5 @@
-from input import Operator
-from population import Population
+from pyb.src.input import Operator
+from pyb.src.population import Population
 
 if __name__ == '__main__':
 

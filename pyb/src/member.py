@@ -1,6 +1,6 @@
 import random
 
-from input import Operator
+from pyb.src.input import Operator
 
 
 class Member:
