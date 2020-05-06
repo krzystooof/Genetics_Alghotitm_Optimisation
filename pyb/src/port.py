@@ -1,9 +1,17 @@
+"""
+File contains code necessary to run algorithm through USB VCP.
+@author: Jakub Chodubski
+"""
 import pyb
 import ujson
+
 from pyb.src.inform import Inform
 
 
 class Port:
+    """
+    Class used to communicate via USB
+    """
 
     def __init__(self):
         self.usb = pyb.USB_VCP()
