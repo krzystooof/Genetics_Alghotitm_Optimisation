@@ -1,7 +1,7 @@
 import math
 import random
 
-from member import Member
+from pyb.src.member import Member
 
 def sort_population_by_fitness(population):
     return sorted(population.member_list, key=lambda member: member.fitness)
