@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>port.Port</title>
+  <title>port.Inform</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -40,7 +40,7 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="port-module.html">Module&nbsp;port</a> ::
-        Class&nbsp;Port
+        Class&nbsp;Inform
       </span>
     </td>
     <td>
@@ -50,31 +50,33 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="port.Port-class.html"
+            >]&nbsp;|&nbsp;<a href="port.Inform-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Port</h1><p class="nomargin-top"><span class="codelink"><a href="port-pysrc.html#Port">source&nbsp;code</a></span></p>
-<p>Class used to communicate via USB VCP. Needs initialization.</p>
+<h1 class="epydoc">Class Inform</h1><p class="nomargin-top"><span class="codelink"><a href="port-pysrc.html#Inform">source&nbsp;code</a></span></p>
+<p>This class is used to signalize pyboard status via LEDs. It is fully 
+  static to optimize runtime. Should be used every time pyboard changes its
+  state or important event happens.</p>
 
 <hr />
 <div class="fields">      <p><strong>Author:</strong>
         Jakub Chodubski
       </p>
-</div><!-- ==================== INSTANCE METHODS ==================== -->
-<a name="section-InstanceMethods"></a>
+</div><!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td colspan="2" class="table-header">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr valign="top">
-        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="left"><span class="table-header">Static Methods</span></td>
         <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceMethods"
+         ><span class="options">[<a href="#section-StaticMethods"
          class="privatelink" onclick="toggle_private();"
          >hide private</a>]</span></td>
       </tr>
@@ -87,10 +89,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Opens VCP and waits for connection</td>
+          <td><span class="summary-sig"><a name="waiting"></a><span class="summary-sig-name">waiting</span>()</span><br />
+      Should be used if the board is waiting for new inputs.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="port-pysrc.html#Port.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="port-pysrc.html#Inform.waiting">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -104,11 +106,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="attach"></a><span class="summary-sig-name">attach</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">index</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
+          <td><span class="summary-sig"><a href="port.Inform-class.html#running" class="summary-sig-name">running</a>()</span><br />
+      Use this if board is not accepting any inputs at the moment.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="port-pysrc.html#Port.attach">source&nbsp;code</a></span>
+            <span class="codelink"><a href="port-pysrc.html#Inform.running">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -122,9 +123,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="send"></a><span class="summary-sig-name">send</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a href="port.Inform-class.html#error" class="summary-sig-name">error</a>()</span><br />
+      Algorithm encountered a problem.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="port-pysrc.html#Port.send">source&nbsp;code</a></span>
+            <span class="codelink"><a href="port-pysrc.html#Inform.error">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -138,9 +140,29 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="read"></a><span class="summary-sig-name">read</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="connected"></a><span class="summary-sig-name">connected</span>()</span><br />
+      Signal Virtual Comm Port has been connected After signaling is done 
+      previous state will be displayed</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="port-pysrc.html#Port.read">source&nbsp;code</a></span>
+            <span class="codelink"><a href="port-pysrc.html#Inform.connected">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="correct_led"></a><span class="summary-sig-name">correct_led</span>()</span><br />
+      Method used to correct currently displayed LEDs to state saved in 
+      Inform.state</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="port-pysrc.html#Inform.correct_led">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -149,6 +171,67 @@
     </td>
   </tr>
 </table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="running"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">running</span>()</span>
+    <br /><em class="fname">Static Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="port-pysrc.html#Inform.running">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Use this if board is not accepting any inputs at the moment. Any data 
+  send via USB VCP to board will be queued</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="error"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">error</span>()</span>
+    <br /><em class="fname">Static Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="port-pysrc.html#Inform.error">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Algorithm encountered a problem. Board is waiting for debug and 
+  reset.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
