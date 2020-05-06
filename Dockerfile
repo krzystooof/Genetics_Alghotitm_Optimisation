@@ -14,7 +14,7 @@ RUN apt-get -y install octave
 RUN apt-get install octave-ga
 
 # Run tests
-RUN sed -i -e 's/\r$//' entrypoint.sh
+RUN chmod 755 entrypoint.sh
 CMD ["bash", "entrypoint.sh"]
 
 
