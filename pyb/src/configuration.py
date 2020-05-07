@@ -1,7 +1,13 @@
+"""
+This file only contains cofiguration class
+"""
 import json
 
 
 class Configuration:
+"""
+    Make a comment here
+"""
 
     def load_file_1(self):
         data = {
