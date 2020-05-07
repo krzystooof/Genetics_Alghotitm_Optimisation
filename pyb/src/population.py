@@ -13,8 +13,6 @@ crossover_options - list of crossover options, when creating new generation one 
 import math
 import random
 
-from pyb.src.member import Member
-
 
 def sort_population_by_fitness(population):
     return sorted(population.member_list, key=lambda member: member.fitness)

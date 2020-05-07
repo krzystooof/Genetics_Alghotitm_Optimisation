@@ -1,4 +1,4 @@
-from pyb.src.input import Operator
+from pyb.src.population import Operator
 from pyb.src.population import Population
 
 if __name__ == '__main__':
