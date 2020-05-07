@@ -1,7 +1,20 @@
+"""  A subset of all the possible  solutions to the given problem.
+
+operator - input (see operator class)
+population_size
+population_discard - fraction of members to remove at each generation (float from 0.0 to 1.0)
+noise - fraction of members to additionally mutate at each generation (float from 0.0 to 1.0)
+mutation_options - list of mutation options, when creating new generation one option is randomly selected
+    for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
+    3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
+crossover_options - list of crossover options, when creating new generation one option is randomly selected
+    for each member: 1 - one point crossover, 2 - multi point crossover
+"""
 import math
 import random
 
 from pyb.src.member import Member
+
 
 def sort_population_by_fitness(population):
     return sorted(population.member_list, key=lambda member: member.fitness)
@@ -74,7 +87,6 @@ class Population:
             ticket_list.insert(x, tickets)
 
         # Rewriting fit members to new population
-        # TODO remove non fit members
         self.member_list = sorted_list
         self.population_size = len(self.member_list)
 
