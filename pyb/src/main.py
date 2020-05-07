@@ -16,43 +16,30 @@ if __name__ == '__main__':
 
     population = Population(operator, population_size, population_discard, noise, mutation_options, crossover_options)
 
-    generation_value1234 = []
+    generation_value = []
     for x in range(generations):
         best_result = population.new_gen(population).values
         a = best_result.copy()
         print("Best result: ", a)
         print("Population generation: ", population.generation)
         print((population.generation, x + 1))
-        generation_value1234.append(a)
+        generation_value.append(a)
 
-        # print("WYNIKI: ", generation_value[0])
-        # print("WYNIKI: ", generation_value1234[1])
-        # print("WYNIKI: ", generation_value1234[2])
-        # print("WYNIKI: ", generation_value1234[3])
-        # print("WYNIKI: ", generation_value1234[4])
-        # print("WYNIKI: ", generation_value1234[5])
-        # print("WYNIKI: ", generation_value1234[6])
-        # print("WYNIKI: ", generation_value1234[7])
-        # print("WYNIKI: ", generation_value1234[8])
-        # print("WYNIKI: ", generation_value1234[9])
-        # print("WYNIKI: ", generation_value1234[10])
+    print(generation_value)
 
-    print(generation_value1234)
+    # Results of algorithm
+    results = {
+        "gen1": generation_value[0],
+        "gen2": generation_value[1],
+        "gen3": generation_value[2],
+        "gen4": generation_value[3],
+        "gen5": generation_value[4],
+        "gen6": generation_value[5],
+        "gen7": generation_value[6],
+        "gen8": generation_value[7],
+        "gen9": generation_value[8],
+        "gen10": generation_value[9],
 
-    # Data to be written
-    # results = {
-    #     "gen0": generation_value1234[0],
-    #     "gen1": generation_value1234[1],
-    #     "gen2": generation_value1234[2],
-    #     "gen3": generation_value1234[3],
-    #     "gen4": generation_value1234[4],
-    #     "gen5": generation_value1234[5],
-    #     "gen6": generation_value1234[6],
-    #     "gen7": generation_value1234[7],
-    #     "gen8": generation_value1234[8],
-    #     "gen9": generation_value1234[9],
-    #     "gen10": generation_value1234[10]
-    #
-    # }
-    # with open("tests/results1.json", "w") as outfile:
-    #     json.dump(results, outfile)
+    }
+    with open("tests/results.json", "w") as outfile:
+        json.dump(results, outfile)
