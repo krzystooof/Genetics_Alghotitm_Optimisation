@@ -15,6 +15,6 @@ RUN apt-get install octave-ga
 
 # Run tests
 RUN chmod 755 entrypoint.sh
-CMD ["bash", "entrypoint.sh"]
+RUN bash entrypoint.sh
 
 
