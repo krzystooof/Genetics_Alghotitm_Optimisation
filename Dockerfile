@@ -7,6 +7,7 @@ RUN mkdir /app
 COPY . /app/
 # Set tests as workdir
 WORKDIR /app/pyb/src/tests
+VOLUME ["/app"]
 
 # Install octave with ga package
 RUN apt-get update

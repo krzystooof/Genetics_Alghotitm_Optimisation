@@ -40,7 +40,7 @@ class Population:
             member.calculate_fitness()
 
         # Printing info
-        self.__print_generation__()
+        # self.__print_generation__()
 
     def new_gen(self, population):  # Create new population by mutating given population
         # Rewriting variables that won't change in new population
@@ -117,7 +117,7 @@ class Population:
         best_member = population.member_list[0]
         self.best_fitness = best_member.fitness
 
-        self.__print_generation__()
+        # self.__print_generation__()
 
         return best_member.operator
 
