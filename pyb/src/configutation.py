@@ -11,7 +11,7 @@ import json
 class Configuration:
 
     @staticmethod
-    def load_file_1():
+    def load_file_1(self):
         """Setting variables for algorithm"""
         data = {
             'operator': '1',
