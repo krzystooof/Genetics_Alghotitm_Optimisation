@@ -19,9 +19,9 @@ def sort_population_by_fitness(population):
 
 
 class Population:
-"""
-Class governing member reproduction and beeding mechanics.
-"""
+    """
+        Class governing member reproduction and beeding mechanics.
+    """
     def __init__(self, operator, population_size, population_discard, noise, mutation_options,
                  crossover_options):  # Create random population
         # Variables to set
@@ -146,10 +146,10 @@ Class governing member reproduction and beeding mechanics.
 
 
 class Member:
-""" One such solution to the given problem.
+    """ One such solution to the given problem.
 
-operator - input (see operator class)
-"""
+    operator - input (see operator class)
+    """
     def __init__(self, operator):
         self.fitness = 0
         self.operator = operator
@@ -201,11 +201,11 @@ operator - input (see operator class)
 
 
 class Operator:
-""" Class that implements polynomial input for member
+    """ Class that implements polynomial input for member
 
-polynomial = sum from i to n of a(i) * x to the power of i ex 5x^5 - 4x2 + 1
-values - list of polynomial values reversed,
+    polynomial = sum from i to n of a(i) * x to the power of i ex 5x^5 - 4x2 + 1
+    values - list of polynomial values reversed,
     ex polynomial = ax^2+b values=[b,0,a], (ax^2+0x+b)
-"""
+    """
     def __init__(self, values):
         self.values = values

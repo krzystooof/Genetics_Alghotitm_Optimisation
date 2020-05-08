@@ -1,5 +1,6 @@
-from pyb.src.population import Operator
-from pyb.src.population import Population
+from pyb.src.algorithm import Operator
+from pyb.src.algorithm import Population
+
 
 if __name__ == '__main__':
 
