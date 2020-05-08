@@ -41,6 +41,7 @@ def main():
         print("Best result: ", best_member.operator.values)
 
     # Save results
+    # TODO: This must be saved but cannot stay in main.py as its prepared for execution on STM
     results = {f'generation_{counter}': value for counter, value in enumerate(generations_values)}
     with open("../../tests/algorithm_results.json", "w") as outfile:
         json.dump(results, outfile, indent=4)
