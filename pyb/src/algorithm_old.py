@@ -10,40 +10,36 @@ mutation_options - list of mutation options, when creating new generation one op
 crossover_options - list of crossover options, when creating new generation one option is randomly selected
     for each member: 1 - one point crossover, 2 - multi point crossover
 """
+import math
 import random
+
+
+def sort_population_by_fitness(population):
+    return sorted(population.member_list, key=lambda member: member.fitness)
 
 
 class Population:
     """
         Class governing member reproduction and beeding mechanics.
-        @author: Jakub Chodubski
-        @version: 2.0
     """
 
     def __init__(self, operator, population_size, population_discard, noise, mutation_options,
                  crossover_options):  # Create random population
-        # Variables to set (configuration)
+        # Variables to set
         self.operator = operator
-
-        # Size of population (Value <1-x>)
         self.population_size = population_size
-
-        # Percentage of discarded members with each generation (Value <0-1>)
         self.population_discard = population_discard
-
-        # Percentage of random mutations for each generation (Value <0-1>)
         self.noise = noise
-
         # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble
         # mutation - shuffle random part, 4 - inversion mutation - invert random part
         self.mutation_options = mutation_options
-
         # 1 - one point, 2 - multi point
         self.crossover_options = crossover_options
 
         # generations specific variables - don't change
         self.generation = 0
         self.total_crossovers = 0
+        self.random_fill = 0
         self.best_fitness = 0
         self.member_list = []
         self.members_to_mutate = 0
@@ -52,81 +48,83 @@ class Population:
         for x in range(0, self.population_size):
             self.member_list.append(Member(self.operator))
 
-    def new_gen(self):
-        """
-        Generate new generation based on current generation. Some members will be discarded,
-        new members will be created due to crossovers, mutations may appear.
-        """
-        self.check_config()
-        self.sort_by_fitness()
-        self.discard_unfit()
-        self.breed_to_fill()
+    def new_gen(self, population):  # Create new population by mutating given population
+        # Rewriting variables that won't change in new population
+        self.population_discard = population.population_discard
+        self.population_size = population.population_size
+        self.generation = population.generation + 1
+        self.mutation_options = population.mutation_options
+        self.crossover_options = population.crossover_options
+
+        # Calculating total members to discard and first discard index
+        discard_members = math.floor(self.population_discard * self.population_size)
+        discard_index_start = self.population_size - discard_members - 1
+
+        # Sorting population by fitness
+        sorted_list = sort_population_by_fitness(population)
+
+        # Discarding unfit members
+        for x in range(self.population_size, discard_index_start):
+            sorted_list.pop(x)
+
+        # Calculating total fitness of remaining members
+        fitness_sum = 0
+        for x in range(0, len(sorted_list)):
+            fitness_sum += sorted_list[x].fitness
+
+        # Calculating tickets for each remaining member. One ticket allows member for one "child"
+        ticket_list = []
+        for x in range(0, len(sorted_list)):
+            tickets = sorted_list[x].fitness / fitness_sum
+            tickets = int(tickets)
+            ticket_list.insert(x, tickets)
+
+        # Rewriting fit members to new population
+        self.member_list = sorted_list
+        self.population_size = len(self.member_list)
+
+        # Adding mutations to new population
+
+        crossovers_made = 0
+        for x in range(0, len(ticket_list) - 1):
+            for y in range(0, len(ticket_list) - 1):
+                # mutations are crossover type
+                crossover_type = random.choice(self.crossover_options)
+                if ticket_list[x] >= 1 and ticket_list[y] >= 1:
+                    self.member_list.append(self.member_list[x].crossover(crossover_type, self.member_list[y]))
+                    crossovers_made += 1
+        self.total_crossovers += crossovers_made
+
+        self.population_size = len(self.member_list)
+
+        # Adding new random members to the list
+        self.random_fill = self.population_size - len(self.member_list)
+        for x in range(0, self.random_fill):
+            self.member_list.append(Member(self.operator))
+
+        self.population_size = len(self.member_list)
+
         self.apply_noise()
-        # Population is now ready for testing
 
-    def check_config(self):
-        """Looks for changes in configuration"""
-        # TODO
-        pass
-
-    def sort_by_fitness(self):
-        self.member_list = sorted(self.member_list, key=lambda member: member.fitness)
-
-    def discard_unfit(self):
-        # Calculate how many members will be discarded
-        unfit_n = self.population_discard * self.population_size
-        # Calculate how many will stay
-        fit_n = self.population_size - unfit_n
-        # Rewrite fit members to new list
-        new_list = []
-        for x in range(0, fit_n):
-            new_list.append(self.member_list[x])
-        # Substitute lists
-        self.member_list = new_list
-
-    def get_statistics(self) -> dict:
-        # TODO
-        pass
-
-    def breed_to_fill(self):
-        # Assign crossover probability to each member
-        self.assign_cross_chances()
-        # Breed until population is full
-        while len(self.member_list) < self.population_size:
-            parent_1: Member = random.choice(self.member_list)
-            parent_2: Member = random.choice(self.member_list)
-            if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
-                # TODO think about crossover options
-                parent_1.crossover(random.choice(self.crossover_options), parent_2)
-
-    def assign_cross_chances(self):
-        # Get total fitness
-        total_fitness = 0
-        for member in self.member_list:
-            total_fitness += member.fitness
-        # Assign chances based on fitness
-        for member in self.member_list:
-            member.crossover_chance = member.fitness/total_fitness
+        self.population_size = len(self.member_list)
 
     def apply_noise(self):
-        # Calculate how many members will be mutated
-        mutate_n = self.noise * self.population_size
-        # Mutate members
-        for x in range(0, mutate_n):
-            mutating_member: Member = random.choice(self.member_list)
-            mutating_member.mutate(random.choice(self.mutation_options))
+        self.members_to_mutate = self.noise * self.population_size
+        for x in range(0, math.floor(self.members_to_mutate)):
+            index = random.randint(0, self.population_size - 1)
+            mutation_type = random.choice(self.mutation_options)
+            self.member_list[index].mutate(mutation_type)
 
-    # TODO stat methods
     def get_population_info(self):
-        # TODO move into get_stats()
+        sort_population_by_fitness(self)
         best_member = self.member_list[0]
         self.best_fitness = best_member.fitness
+
         self.__print_generation__()
 
         return best_member
 
     def __print_generation__(self):
-        # TODO move into get_stats()
         print("==============================")
         print("Generation: ", self.generation)
         print("Population size: ", self.population_size)
@@ -144,7 +142,6 @@ class Member:
 
     def __init__(self, operator):
         self.fitness = 0
-        self.crossover_chance = 0
         self.operator = operator
 
     def mutate(self, mutation_method):
