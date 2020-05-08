@@ -35,11 +35,12 @@ class VCP:
         Reads data from USB VCP. Always returns python dictionary with at least
         'type' field. Type values:
         0 means there was no new data on usb buffer
-        1 means there is data to feed to algorithm
-        2 means there is data regarding algorithm control
+        1 means desktop client encountered a problem
+        2 means config was transferred
         3 means data was successfully transferred
+        4 means there is data regarding algorithm control
         ...
-        9 means desktop client encountered a problem
+        9 means there is data to feed to algorithm
 
         Type 3 is internal type and will not be forwarded.
         """
