@@ -27,6 +27,7 @@ class Population:
         # Configuration variables
         self.population_size = 0
         self.population_discard = 0
+        self.population_chance_bonus = 0
         self.noise = 0
         self.mutation_options = 0
         self.crossover_options = 0
@@ -35,7 +36,7 @@ class Population:
         # Filling population with random members
         self.member_list = []
         for x in range(0, self.population_size):
-            self.member_list.append(Member())
+            self.member_list.append(Member(Operator([random.randint(-100, 100)])))  # TODO randomize initial values
 
         # Statistics for current generation
         self.generation = 0
@@ -57,7 +58,7 @@ class Population:
         # Population is now ready for testing
 
     def sort_by_fitness(self):
-        self.member_list = sorted(self.member_list, key=lambda member: member.fitness)
+        self.member_list = sorted(self.member_list, key=lambda member: -member.fitness)
 
     def discard_unfit(self):
         # Calculate how many members will be discarded
@@ -79,9 +80,9 @@ class Population:
         while len(self.member_list) < self.population_size:
             parent_1: Member = random.choice(self.member_list)
             parent_2: Member = random.choice(self.member_list)
-            if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
+            if random.random() < abs(parent_1.crossover_chance * parent_2.crossover_chance):
                 # TODO think about crossover options
-                parent_1.crossover(random.choice(self.crossover_options), parent_2)
+                self.member_list.append(parent_1.crossover(random.choice(self.crossover_options), parent_2))
                 self.total_crossovers += 1
 
     def assign_cross_chances(self):
@@ -107,6 +108,7 @@ class Population:
           - population_size - Size of population (Value <1-x>)
           - population_discard - Percentage of discarded members with each generation (Value <0-1>)
           - population_noise - Percentage of random mutations for each generation (Value <0-1>)
+          - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
           - member_mutation_options - List of allowed mutation types. Possible values:
             1. Random resetting (set random element to 0)
             2. Swap mutation (swap two elements)
@@ -119,6 +121,7 @@ class Population:
 
         self.population_size = config["population_size"]
         self.population_discard = config["population_discard"]
+        self.population_chance_bonus = config["population_chance_bonus"]
         self.noise = config["population_noise"]
         self.mutation_options = config["member_mutation_options"]
         self.crossover_options = config["member_crossover_options"]

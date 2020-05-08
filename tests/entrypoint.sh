@@ -3,7 +3,7 @@
 cd /app/tests && octave-cli ga_example.m > results_octave.json
 
 # Run alogrithm, create another results
-cd /app/pyb/src/ && python main_pyb.py
+cd /app/pyb/src/ && python main_tests.py
 
 # Compare given results
 cd /app/tests && python compare.py
