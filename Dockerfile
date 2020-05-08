@@ -6,8 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN mkdir /app
 COPY . /app/
 # Set tests as workdir
-WORKDIR /app/pyb/src/tests
-VOLUME ["/app"]
+WORKDIR /app/
 
 # Install octave with ga package
 RUN apt-get update
@@ -15,7 +14,5 @@ RUN apt-get -y install octave
 RUN apt-get install octave-ga
 
 # Run tests
-RUN chmod 755 entrypoint.sh
-CMD ["bash", "entrypoint.sh"]
-
-
+RUN chmod 755 tests/entrypoint.sh
+RUN bash tests/entrypoint.sh
