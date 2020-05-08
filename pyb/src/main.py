@@ -16,30 +16,18 @@ if __name__ == '__main__':
 
     population = Population(operator, population_size, population_discard, noise, mutation_options, crossover_options)
 
-    generation_value = []
+    generations_values = []
+
     for x in range(generations):
-        best_result = population.new_gen(population).values
-        a = best_result.copy()
-        print("Best result: ", a)
+        best_result = population.new_gen(population)
+        results_copy = best_result.values.copy()
+        print("Best result: ", results_copy)
         print("Population generation: ", population.generation)
         print((population.generation, x + 1))
-        generation_value.append(a)
-
-    print(generation_value)
+        generations_values.append(results_copy)
 
     # Results of algorithm
-    results = {
-        "gen1": generation_value[0],
-        "gen2": generation_value[1],
-        "gen3": generation_value[2],
-        "gen4": generation_value[3],
-        "gen5": generation_value[4],
-        "gen6": generation_value[5],
-        "gen7": generation_value[6],
-        "gen8": generation_value[7],
-        "gen9": generation_value[8],
-        "gen10": generation_value[9],
+    results = {f'generation_{counter}': value for counter, value in enumerate(generations_values)}
 
-    }
-    with open("tests/results.json", "w") as outfile:
-        json.dump(results, outfile)
+    with open("tests/algorithm_results.json", "w") as outfile:
+        json.dump(results, outfile, indent=4)
