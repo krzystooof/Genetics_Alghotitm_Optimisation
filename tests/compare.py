@@ -1,3 +1,14 @@
-with open('results_octave.json') as octave_results:
-    with open('algorithm_results.json') as algorithm_results:
-        assert algorithm_results == octave_results
+import json
+
+
+with open('algorithm_results.json') as algorithm:
+    with open(r'results_octave.txt', "r") as octave:
+        algorithm_results = json.load(algorithm)['generation_9']
+
+        final_from_algorithm = float(algorithm_results[0])
+        final_from_octave = float(octave.readlines()[3])
+
+        print("Octave results: ", final_from_octave)
+        print("PTMAG results: ", final_from_algorithm)
+
+        assert final_from_algorithm == final_from_octave
