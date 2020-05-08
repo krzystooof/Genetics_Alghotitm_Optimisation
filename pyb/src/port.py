@@ -93,7 +93,7 @@ class Inform:
         """
         Should be used if the board is waiting for new inputs.
         """
-        state = 0
+        Inform.state = 0
         pyb.LED(1).on()
         pyb.LED(2).off()
         pyb.LED(3).off()
@@ -104,7 +104,7 @@ class Inform:
         Use this if board is not accepting any inputs at the moment.
         Any data send via USB VCP to board will be queued.
         """
-        state = 1
+        Inform.state = 1
         pyb.LED(1).off()
         pyb.LED(2).on()
         pyb.LED(3).off()
@@ -115,7 +115,7 @@ class Inform:
         Algorithm encountered a problem.
         Board is waiting for debug and reset.
         """
-        state = 2
+        Inform.state = 2
         pyb.LED(1).off()
         pyb.LED(2).off()
         pyb.LED(3).on()
