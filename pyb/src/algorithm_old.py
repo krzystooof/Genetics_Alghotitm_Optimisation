@@ -120,7 +120,7 @@ class Population:
         best_member = self.member_list[0]
         self.best_fitness = best_member.fitness
 
-        self.__print_generation__()
+        # self.__print_generation__()
 
         return best_member
 
