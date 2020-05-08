@@ -1,6 +1,8 @@
+import json
+
+from pyb.src.port import VCP
 from pyb.src.algorithm_old import Operator
 from pyb.src.algorithm_old import Population
-from pyb.src.port import VCP
 
 # Create Virtual Comm Port to communicate with desktop
 usb = VCP
@@ -30,11 +32,18 @@ def main():
     print("Best result: ", best_member.operator.values)
 
     # Comment here
+    generations_values = []  # List for further saving results to json
     for x in range(0, generations):
         population.new_gen(population)
         test_population(population)
         best_member = population.get_population_info()
+        generations_values.append(best_member.operator.values)
         print("Best result: ", best_member.operator.values)
+
+    # Save results
+    results = {f'generation_{counter}': value for counter, value in enumerate(generations_values)}
+    with open("../../tests/algorithm_results.json", "w") as outfile:
+        json.dump(results, outfile, indent=4)
 
     # Comment here
     usb.attach("best_member_values", best_member.operator.values)
