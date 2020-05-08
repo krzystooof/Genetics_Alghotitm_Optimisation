@@ -28,6 +28,5 @@ if __name__ == '__main__':
 
     # Results of algorithm
     results = {f'generation_{counter}': value for counter, value in enumerate(generations_values)}
-
-    with open("tests/algorithm_results.json", "w") as outfile:
+    with open("../../tests/algorithm_results.json", "w") as outfile:
         json.dump(results, outfile, indent=4)
