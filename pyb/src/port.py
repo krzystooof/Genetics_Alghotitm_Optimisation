@@ -45,7 +45,7 @@ class VCP:
         """
         received: bytes = self.usb.readline()
         str_rcv = received.decode('utf-8')
-        dictionary = ujson.loads(received)
+        dictionary = ujson.loads(str_rcv)
         if dictionary["type"] == 9:
             Inform.error()
         return dictionary
