@@ -22,6 +22,7 @@ class Population:
     """
         Class governing member reproduction and beeding mechanics.
     """
+
     def __init__(self, operator, population_size, population_discard, noise, mutation_options,
                  crossover_options):  # Create random population
         # Variables to set
@@ -46,14 +47,6 @@ class Population:
         # Filling population with random members
         for x in range(0, self.population_size):
             self.member_list.append(Member(self.operator))
-
-        # TODO method to get fitness from outside
-        # calculate fitness
-        for member in self.member_list:
-            member.calculate_fitness()
-
-        # Printing info
-        self.__print_generation__()
 
     def new_gen(self, population):  # Create new population by mutating given population
         # Rewriting variables that won't change in new population
@@ -120,18 +113,14 @@ class Population:
 
         self.population_size = len(self.member_list)
 
-        # TODO method to get fitness from outside
-        # calculate fitness
-        for member in self.member_list:
-            member.calculate_fitness()
-
+    def get_population_info(self):
         sort_population_by_fitness(self)
-        best_member = population.member_list[0]
+        best_member = self.member_list[0]
         self.best_fitness = best_member.fitness
 
         self.__print_generation__()
 
-        return best_member.operator
+        return best_member
 
     def __print_generation__(self):
         print("==============================")
@@ -143,21 +132,15 @@ class Population:
         print("Total random mutations: ", self.members_to_mutate)
 
 
-
-
 class Member:
     """ One such solution to the given problem.
 
     operator - input (see operator class)
     """
+
     def __init__(self, operator):
         self.fitness = 0
         self.operator = operator
-
-    # calculating outside the code
-    def calculate_fitness(self):
-        self.fitness = random.randint(5, 10)  # primitive calculating method
-        return self.fitness
 
     def mutate(self, mutation_method):
         # self.input - list
@@ -197,9 +180,6 @@ class Member:
             return Member(operator)
 
 
-
-
-
 class Operator:
     """ Class that implements polynomial input for member
 
@@ -207,5 +187,6 @@ class Operator:
     values - list of polynomial values reversed,
     ex polynomial = ax^2+b values=[b,0,a], (ax^2+0x+b)
     """
+
     def __init__(self, values):
         self.values = values
