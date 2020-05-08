@@ -5,7 +5,6 @@ from pyb.src.port import VCP
 # Create Virtual Comm Port to communicate with desktop
 usb = VCP
 
-
 def main():
     """Main function. First to run"""
 

@@ -65,7 +65,7 @@ population_size
 population_discard - fraction of members to remove at each generation (float from 0.0 to 1.0)
 noise - fraction of members to additionally mutate at each generation (float from 0.0 to 1.0)
 mutation_options - list of mutation options, when creating new generation one option is randomly selected
-    for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
+for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
     3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
 crossover_options - list of crossover options, when creating new generation one option is randomly selected
     for each member: 1 - one point crossover, 2 - multi point crossover
@@ -114,141 +114,6 @@ crossover_options - list of crossover options, when creating new generation one 
     </td>
   </tr>
 </table>
-<!-- ==================== FUNCTIONS ==================== -->
-<a name="section-Functions"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Functions</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Functions"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="sort_population_by_fitness"></a><span class="summary-sig-name">sort_population_by_fitness</span>(<span class="summary-sig-arg">population</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#sort_population_by_fitness">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="new_gen"></a><span class="summary-sig-name">new_gen</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">population</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#new_gen">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__print_generation__"></a><span class="summary-sig-name">__print_generation__</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#__print_generation__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="calculate_fitness"></a><span class="summary-sig-name">calculate_fitness</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#calculate_fitness">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="mutate"></a><span class="summary-sig-name">mutate</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">mutation_method</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#mutate">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="crossover"></a><span class="summary-sig-name">crossover</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">crossover_method</span>,
-        <span class="summary-sig-arg">parent</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#crossover">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">values</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#__init__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-</table>
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -277,7 +142,7 @@ crossover_options - list of crossover options, when creating new generation one 
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May  7 20:20:18 2020
+    Generated by Epydoc 3.0.1 on Fri May  8 15:47:22 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

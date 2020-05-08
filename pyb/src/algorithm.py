@@ -5,78 +5,65 @@ population_size
 population_discard - fraction of members to remove at each generation (float from 0.0 to 1.0)
 noise - fraction of members to additionally mutate at each generation (float from 0.0 to 1.0)
 mutation_options - list of mutation options, when creating new generation one option is randomly selected
-    for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
+for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
     3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
 crossover_options - list of crossover options, when creating new generation one option is randomly selected
     for each member: 1 - one point crossover, 2 - multi point crossover
 """
+# TODO shorten ^^^docstring^^^
 import random
+import math
 
 
 class Population:
     """
         Class governing member reproduction and beeding mechanics.
         @author: Jakub Chodubski
-        @version: 2.0
+        @version: 2.1
     """
 
-    def __init__(self, operator, population_size, population_discard, noise, mutation_options,
-                 crossover_options):  # Create random population
-        # Variables to set (configuration)
-        self.operator = operator
-
-        # Size of population (Value <1-x>)
-        self.population_size = population_size
-
-        # Percentage of discarded members with each generation (Value <0-1>)
-        self.population_discard = population_discard
-
-        # Percentage of random mutations for each generation (Value <0-1>)
-        self.noise = noise
-
-        # 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements, 3 - scramble
-        # mutation - shuffle random part, 4 - inversion mutation - invert random part
-        self.mutation_options = mutation_options
-
-        # 1 - one point, 2 - multi point
-        self.crossover_options = crossover_options
-
-        # generations specific variables - don't change
-        self.generation = 0
-        self.total_crossovers = 0
-        self.best_fitness = 0
-        self.member_list = []
-        self.members_to_mutate = 0
+    def __init__(self, config):
+        """Creates new random population"""
+        # Configuration variables
+        self.population_size = 0
+        self.population_discard = 0
+        self.noise = 0
+        self.mutation_options = 0
+        self.crossover_options = 0
+        self.load_config(config)
 
         # Filling population with random members
+        self.member_list = []
         for x in range(0, self.population_size):
-            self.member_list.append(Member(self.operator))
+            self.member_list.append(Member())
+
+        # Statistics for current generation
+        self.generation = 0
+        self.best_member = self.member_list[0]
+        self.total_crossovers = 0
+        self.total_mutations = 0
+        self.total_discarded = 0
 
     def new_gen(self):
         """
         Generate new generation based on current generation. Some members will be discarded,
         new members will be created due to crossovers, mutations may appear.
         """
-        self.check_config()
+        self.generation += 1
         self.sort_by_fitness()
         self.discard_unfit()
         self.breed_to_fill()
         self.apply_noise()
         # Population is now ready for testing
 
-    def check_config(self):
-        """Looks for changes in configuration"""
-        # TODO
-        pass
-
     def sort_by_fitness(self):
         self.member_list = sorted(self.member_list, key=lambda member: member.fitness)
 
     def discard_unfit(self):
         # Calculate how many members will be discarded
-        unfit_n = self.population_discard * self.population_size
+        self.total_discarded = math.floor(self.population_discard * self.population_size)
         # Calculate how many will stay
-        fit_n = self.population_size - unfit_n
+        fit_n = self.population_size - self.total_discarded
         # Rewrite fit members to new list
         new_list = []
         for x in range(0, fit_n):
@@ -84,20 +71,18 @@ class Population:
         # Substitute lists
         self.member_list = new_list
 
-    def get_statistics(self) -> dict:
-        # TODO
-        pass
-
     def breed_to_fill(self):
         # Assign crossover probability to each member
         self.assign_cross_chances()
         # Breed until population is full
+        self.total_crossovers = 0
         while len(self.member_list) < self.population_size:
             parent_1: Member = random.choice(self.member_list)
             parent_2: Member = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
                 # TODO think about crossover options
                 parent_1.crossover(random.choice(self.crossover_options), parent_2)
+                self.total_crossovers += 1
 
     def assign_cross_chances(self):
         # Get total fitness
@@ -110,30 +95,37 @@ class Population:
 
     def apply_noise(self):
         # Calculate how many members will be mutated
-        mutate_n = self.noise * self.population_size
+        self.total_mutations = math.floor(self.noise * self.population_size)
         # Mutate members
-        for x in range(0, mutate_n):
+        for x in range(0, self.total_mutations):
             mutating_member: Member = random.choice(self.member_list)
             mutating_member.mutate(random.choice(self.mutation_options))
 
-    # TODO stat methods
-    def get_population_info(self):
-        # TODO move into get_stats()
-        best_member = self.member_list[0]
-        self.best_fitness = best_member.fitness
-        self.__print_generation__()
+    def load_config(self, config):
+        """
+        Loads configuration variables. Takes dictionary as argument. This dictionary must contain fields:
+          - population_size - Size of population (Value <1-x>)
+          - population_discard - Percentage of discarded members with each generation (Value <0-1>)
+          - population_noise - Percentage of random mutations for each generation (Value <0-1>)
+          - member_mutation_options - List of allowed mutation types. Possible values:
+            1. Random resetting (set random element to 0)
+            2. Swap mutation (swap two elements)
+            3. Scramble mutation (shuffle random part)
+            4. Inversion mutation (invert random part)
+          - member_crossover_options - List of allowed crossover types. Possible values:
+            1. One point
+            2. Multi point
+        """
 
-        return best_member
+        self.population_size = config["population_size"]
+        self.population_discard = config["population_discard"]
+        self.noise = config["population_noise"]
+        self.mutation_options = config["member_mutation_options"]
+        self.crossover_options = config["member_crossover_options"]
 
-    def __print_generation__(self):
-        # TODO move into get_stats()
-        print("==============================")
-        print("Generation: ", self.generation)
-        print("Population size: ", self.population_size)
-        print("Best fitness: ", self.best_fitness)
-        print("Total crossovers: ", self.total_crossovers)
-        print("New random members: ", self.random_fill)
-        print("Total random mutations: ", self.members_to_mutate)
+    def update_stats(self):
+        self.sort_by_fitness()
+        self.best_member = self.member_list[0]
 
 
 class Member:
@@ -142,7 +134,7 @@ class Member:
     operator - input (see operator class)
     """
 
-    def __init__(self, operator):
+    def __init__(self, operator):  # TODO must generate random operator if not given
         self.fitness = 0
         self.crossover_chance = 0
         self.operator = operator
