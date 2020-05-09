@@ -68,6 +68,8 @@ class Main:
 
     def load_config(self):
         """Feeds configuration variables into algorithm"""
+        # TODO load generations number
+
         if self.initiated:
             self.population.load_config(self.data['config'])
         else:
@@ -85,7 +87,7 @@ class Main:
             self.started = True
 
     def feed(self):
-        self.population.member_list[self.data['index']] = self.data['fitness']
+        self.population.member_list[self.data['index']].fitness = self.data['fitness']
 
     def run(self):
         if self.started and self.initiated: # Not paused and population exists
