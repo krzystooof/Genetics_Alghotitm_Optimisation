@@ -3,16 +3,28 @@ from tkinter import scrolledtext
 
 
 def stop_alghoritm(gui):
-    gui.log("Stop Called")
+    gui.log("Stopping")
+    # TODO pass STOP command to board using VCP
 
 
 def restart_alghoritm(gui):
-    gui.log("Retart Called")
+    gui.log("Restarting")
+    stop_alghoritm(gui)
+    start_alghoritm(gui)
 
 
 def start_alghoritm(gui):
-    gui.log("Start Called")
+    gui.log("Starting")
+    try:
+        gui.check_values()
+    except ValueError as error:
+        print(repr(error))
+        gui.log("\tERROR: " + str(error))
+        gui.log("Start aborted")
+        return
+    gui.population_chance_bonus_spinbox.get()
 
+    # TODO pass values to board using VCP
 
 
 class GUI:
@@ -82,18 +94,24 @@ class GUI:
                                                        width=spinbox_width, format='%0.3f', increment=0.001)
         self.population_chance_bonus_spinbox.grid(column=entries_column, row=4, sticky=entries_column_anchor)
 
-        self.member_mutation_option1 = Checkbutton(self.window, text=self.mutation_texts[0], var=self.mutation_states[0])
+        self.member_mutation_option1 = Checkbutton(self.window, text=self.mutation_texts[0],
+                                                   var=self.mutation_states[0])
         self.member_mutation_option1.grid(column=entries_column, row=5, sticky=entries_column_anchor)
-        self.member_mutation_option2 = Checkbutton(self.window, text=self.mutation_texts[1], var=self.mutation_states[1])
+        self.member_mutation_option2 = Checkbutton(self.window, text=self.mutation_texts[1],
+                                                   var=self.mutation_states[1])
         self.member_mutation_option2.grid(column=entries_column + 1, row=5, sticky=entries_column_anchor)
-        self.member_mutation_option3 = Checkbutton(self.window, text=self.mutation_texts[2], var=self.mutation_states[2])
+        self.member_mutation_option3 = Checkbutton(self.window, text=self.mutation_texts[2],
+                                                   var=self.mutation_states[2])
         self.member_mutation_option3.grid(column=entries_column + 2, row=5, sticky=entries_column_anchor)
-        self.member_mutation_option4 = Checkbutton(self.window, text=self.mutation_texts[3], var=self.mutation_states[3])
+        self.member_mutation_option4 = Checkbutton(self.window, text=self.mutation_texts[3],
+                                                   var=self.mutation_states[3])
         self.member_mutation_option4.grid(column=entries_column + 3, row=5, sticky=entries_column_anchor)
 
-        self.member_crossover_option1 = Checkbutton(self.window, text=self.crossover_texts[0], var=self.crossover_states[0])
+        self.member_crossover_option1 = Checkbutton(self.window, text=self.crossover_texts[0],
+                                                    var=self.crossover_states[0])
         self.member_crossover_option1.grid(column=entries_column, row=6, sticky=entries_column_anchor)
-        self.member_crossover_option2 = Checkbutton(self.window, text=self.crossover_texts[1], var=self.crossover_states[1])
+        self.member_crossover_option2 = Checkbutton(self.window, text=self.crossover_texts[1],
+                                                    var=self.crossover_states[1])
         self.member_crossover_option2.grid(column=entries_column + 1, row=6, sticky=entries_column_anchor)
 
         # buttons
