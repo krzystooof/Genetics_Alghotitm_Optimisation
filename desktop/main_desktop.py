@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import scrolledtext
+from tkinter import scrolledtext, messagebox
 
 
 def stop_algorithm(gui):
@@ -22,25 +22,27 @@ def start_algorithm(gui):
         gui.log_error(str(error))
         gui.log("Start aborted")
         return
+    generations = gui.generations_spinbox.get()
     population_chance_bonus = gui.population_chance_bonus_spinbox.get()
     population_size = gui.population_size_spinbox.get()
     population_noise = gui.population_noise_spinbox.get()
     population_discard = gui.population_discard_spinbox.get()
 
     mutation_options = []
-    x = 1
-    for boolean in gui.mutation_states:
+
+    for x, boolean in enumerate(gui.mutation_states):
         if boolean.get() is True:
-            mutation_options.append(x)
+            mutation_options.append(x + 1)
         x += 1
 
     crossover_options = []
-    x = 1
-    for boolean in gui.crossover_states:
+
+    for x, boolean in enumerate(gui.crossover_states):
         if boolean.get() is True:
-            crossover_options.append(x)
+            crossover_options.append(x + 1)
         x += 1
     config = {
+        "generations": generations,
         "population_size": population_size,
         "population_discard": population_discard,
         "population_chance_bonus": population_chance_bonus,
@@ -48,6 +50,7 @@ def start_algorithm(gui):
         "member_mutation_options": mutation_options,
         "member_crossover_options": crossover_options
     }
+    pass
     # TODO pass config to board using VCP
 
 
@@ -65,8 +68,6 @@ class GUI:
 
         spinbox_width = 5
         buttons_width = 10
-
-        population_size_default_value = 100
 
         self.generations_min = 1
         self.generations_max = 9999
@@ -86,15 +87,14 @@ class GUI:
         self.crossover_states[0].set(True)
 
         labels = []
-        row = 0
         self.label_names = ["Generations:", "Population size:", "Population discard:", "Population noise:",
                             "Population chance bonus:",
                             "Member mutation options:", "Member crossover options:"]
-        for label_name in self.label_names:
+
+        for row, label_name in enumerate(self.label_names):
             new_label = Label(self.window, text=label_name)
             new_label.grid(column=labels_column, row=row, sticky=labels_column_anchor)
             labels.append(new_label)
-            row += 1
 
         # entries
         self.generations_spinbox = Spinbox(self.window, from_=self.generations_min, to=self.generations_max,
@@ -212,6 +212,23 @@ class GUI:
                 found_true = True
         if found_true is False:
             raise ValueError('At least one crossover option must be selected')
+
+    def show_info(self, number):
+        if number == 0:
+            message = "Number of GA generations "
+        elif number == 1:
+            message = "Size of population (Value <1-x>)"
+        elif number == 2:
+            message = "Percentage of discarded members with each generation (Value <0-1>)"
+        elif number == 3:
+            message = "Percentage of random mutations for each generation (Value <0-1>)"
+        elif number == 4:
+            message = "Higher values = less accurate crossovers = faster runtime (Value <1-x>)"
+        elif number == 5:
+            message = "List of allowed mutation types. They are randomly chosen for each mutation"
+        elif number == 6:
+            message = "List of allowed crossover types. They are randomly chosen for each crossover"
+        messagebox.showinfo("Info", message)
 
 
 if __name__ == '__main__':
