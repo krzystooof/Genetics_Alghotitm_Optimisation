@@ -2,29 +2,53 @@ from tkinter import *
 from tkinter import scrolledtext
 
 
-def stop_alghoritm(gui):
+def stop_algorithm(gui):
     gui.log("Stopping")
     # TODO pass STOP command to board using VCP
 
 
-def restart_alghoritm(gui):
+def restart_algorithm(gui):
     gui.log("Restarting")
-    stop_alghoritm(gui)
-    start_alghoritm(gui)
+    stop_algorithm(gui)
+    start_algorithm(gui)
 
 
-def start_alghoritm(gui):
+def start_algorithm(gui):
     gui.log("Starting")
     try:
         gui.check_values()
     except ValueError as error:
         print(repr(error))
-        gui.log("\tERROR: " + str(error))
+        gui.log_error(str(error))
         gui.log("Start aborted")
         return
-    gui.population_chance_bonus_spinbox.get()
+    population_chance_bonus = gui.population_chance_bonus_spinbox.get()
+    population_size = gui.population_size_spinbox.get()
+    population_noise = gui.population_noise_spinbox.get()
+    population_discard = gui.population_discard_spinbox.get()
 
-    # TODO pass values to board using VCP
+    mutation_options = []
+    x = 1
+    for boolean in gui.mutation_states:
+        if boolean.get() is True:
+            mutation_options.append(x)
+        x += 1
+
+    crossover_options = []
+    x = 1
+    for boolean in gui.crossover_states:
+        if boolean.get() is True:
+            crossover_options.append(x)
+        x += 1
+    config = {
+        "population_size" : population_size,
+        "population_discard" : population_discard,
+        "population_chance_bonus" : population_chance_bonus,
+        "population_noise" : population_noise,
+        "member_mutation_options" : mutation_options,
+        "member_crossover_options" : crossover_options
+    }
+    # TODO pass config to board using VCP
 
 
 class GUI:
@@ -115,14 +139,14 @@ class GUI:
         self.member_crossover_option2.grid(column=entries_column + 1, row=6, sticky=entries_column_anchor)
 
         # buttons
-        self.stop_btn = Button(self.window, text="STOP", command=lambda: stop_alghoritm(self), width=buttons_width)
+        self.stop_btn = Button(self.window, text="STOP", command=lambda: stop_algorithm(self), width=buttons_width)
         self.stop_btn.grid(column=4, row=2)
 
-        self.restart_btn = Button(self.window, text="RESTART", command=lambda: restart_alghoritm(self),
+        self.restart_btn = Button(self.window, text="RESTART", command=lambda: restart_algorithm(self),
                                   width=buttons_width)
         self.restart_btn.grid(column=4, row=3)
 
-        self.start_btn = Button(self.window, text="START", command=lambda: start_alghoritm(self), width=buttons_width)
+        self.start_btn = Button(self.window, text="START", command=lambda: start_algorithm(self), width=buttons_width)
         self.start_btn.grid(column=4, row=1)
 
         self.console = scrolledtext.ScrolledText(self.window)
@@ -130,6 +154,12 @@ class GUI:
 
     def log(self, text):
         self.console.insert('end', text + '\n')
+
+    def log_info(self, text):
+        self.console.insert('end', "\tINFO:" + text + '\n')
+
+    def log_error(self, text):
+        self.console.insert('end', "\tERROR:" + text + '\n')
 
     def work(self):
         self.window.mainloop()
