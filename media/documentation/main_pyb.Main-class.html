@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>algorithm.Population</title>
+  <title>main_pyb.Main</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -39,8 +39,8 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        <a href="algorithm-module.html">Module&nbsp;algorithm</a> ::
-        Class&nbsp;Population
+        <a href="main_pyb-module.html">Module&nbsp;main_pyb</a> ::
+        Class&nbsp;Main
       </span>
     </td>
     <td>
@@ -50,24 +50,15 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="algorithm.Population-class.html"
+            >]&nbsp;|&nbsp;<a href="main_pyb.Main-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Population</h1><p class="nomargin-top"><span class="codelink"><a href="algorithm-pysrc.html#Population">source&nbsp;code</a></span></p>
-<p>Class governing member reproduction and beeding mechanics.</p>
-
-<hr />
-<div class="fields">      <p><strong>Author:</strong>
-        Jakub Chodubski
-      </p>
-      <p><strong>Version:</strong>
-        2.1
-      </p>
-</div><!-- ==================== INSTANCE METHODS ==================== -->
+<h1 class="epydoc">Class Main</h1><p class="nomargin-top"><span class="codelink"><a href="main_pyb-pysrc.html#Main">source&nbsp;code</a></span></p>
+<!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
@@ -90,11 +81,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">config</span>)</span><br />
-      Creates new random population</td>
+          <td><span class="summary-sig"><a href="main_pyb.Main-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Main function.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="main_pyb-pysrc.html#Main.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -108,10 +98,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="algorithm.Population-class.html#new_gen" class="summary-sig-name">new_gen</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Generate new generation based on current generation.</td>
+          <td><span class="summary-sig"><a name="error"></a><span class="summary-sig-name">error</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.new_gen">source&nbsp;code</a></span>
+            <span class="codelink"><a href="main_pyb-pysrc.html#Main.error">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -125,9 +114,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="sort_by_fitness"></a><span class="summary-sig-name">sort_by_fitness</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="load_config"></a><span class="summary-sig-name">load_config</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Feeds configuration variables into algorithm</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.sort_by_fitness">source&nbsp;code</a></span>
+            <span class="codelink"><a href="main_pyb-pysrc.html#Main.load_config">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -141,9 +131,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="discard_unfit"></a><span class="summary-sig-name">discard_unfit</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="control"></a><span class="summary-sig-name">control</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Starts, stops, pauses algorithm</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.discard_unfit">source&nbsp;code</a></span>
+            <span class="codelink"><a href="main_pyb-pysrc.html#Main.control">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -157,9 +148,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="breed_to_fill"></a><span class="summary-sig-name">breed_to_fill</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="feed"></a><span class="summary-sig-name">feed</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.breed_to_fill">source&nbsp;code</a></span>
+            <span class="codelink"><a href="main_pyb-pysrc.html#Main.feed">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -173,59 +164,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="assign_cross_chances"></a><span class="summary-sig-name">assign_cross_chances</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="run"></a><span class="summary-sig-name">run</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.assign_cross_chances">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="apply_noise"></a><span class="summary-sig-name">apply_noise</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.apply_noise">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="algorithm.Population-class.html#load_config" class="summary-sig-name">load_config</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">config</span>)</span><br />
-      Loads configuration variables.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.load_config">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="update_stats"></a><span class="summary-sig-name">update_stats</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="algorithm-pysrc.html#Population.update_stats">source&nbsp;code</a></span>
+            <span class="codelink"><a href="main_pyb-pysrc.html#Main.run">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -252,95 +193,22 @@
   </td>
 </tr>
 </table>
-<a name="new_gen"></a>
+<a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">new_gen</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="algorithm-pysrc.html#Population.new_gen">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="main_pyb-pysrc.html#Main.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Generate new generation based on current generation. Some members will
-  be discarded, new members will be created due to crossovers, mutations 
-  may appear.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="load_config"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">load_config</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">config</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="algorithm-pysrc.html#Population.load_config">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Loads configuration variables. Takes dictionary as argument. This 
-  dictionary must contain fields:</p>
-  <ul>
-    <li>
-      population_size - Size of population (Value &lt;1-x&gt;)
-    </li>
-    <li>
-      population_discard - Percentage of discarded members with each 
-      generation (Value &lt;0-1&gt;)
-    </li>
-    <li>
-      population_noise - Percentage of random mutations for each generation
-      (Value &lt;0-1&gt;)
-    </li>
-    <li>
-      population_chance_bonus - Higher values = less accurate crossovers = 
-      faster runtime (Value &lt;1-x&gt;)
-    </li>
-    <li>
-      population_reverse_fitness - Tells algorithm which is better: Higher 
-      fitness or lower. (Value [True,False])
-    </li>
-    <li>
-      member_mutation_options - List of allowed mutation types. Possible 
-      values:
-      <ol start="1">
-        <li>
-          Random resetting (set random element to 0)
-        </li>
-        <li>
-          Swap mutation (swap two elements)
-        </li>
-        <li>
-          Scramble mutation (shuffle random part)
-        </li>
-        <li>
-          Inversion mutation (invert random part)
-        </li>
-      </ol>
-    </li>
-    <li>
-      member_crossover_options - List of allowed crossover types. Possible 
-      values:
-      <ol start="1">
-        <li>
-          One point
-        </li>
-        <li>
-          Multi point
-        </li>
-      </ol>
-    </li>
-  </ul>
+  <p>Main function. First to run</p>
   <dl class="fields">
   </dl>
 </td></tr></table>

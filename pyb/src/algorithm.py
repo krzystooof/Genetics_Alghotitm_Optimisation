@@ -31,6 +31,7 @@ class Population:
         self.noise = 0
         self.mutation_options = 0
         self.crossover_options = 0
+        self.reverse = False
         self.load_config(config)
 
         # Filling population with random members
@@ -58,7 +59,10 @@ class Population:
         # Population is now ready for testing
 
     def sort_by_fitness(self):
-        self.member_list = sorted(self.member_list, key=lambda member: -member.fitness)
+        if self.reverse:
+            self.member_list = sorted(list=self.member_list, key=lambda member: member.fitness, reverse=False)
+        else:
+            self.member_list = sorted(list=self.member_list, key=lambda member: member.fitness, reverse=True)
 
     def discard_unfit(self):
         # Calculate how many members will be discarded
@@ -109,6 +113,7 @@ class Population:
           - population_discard - Percentage of discarded members with each generation (Value <0-1>)
           - population_noise - Percentage of random mutations for each generation (Value <0-1>)
           - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
+          - population_reverse_fitness - Tells algorithm which is better: Higher fitness or lower. (Value [True,False])
           - member_mutation_options - List of allowed mutation types. Possible values:
             1. Random resetting (set random element to 0)
             2. Swap mutation (swap two elements)
@@ -123,6 +128,7 @@ class Population:
         self.population_discard = config["population_discard"]
         self.population_chance_bonus = config["population_chance_bonus"]
         self.noise = config["population_noise"]
+        self.reverse = config[""]
         self.mutation_options = config["member_mutation_options"]
         self.crossover_options = config["member_crossover_options"]
 

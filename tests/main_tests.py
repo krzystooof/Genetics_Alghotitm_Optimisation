@@ -25,6 +25,7 @@ def get_config():
         'population_discard': 0.5,
         'population_noise': 0.3,
         'population_chance_bonus': 5,
+        'population_reverse_fitness': True,
         'member_mutation_options': mutate,
         'member_crossover_options': crossover
     }
