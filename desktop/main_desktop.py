@@ -41,12 +41,12 @@ def start_algorithm(gui):
             crossover_options.append(x)
         x += 1
     config = {
-        "population_size" : population_size,
-        "population_discard" : population_discard,
-        "population_chance_bonus" : population_chance_bonus,
-        "population_noise" : population_noise,
-        "member_mutation_options" : mutation_options,
-        "member_crossover_options" : crossover_options
+        "population_size": population_size,
+        "population_discard": population_discard,
+        "population_chance_bonus": population_chance_bonus,
+        "population_noise": population_noise,
+        "member_mutation_options": mutation_options,
+        "member_crossover_options": crossover_options
     }
     # TODO pass config to board using VCP
 
@@ -68,7 +68,9 @@ class GUI:
 
         population_size_default_value = 100
 
-        self.population_size_min = 0
+        self.generations_min = 1
+        self.generations_max = 9999
+        self.population_size_min = 1
         self.population_size_max = 9999
         self.population_percentage_values_min = 0
         self.population_percentage_values_max = 1
@@ -84,8 +86,8 @@ class GUI:
         self.crossover_states[0].set(True)
 
         labels = []
-        row = 1
-        self.label_names = ["Population size:", "Population discard:", "Population noise:",
+        row = 0
+        self.label_names = ["Generations:", "Population size:", "Population discard:", "Population noise:",
                             "Population chance bonus:",
                             "Member mutation options:", "Member crossover options:"]
         for label_name in self.label_names:
@@ -95,13 +97,15 @@ class GUI:
             row += 1
 
         # entries
-        default_size = IntVar()
-        default_size.set(population_size_default_value)
+        self.generations_spinbox = Spinbox(self.window, from_=self.generations_min, to=self.generations_max,
+                                           width=spinbox_width)
+
+        self.generations_spinbox.grid(column=entries_column, row=0, sticky=entries_column_anchor)
+        self.generations_spinbox.focus()
+
         self.population_size_spinbox = Spinbox(self.window, from_=self.population_size_min, to=self.population_size_max,
-                                               width=spinbox_width,
-                                               textvariable=default_size)
+                                               width=spinbox_width)
         self.population_size_spinbox.grid(column=entries_column, row=1, sticky=entries_column_anchor)
-        self.population_size_spinbox.focus()
 
         self.population_discard_spinbox = Spinbox(self.window, from_=self.population_percentage_values_min,
                                                   to=self.population_percentage_values_max,
@@ -165,6 +169,12 @@ class GUI:
         self.window.mainloop()
 
     def check_values(self):
+        spinbox_value = int(self.generations_spinbox.get())
+        if spinbox_value > self.generations_max:
+            raise ValueError('Generations number exceeded MAX: ' + str(self.generations_max))
+        if spinbox_value < self.population_size_min:
+            raise ValueError('Generations number under MIN: ' + str(self.generations_min))
+
         spinbox_value = int(self.population_size_spinbox.get())
         if spinbox_value > self.population_size_max:
             raise ValueError('Population size exceeded MAX: ' + str(self.population_size_max))
