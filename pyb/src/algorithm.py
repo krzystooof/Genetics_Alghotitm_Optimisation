@@ -60,9 +60,9 @@ class Population:
 
     def sort_by_fitness(self):
         if self.reverse:
-            self.member_list = sorted(list=self.member_list, key=lambda member: member.fitness, reverse=False)
+            self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=False)
         else:
-            self.member_list = sorted(list=self.member_list, key=lambda member: member.fitness, reverse=True)
+            self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=True)
 
     def discard_unfit(self):
         # Calculate how many members will be discarded
@@ -128,7 +128,7 @@ class Population:
         self.population_discard = config["population_discard"]
         self.population_chance_bonus = config["population_chance_bonus"]
         self.noise = config["population_noise"]
-        self.reverse = config[""]
+        self.reverse = config["population_reverse_fitness"]
         self.mutation_options = config["member_mutation_options"]
         self.crossover_options = config["member_crossover_options"]
 
