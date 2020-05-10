@@ -84,19 +84,31 @@ class Population:
         while len(self.member_list) < self.population_size:
             parent_1: Member = random.choice(self.member_list)
             parent_2: Member = random.choice(self.member_list)
-            if random.random() < abs(parent_1.crossover_chance * parent_2.crossover_chance):
-                # TODO think about crossover options
+            if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
                 self.member_list.append(parent_1.crossover(random.choice(self.crossover_options), parent_2))
                 self.total_crossovers += 1
 
     def assign_cross_chances(self):
+        offset = self.get_offset()  # Offset ensures always positive fitness
         # Get total fitness
         total_fitness = 0
         for member in self.member_list:
-            total_fitness += member.fitness
-        # Assign chances based on fitness
+            total_fitness += (member.fitness + offset)
+        # Assign chances based on fitness aka what percent of total fitness is member's fitness
         for member in self.member_list:
-            member.crossover_chance = member.fitness/total_fitness
+            try:
+                if self.reverse:
+                    member.crossover_chance = (total_fitness - member.fitness + offset)/total_fitness
+                else:
+                    member.crossover_chance = (member.fitness + offset)/total_fitness
+            except ZeroDivisionError:
+                member.crossover_chance = 1
+
+    def get_offset(self):
+        if self.reverse:
+            return -(self.member_list[0].fitness)  # Fittest member is lower value
+        else:
+            return -(self.member_list[len(self.member_list)].fitness)  # Worst fit member is lower value
 
     def apply_noise(self):
         # Calculate how many members will be mutated
@@ -113,7 +125,7 @@ class Population:
           - population_discard - Percentage of discarded members with each generation (Value <0-1>)
           - population_noise - Percentage of random mutations for each generation (Value <0-1>)
           - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
-          - population_reverse_fitness - Tells algorithm which is better: Higher fitness or lower. (Value [True,False])
+          - population_reverse_fitness - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
           - member_mutation_options - List of allowed mutation types. Possible values:
             1. Random resetting (set random element to 0)
             2. Swap mutation (swap two elements)
