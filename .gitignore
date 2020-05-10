@@ -4,3 +4,4 @@ src/venv/
 venv/
 .idea/
 microPython/
+README_pyb.txt

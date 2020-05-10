@@ -1,6 +1,4 @@
-"""
-File contains code necessary to run algorithm on pyboard.
-"""
+"""File contains code necessary to run algorithm on pyboard."""
 import pyb
 import ujson
 
@@ -33,10 +31,22 @@ class VCP:
         print("Sent: ", self.usb.write(to_send), "bytes")
 
     def read(self):
-        """Returns received data translated to python dictionary"""
+        """
+        Reads data from USB VCP. Always returns python dictionary with at least
+        'type' field. Type values:
+        0 means there was no new data on usb buffer
+        1 means desktop client encountered a problem
+        2 means config was transferred
+        3 means data was successfully transferred
+        4 means there is data regarding algorithm control
+        ...
+        9 means there is data to feed to algorithm
+
+        Type 3 is internal type and will not be forwarded.
+        """
         received: bytes = self.usb.readline()
         str_rcv = received.decode('utf-8')
-        dictionary = ujson.loads(received)
+        dictionary = ujson.loads(str_rcv)
         if dictionary["type"] == 9:
             Inform.error()
         return dictionary
@@ -84,7 +94,7 @@ class Inform:
         """
         Should be used if the board is waiting for new inputs.
         """
-        state = 0
+        Inform.state = 0
         pyb.LED(1).on()
         pyb.LED(2).off()
         pyb.LED(3).off()
@@ -93,9 +103,9 @@ class Inform:
     def running():  # blue on
         """
         Use this if board is not accepting any inputs at the moment.
-        Any data send via USB VCP to board will be queued
+        Any data send via USB VCP to board will be queued.
         """
-        state = 1
+        Inform.state = 1
         pyb.LED(1).off()
         pyb.LED(2).on()
         pyb.LED(3).off()
@@ -106,7 +116,7 @@ class Inform:
         Algorithm encountered a problem.
         Board is waiting for debug and reset.
         """
-        state = 2
+        Inform.state = 2
         pyb.LED(1).off()
         pyb.LED(2).off()
         pyb.LED(3).on()
@@ -114,8 +124,8 @@ class Inform:
     @staticmethod
     def connected():  # quick flash green, blued
         """
-        Signal Virtual Comm Port has been connected
-        After signaling is done previous state will be displayed
+        Signal Virtual Comm Port has been connected.
+        After signaling is done previous state will be displayed.
         """
         pyb.LED(1).off()
         pyb.LED(2).on()
@@ -124,9 +134,7 @@ class Inform:
 
     @staticmethod
     def correct_led():
-        """
-        Method used to correct currently displayed LEDs to state saved in Inform.state
-        """
+        """Method used to correct currently displayed LEDs to state saved in Inform.state"""
         if Inform.state == 0:
             Inform.waiting()
 
