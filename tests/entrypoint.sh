@@ -1,9 +1,13 @@
 #!/bin/bash
+
+cd /app/tests
+
 # Create octave results as reference
-cd /app/tests && octave-cli ga_example.m > results_octave.json
+
+octave-cli ga_example.m > results_octave.txt
 
 # Run alogrithm, create another results
-cd /app/pyb/src/ && python main_tests.py
+python main_tests.py
 
 # Compare given results
-cd /app/tests && python compare.py
+python compare.py
