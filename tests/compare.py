@@ -3,7 +3,7 @@ import json
 
 with open('algorithm_results.json') as algorithm:
     with open(r'results_octave.txt', "r") as octave:
-        algorithm_results = json.load(algorithm)['generation_9']
+        algorithm_results = json.load(algorithm)['best_fitness']
 
         final_from_algorithm = float(algorithm_results[0])
         final_from_octave = float(octave.readlines()[3])

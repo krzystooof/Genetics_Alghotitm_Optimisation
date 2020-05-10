@@ -1,4 +1,5 @@
 from pyb.src.algorithm import Population
+import json
 
 
 def main():
@@ -14,6 +15,12 @@ def main():
     population.update_stats()
     print("Best member's fitness: ", population.best_member.fitness)
     print("Best member's operator: ", population.best_member.operator.values)
+    """Saving final results into json"""
+    final_results = {
+        'best_fitness': population.best_member.fitness,
+    }
+    with open("algorithm_results.json", "w") as write_file:
+        json.dump(final_results, write_file)
     # TODO algorithm ended. Save final results
 
 
