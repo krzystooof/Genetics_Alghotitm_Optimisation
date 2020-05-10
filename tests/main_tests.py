@@ -17,7 +17,7 @@ def main():
     print("Best member's operator: ", population.best_member.operator.values)
     """Saving final results into json"""
     final_results = {
-        'best_fitness': population.best_member.fitness,
+        'calculated_result': population.best_member.operator.values,
     }
     with open("algorithm_results.json", "w") as write_file:
         json.dump(final_results, write_file)

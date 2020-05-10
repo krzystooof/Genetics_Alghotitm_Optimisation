@@ -3,7 +3,7 @@ import json
 
 with open('algorithm_results.json') as algorithm:
     with open(r'results_octave.txt', "r") as octave:
-        algorithm_results = json.load(algorithm)['best_fitness']
+        algorithm_results = json.load(algorithm)['calculated_result']
 
         final_from_algorithm = float(algorithm_results[0])
         final_from_octave = float(octave.readlines()[3])
@@ -11,4 +11,7 @@ with open('algorithm_results.json') as algorithm:
         print("Octave results: ", final_from_octave)
         print("PTMAG results: ", final_from_algorithm)
 
-        assert final_from_algorithm == final_from_octave
+        tolerance = 0.05
+
+        assert (final_from_algorithm >= final_from_octave - tolerance) and (
+                final_from_algorithm <= final_from_octave + tolerance)

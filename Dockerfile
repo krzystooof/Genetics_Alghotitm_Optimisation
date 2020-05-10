@@ -7,7 +7,7 @@ ENV PYTHONPATH=/app
 RUN mkdir /app
 COPY . /app/
 # Set tests as workdir
-WORKDIR /app/
+WORKDIR /app/tests
 
 # Install octave with ga package
 RUN apt-get update
@@ -15,5 +15,5 @@ RUN apt-get -y install octave
 RUN apt-get install octave-ga
 
 # Run tests
-RUN chmod 755 tests/entrypoint.sh
-RUN bash tests/entrypoint.sh
+RUN chmod 755 entrypoint.sh
+RUN bash entrypoint.sh
