@@ -37,7 +37,7 @@ class Population:
         # Filling population with random members
         self.member_list = []
         for x in range(0, self.population_size):
-            self.member_list.append(Member(Operator([random.randint(-100, 100)])))  # TODO randomize initial values
+            self.member_list.append(Member(Operator([random.uniform(-100, 100)])))  # TODO randomize initial values
 
         # Statistics for current generation
         self.generation = 0
@@ -89,26 +89,31 @@ class Population:
                 self.total_crossovers += 1
 
     def assign_cross_chances(self):
-        offset = self.get_offset()  # Offset ensures always positive fitness
-        # Get total fitness
-        total_fitness = 0
+        """Assigns crossover chances to every member of population based on fitness"""
+        average = self.get_average_fitness()
+        #  Offset ensures always positive non-zero fitness
+        offset = self.get_offset()
         for member in self.member_list:
-            total_fitness += (member.fitness + offset)
-        # Assign chances based on fitness aka what percent of total fitness is member's fitness
+            #  0.5 is base value. Average member will get crossover_chance of 0.5
+            #  Basic formula for calculating crossover chance is (member_fitness/average_fitness)*0.5
+            #  Here implemented, but with offset and reverse mode, when lower fitness should give higher chance
+            if self.reverse:
+                delta = average - member.fitness
+                member.crossover_chance = ((average + delta + offset) / (average + offset)) * 0.5
+            else:
+                member.crossover_chance = ((member.fitness + offset) / (average + offset)) * 0.5
+
+    def get_average_fitness(self):
+        total = 0
         for member in self.member_list:
-            try:
-                if self.reverse:
-                    member.crossover_chance = (total_fitness - member.fitness + offset)/total_fitness
-                else:
-                    member.crossover_chance = (member.fitness + offset)/total_fitness
-            except ZeroDivisionError:
-                member.crossover_chance = 1
+            total += member.fitness
+        return total / len(self.member_list)
 
     def get_offset(self):
         if self.reverse:
-            return -(self.member_list[0].fitness)  # Fittest member is lower value
+            return -(self.member_list[0].fitness - 1)  # Fittest member is lower value
         else:
-            return -(self.member_list[len(self.member_list)].fitness)  # Worst fit member is lower value
+            return -(self.member_list[len(self.member_list)].fitness - 1)  # Worst fit member is lower value
 
     def apply_noise(self):
         # Calculate how many members will be mutated
@@ -156,7 +161,7 @@ class Member:
     """
 
     def __init__(self, operator):  # TODO must generate random operator if not given
-        self.fitness = 0
+        self.fitness = 0.0
         self.crossover_chance = 0
         self.operator = operator
 
@@ -168,8 +173,8 @@ class Member:
             while j - i < 1:
                 i = random.randint(0, len(self.operator.values) - 1)
                 j = random.randint(i, len(self.operator.values) - 1)
-        if mutation_method == 1:  # random resetting - set random element to 0
-            self.operator.values[i] = 0
+        if mutation_method == 1:  # random resetting - sets random number to random value
+            self.operator.values[i] *= random.uniform(-100, 100)  # TODO no hardcoded values
         elif mutation_method == 2:  # swap mutation - swap two elements
             self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
         elif mutation_method == 3:  # scramble mutation - shuffle random part

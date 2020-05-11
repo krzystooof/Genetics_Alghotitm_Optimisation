@@ -9,9 +9,10 @@ def main():
     while population.generation < 100:  # TODO find good break condition
         for member in population.member_list:
             member.fitness = get_fitness(member.operator)
-        population.update_stats()
         population.new_gen()
 
+    for member in population.member_list:
+        member.fitness = get_fitness(member.operator)
     population.update_stats()
     print("Best member's fitness: ", population.best_member.fitness)
     print("Best member's operator: ", population.best_member.operator.values)
@@ -30,17 +31,20 @@ def get_config():
     config_dict = {
         'population_size': 100,
         'population_discard': 0.5,
-        'population_noise': 0.3,
-        'population_chance_bonus': 5,
+        'population_noise': 0.1,
+        'population_chance_bonus': 2,
         'population_reverse_fitness': True,
+        'population_base_start': -100,
+        'population_base_end': 100,
         'member_mutation_options': mutate,
         'member_crossover_options': crossover
+
     }
     return config_dict
 
 
 def get_fitness(operator):  # simpleFitFunc, but in python
-    return (operator.values[0] - 1)*(operator.values[0] - 1)
+    return (operator.values[0] - 1.0)*(operator.values[0] - 1.0)
 
 
 main()
