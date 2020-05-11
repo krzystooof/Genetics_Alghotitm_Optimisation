@@ -1,19 +1,23 @@
 from tkinter import *
 from tkinter import scrolledtext, messagebox
 
+from desktop.usb import USB
 
-def stop_algorithm(gui):
+
+def stop_algorithm(gui, usb):
     gui.log("Stopping")
-    # TODO pass STOP command to board using VCP
+    operation = "STOP"
+    usb.attach("operation", operation)
+    usb.send()
 
 
-def restart_algorithm(gui):
+def restart_algorithm(gui, usb):
     gui.log("Restarting")
-    stop_algorithm(gui)
-    start_algorithm(gui)
+    stop_algorithm(gui, usb)
+    start_algorithm(gui, usb)
 
 
-def start_algorithm(gui):
+def start_algorithm(gui, usb):
     gui.log("Starting")
     try:
         gui.check_values()
@@ -22,6 +26,7 @@ def start_algorithm(gui):
         gui.log_error(str(error))
         gui.log("Start aborted")
         return
+    operation = "START"
     generations = gui.generations_spinbox.get()
     population_chance_bonus = gui.population_chance_bonus_spinbox.get()
     population_size = gui.population_size_spinbox.get()
@@ -50,12 +55,21 @@ def start_algorithm(gui):
         "member_mutation_options": mutation_options,
         "member_crossover_options": crossover_options
     }
-    pass
-    # TODO pass config to board using VCP
+    usb.attach("operation", operation)
+    usb.attach("config", config)
+    usb.send()
+
+
+def pause_algorithm(gui, usb):
+    gui.log("Stopping")
+    operation = "PAUSE"
+    usb.attach("operation", operation)
+    usb.send()
 
 
 class GUI:
-    def __init__(self):
+    def __init__(self, usb: USB):
+        self.usb = usb
         self.window = Tk()
 
         self.window.title("Desktop STM GA Control Panel")
@@ -143,15 +157,20 @@ class GUI:
         self.member_crossover_option2.grid(column=entries_column + 1, row=6, sticky=entries_column_anchor)
 
         # buttons
-        self.stop_btn = Button(self.window, text="STOP", command=lambda: stop_algorithm(self), width=buttons_width)
-        self.stop_btn.grid(column=4, row=2)
+        self.stop_btn = Button(self.window, text="STOP", command=lambda: stop_algorithm(self, usb), width=buttons_width)
+        self.stop_btn.grid(column=4, row=1)
 
-        self.restart_btn = Button(self.window, text="RESTART", command=lambda: restart_algorithm(self),
+        self.restart_btn = Button(self.window, text="RESTART", command=lambda: restart_algorithm(self, usb),
                                   width=buttons_width)
         self.restart_btn.grid(column=4, row=3)
 
-        self.start_btn = Button(self.window, text="START", command=lambda: start_algorithm(self), width=buttons_width)
-        self.start_btn.grid(column=4, row=1)
+        self.start_btn = Button(self.window, text="START", command=lambda: start_algorithm(self, usb),
+                                width=buttons_width)
+        self.start_btn.grid(column=4, row=0)
+
+        self.pause_btn = Button(self.window, text="PAUSE", command=lambda: pause_algorithm(self, usb),
+                                width=buttons_width)
+        self.pause_btn.grid(column=4, row=2)
 
         self.console = scrolledtext.ScrolledText(self.window)
         self.console.grid(column=0, row=11, columnspan=5, padx=5, pady=5)
@@ -232,5 +251,8 @@ class GUI:
 
 
 if __name__ == '__main__':
-    gui = GUI()
+    usb = USB()
+    gui = GUI(usb)
+
+    # must be at the end of main
     gui.work()
