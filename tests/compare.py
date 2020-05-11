@@ -1,6 +1,5 @@
 import json
 
-
 with open('algorithm_results.json') as algorithm:
     with open(r'results_octave.txt', "r") as octave:
         algorithm_results = json.load(algorithm)['calculated_result']
@@ -13,5 +12,4 @@ with open('algorithm_results.json') as algorithm:
 
         tolerance = 0.05
 
-        assert (final_from_algorithm >= final_from_octave - tolerance) and (
-                final_from_algorithm <= final_from_octave + tolerance)
+        assert final_from_octave - tolerance <= final_from_algorithm <= final_from_octave + tolerance
