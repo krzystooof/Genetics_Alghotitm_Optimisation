@@ -1,3 +1,4 @@
+"""This module contains code used to control the algorithm on board"""
 from tkinter import *
 from tkinter import scrolledtext, messagebox
 
@@ -68,6 +69,11 @@ def pause_algorithm(gui, usb):
 
 
 class GUI:
+    """
+        Handles interactions with user
+        @author: Krzysztof Greczka
+    """
+
     def __init__(self, usb: USB):
         self.usb = usb
         self.window = Tk()
