@@ -132,18 +132,18 @@ class GUI:
         self.window.mainloop()
 
     def check_values(self, one_checked):
-        # one_checked = True - at least one checkbox in each row must be checked
+        # one_checked - list of checkboxes rows that at least one option must be selected
         for key, value in self.min_max_spinbox_values.items():
             spinbox_value = float(self.get_spinbox_value(key))
             if spinbox_value > value[1]:
                 raise ValueError(self.get_label_text(key) + ' exceeded MAX: ' + str(value[1]))
             if spinbox_value < value[0]:
                 raise ValueError(self.get_label_text(key) + ' number under MIN: ' + str(value[1]))
-        if one_checked:
-            found_true = False
-            for key, value in self.checkbox_values.items():
+        for key, value in self.checkbox_values.items():
+            if key in one_checked:
+                found_true = False
                 for bool in value:
                     if bool.get() is True:
                         found_true = True
-            if found_true is False:
-                raise ValueError('At least one ' + self.get_label_text(key) + ' must be selected')
+                if found_true is False:
+                    raise ValueError('At least one ' + self.get_label_text(key) + ' must be selected')
