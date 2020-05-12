@@ -10,19 +10,19 @@ class GUI:
         @author: Krzysztof Greczka
     """
 
-    def __init__(self, window_title):
+    def __init__(self, window_title="window", entries_width=5,buttons_width=10,entries_column_anchor = "w",labels_column_anchor = "e"):
         self.window = Tk()
 
         self.window.title(window_title)
         self.window.resizable(width=False, height=False)
 
         # default values - able to change after init
-        self.entries_width = 5
-        self.buttons_width = 10
+        self.entries_width = entries_width
+        self.buttons_width = buttons_width
         self.entries_column = 1
-        self.entries_column_anchor = "w"
+        self.entries_column_anchor = entries_column_anchor
         self.labels_column = 0
-        self.labels_column_anchor = "e"
+        self.labels_column_anchor = labels_column_anchor
         self.buttons_column = 2
 
         # algorithm specific values = do not change
