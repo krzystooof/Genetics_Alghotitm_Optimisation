@@ -16,8 +16,7 @@ class Controller:
     def stop_algorithm(self):
         self.gui.disable_buttons([0, 1, 2, 3])
         self.gui.log("Stopping")
-        # TODO attach type
-        # self.usb.attach("type", )
+        self.usb.attach("type", 4)
         operation = "STOP"
         self.usb.attach("operation", operation)
         self.usb.send()
@@ -75,12 +74,13 @@ class Controller:
             self.usb = USB(pyboard_port)
         else:
             self.usb = USB()
-            pyboard_port = "default Linux PyBoard port"
+            pyboard_port = "/dev/ttyACM1 (default Linux PyBoard port)"
         self.gui.log_info("PyBoard port is set to " + pyboard_port)
-        # TODO attach type
-        # self.usb.attach("type", )
-        self.usb.attach("operation", operation)
+        self.usb.attach("type", 2)
         self.usb.attach("config", config)
+        self.usb.send()
+        self.usb.attach("type", 4)
+        self.usb.attach("operation", operation)
         self.usb.send()
         self.gui.enable_entry(0)
         self.gui.enable_buttons([1, 2, 3])
@@ -88,8 +88,7 @@ class Controller:
     def pause_algorithm(self):
         self.gui.disable_buttons([0, 1, 2, 3])
         self.gui.log("Pausing")
-        # TODO attach type
-        # self.usb.attach("type", )
+        self.usb.attach("type", 4)
         operation = "PAUSE"
         self.usb.attach("operation", operation)
         self.usb.send()
