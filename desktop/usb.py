@@ -14,7 +14,7 @@ class USB:
         """Initiates connection. Waits till connected."""
         self.usb = serial.Serial(comm_port, 9600, timeout=0)
         self.dictionary = dict()
-        while not self.usb.is_open():
+        while not self.usb.is_open:
             self.usb.open()
             sleep(0.1)
 

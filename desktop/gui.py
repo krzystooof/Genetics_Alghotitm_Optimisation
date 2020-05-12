@@ -72,7 +72,7 @@ class GUI:
         for text in options_texts:
             state = BooleanVar()
             state.set(def_value)
-            new_checkbutton = Checkbutton(self.window, text=text, var=state)
+            new_checkbutton = Checkbutton(self.window, text=text, selectcolor='#777777', var=state)
             new_checkbutton.grid(column=column, row=self.free_row, sticky=self.entries_column_anchor)
             states.append(state)
             checkbuttons.append(new_checkbutton)
