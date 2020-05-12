@@ -1,256 +1,96 @@
 """This module contains code used to control the algorithm on board"""
-from tkinter import *
-from tkinter import scrolledtext, messagebox
-
 from desktop.usb import USB
 
 
-def stop_algorithm(gui, usb):
-    gui.log("Stopping")
-    operation = "STOP"
-    usb.attach("operation", operation)
-    usb.send()
-
-
-def restart_algorithm(gui, usb):
-    gui.log("Restarting")
-    stop_algorithm(gui, usb)
-    start_algorithm(gui, usb)
-
-
-def start_algorithm(gui, usb):
-    gui.log("Starting")
-    try:
-        gui.check_values()
-    except ValueError as error:
-        print(repr(error))
-        gui.log_error(str(error))
-        gui.log("Start aborted")
-        return
-    operation = "START"
-    generations = gui.generations_spinbox.get()
-    population_chance_bonus = gui.population_chance_bonus_spinbox.get()
-    population_size = gui.population_size_spinbox.get()
-    population_noise = gui.population_noise_spinbox.get()
-    population_discard = gui.population_discard_spinbox.get()
-
-    mutation_options = []
-
-    for x, boolean in enumerate(gui.mutation_states):
-        if boolean.get() is True:
-            mutation_options.append(x + 1)
-        x += 1
-
-    crossover_options = []
-
-    for x, boolean in enumerate(gui.crossover_states):
-        if boolean.get() is True:
-            crossover_options.append(x + 1)
-        x += 1
-    config = {
-        "generations": generations,
-        "population_size": population_size,
-        "population_discard": population_discard,
-        "population_chance_bonus": population_chance_bonus,
-        "population_noise": population_noise,
-        "member_mutation_options": mutation_options,
-        "member_crossover_options": crossover_options
-    }
-    usb.attach("operation", operation)
-    usb.attach("config", config)
-    usb.send()
-
-
-def pause_algorithm(gui, usb):
-    gui.log("Stopping")
-    operation = "PAUSE"
-    usb.attach("operation", operation)
-    usb.send()
-
-
-class GUI:
+class Controller:
     """
-        Handles interactions with user
-        @author: Krzysztof Greczka
-    """
+            Handles controlling PyBoard
+            @author: Krzysztof Greczka
+        """
 
-    def __init__(self, usb: USB):
-        self.usb = usb
-        self.window = Tk()
+    def __init__(self, gui, checkboxes_one_set):
+        self.checkboxes_one_set = checkboxes_one_set
+        self.gui = gui
+        self.usb = USB()
 
-        self.window.title("Desktop STM GA Control Panel")
-        self.window.resizable(width=False, height=False)
+    def stop_algorithm(self):
+        self.gui.disable_buttons([0, 1, 2, 3])
+        self.gui.log("Stopping")
+        self.usb.attach("type", 4)
+        operation = "STOP"
+        self.usb.attach("operation", operation)
+        self.usb.send()
+        self.gui.enable_entry(0)
+        self.gui.enable_button(0)
 
-        entries_column = 1
-        entries_column_anchor = "w"
-        labels_column = 0
-        labels_column_anchor = "e"
+    def restart_algorithm(self):
+        self.stop_algorithm()
+        self.start_algorithm()
 
-        spinbox_width = 5
-        buttons_width = 10
+    def start_algorithm(self):
+        self.gui.disable_buttons([0, 1, 2, 3])
+        self.gui.log("Starting")
+        try:
+            self.gui.check_values(self.checkboxes_one_set)
+        except ValueError as error:
+            print(repr(error))
+            self.gui.log_error(str(error))
+            self.gui.log("Start aborted")
+            self.gui.enable_buttons([0, 1, 2, 3])
+            return
+        operation = "START"
+        generations = self.gui.get_entry_value(1)
+        population_chance_bonus = self.gui.get_entry_value(5)
+        population_size = self.gui.get_entry_value(2)
+        population_noise = self.gui.get_entry_value(4)
+        population_discard = self.gui.get_entry_value(3)
+        reverse_fitness = self.gui.get_checkbox_value(6, 0)
 
-        self.generations_min = 1
-        self.generations_max = 9999
-        self.population_size_min = 1
-        self.population_size_max = 9999
-        self.population_percentage_values_min = 0
-        self.population_percentage_values_max = 1
-        self.population_chance_bonus_min = 1
-        self.population_chance_bonus_max = 9999
+        mutation_options = []
 
-        self.mutation_texts = ["Random resetting", "Swap", "Scramble", "Inversion"]
-        self.mutation_states = [BooleanVar(), BooleanVar(), BooleanVar(), BooleanVar()]
-        self.mutation_states[0].set(True)
-
-        self.crossover_texts = ["One point", "Multi point"]
-        self.crossover_states = [BooleanVar(), BooleanVar()]
-        self.crossover_states[0].set(True)
-
-        labels = []
-        self.label_names = ["Generations:", "Population size:", "Population discard:", "Population noise:",
-                            "Population chance bonus:",
-                            "Member mutation options:", "Member crossover options:"]
-
-        for row, label_name in enumerate(self.label_names):
-            new_label = Label(self.window, text=label_name)
-            new_label.grid(column=labels_column, row=row, sticky=labels_column_anchor)
-            labels.append(new_label)
-
-        # entries
-        self.generations_spinbox = Spinbox(self.window, from_=self.generations_min, to=self.generations_max,
-                                           width=spinbox_width)
-
-        self.generations_spinbox.grid(column=entries_column, row=0, sticky=entries_column_anchor)
-        self.generations_spinbox.focus()
-
-        self.population_size_spinbox = Spinbox(self.window, from_=self.population_size_min, to=self.population_size_max,
-                                               width=spinbox_width)
-        self.population_size_spinbox.grid(column=entries_column, row=1, sticky=entries_column_anchor)
-
-        self.population_discard_spinbox = Spinbox(self.window, from_=self.population_percentage_values_min,
-                                                  to=self.population_percentage_values_max,
-                                                  width=spinbox_width, format='%0.3f', increment=0.001)
-        self.population_discard_spinbox.grid(column=entries_column, row=2, sticky=entries_column_anchor)
-
-        self.population_noise_spinbox = Spinbox(self.window, from_=self.population_percentage_values_min,
-                                                to=self.population_percentage_values_max,
-                                                width=spinbox_width, format='%0.3f', increment=0.001)
-        self.population_noise_spinbox.grid(column=entries_column, row=3, sticky=entries_column_anchor)
-
-        self.population_chance_bonus_spinbox = Spinbox(self.window, from_=self.population_chance_bonus_min,
-                                                       to=self.population_chance_bonus_max,
-                                                       width=spinbox_width, format='%0.3f', increment=0.001)
-        self.population_chance_bonus_spinbox.grid(column=entries_column, row=4, sticky=entries_column_anchor)
-
-        self.member_mutation_option1 = Checkbutton(self.window, text=self.mutation_texts[0],
-                                                   var=self.mutation_states[0])
-        self.member_mutation_option1.grid(column=entries_column, row=5, sticky=entries_column_anchor)
-        self.member_mutation_option2 = Checkbutton(self.window, text=self.mutation_texts[1],
-                                                   var=self.mutation_states[1])
-        self.member_mutation_option2.grid(column=entries_column + 1, row=5, sticky=entries_column_anchor)
-        self.member_mutation_option3 = Checkbutton(self.window, text=self.mutation_texts[2],
-                                                   var=self.mutation_states[2])
-        self.member_mutation_option3.grid(column=entries_column + 2, row=5, sticky=entries_column_anchor)
-        self.member_mutation_option4 = Checkbutton(self.window, text=self.mutation_texts[3],
-                                                   var=self.mutation_states[3])
-        self.member_mutation_option4.grid(column=entries_column + 3, row=5, sticky=entries_column_anchor)
-
-        self.member_crossover_option1 = Checkbutton(self.window, text=self.crossover_texts[0],
-                                                    var=self.crossover_states[0])
-        self.member_crossover_option1.grid(column=entries_column, row=6, sticky=entries_column_anchor)
-        self.member_crossover_option2 = Checkbutton(self.window, text=self.crossover_texts[1],
-                                                    var=self.crossover_states[1])
-        self.member_crossover_option2.grid(column=entries_column + 1, row=6, sticky=entries_column_anchor)
-
-        # buttons
-        self.stop_btn = Button(self.window, text="STOP", command=lambda: stop_algorithm(self, usb), width=buttons_width)
-        self.stop_btn.grid(column=4, row=1)
-
-        self.restart_btn = Button(self.window, text="RESTART", command=lambda: restart_algorithm(self, usb),
-                                  width=buttons_width)
-        self.restart_btn.grid(column=4, row=3)
-
-        self.start_btn = Button(self.window, text="START", command=lambda: start_algorithm(self, usb),
-                                width=buttons_width)
-        self.start_btn.grid(column=4, row=0)
-
-        self.pause_btn = Button(self.window, text="PAUSE", command=lambda: pause_algorithm(self, usb),
-                                width=buttons_width)
-        self.pause_btn.grid(column=4, row=2)
-
-        self.console = scrolledtext.ScrolledText(self.window)
-        self.console.grid(column=0, row=11, columnspan=5, padx=5, pady=5)
-
-    def log(self, text):
-        self.console.insert('end', text + '\n')
-
-    def log_info(self, text):
-        self.console.insert('end', "\tINFO:" + text + '\n')
-
-    def log_error(self, text):
-        self.console.insert('end', "\tERROR:" + text + '\n')
-
-    def work(self):
-        self.window.mainloop()
-
-    def check_values(self):
-        spinbox_value = int(self.generations_spinbox.get())
-        if spinbox_value > self.generations_max:
-            raise ValueError('Generations number exceeded MAX: ' + str(self.generations_max))
-        if spinbox_value < self.population_size_min:
-            raise ValueError('Generations number under MIN: ' + str(self.generations_min))
-
-        spinbox_value = int(self.population_size_spinbox.get())
-        if spinbox_value > self.population_size_max:
-            raise ValueError('Population size exceeded MAX: ' + str(self.population_size_max))
-        if spinbox_value < self.population_size_min:
-            raise ValueError('Population size under MIN: ' + str(self.population_size_min))
-
-        spinbox_value = float(self.population_chance_bonus_spinbox.get())
-        if spinbox_value > self.population_chance_bonus_max:
-            raise ValueError('Population chance bonus exceeded MAX: ' + str(self.population_chance_bonus_max))
-        if spinbox_value < self.population_chance_bonus_min:
-            raise ValueError('Population chance bonus under MIN: ' + str(self.population_percentage_values_min))
-
-        spinbox_value = float(self.population_discard_spinbox.get())
-        if spinbox_value > self.population_percentage_values_max:
-            raise ValueError('Population discard exceeded MAX: ' + str(self.population_percentage_values_max))
-        if spinbox_value < self.population_percentage_values_min:
-            raise ValueError('Population discard under MIN: ' + str(self.population_percentage_values_min))
-
-        spinbox_value = float(self.population_noise_spinbox.get())
-        if spinbox_value > self.population_percentage_values_max:
-            raise ValueError('Population noise exceeded MAX: ' + str(self.population_percentage_values_max))
-        if spinbox_value < self.population_percentage_values_min:
-            raise ValueError('Population noise under MIN: ' + str(self.population_chance_bonus_min))
-
-        found_true = False
-        for boolean in self.mutation_states:
+        for x, boolean in enumerate(self.gui.get_checkbox_values(7)):
             if boolean.get() is True:
-                found_true = True
-        if found_true is False:
-            raise ValueError('At least one mutation option must be selected')
+                mutation_options.append(x + 1)
+            x += 1
 
-        found_true = False
-        for boolean in self.crossover_states:
+        crossover_options = []
+
+        for x, boolean in enumerate(self.gui.get_checkbox_values(8)):
             if boolean.get() is True:
-                found_true = True
-        if found_true is False:
-            raise ValueError('At least one crossover option must be selected')
+                crossover_options.append(x + 1)
+            x += 1
+        config = {
+            "generations": generations,
+            "population_size": population_size,
+            "population_discard": population_discard,
+            "population_chance_bonus": population_chance_bonus,
+            "population_noise": population_noise,
+            "member_mutation_options": mutation_options,
+            "member_crossover_options": crossover_options,
+            "population_reverse_fitness": reverse_fitness
+        }
+        pyboard_port = self.gui.get_entry_value(0)
+        if len(pyboard_port) != 0:
+            self.usb = USB(pyboard_port)
+        else:
+            self.usb = USB()
+            pyboard_port = "/dev/ttyACM1 (default Linux PyBoard port)"
+        self.gui.log_info("PyBoard port is set to " + pyboard_port)
+        self.usb.attach("type", 2)
+        self.usb.attach("config", config)
+        self.usb.send()
+        self.usb.attach("type", 4)
+        self.usb.attach("operation", operation)
+        self.usb.send()
+        self.gui.enable_entry(0)
+        self.gui.enable_buttons([1, 2, 3])
 
-    def show_info(self, number):
-        if number == 0:
-            message = "Number of GA generations "
-        elif number == 1:
-            message = "Size of population (Value <1-x>)"
-        elif number == 2:
-            message = "Percentage of discarded members with each generation (Value <0-1>)"
-        elif number == 3:
-            message = "Percentage of random mutations for each generation (Value <0-1>)"
-        elif number == 4:
-            message = "Higher values = less accurate crossovers = faster runtime (Value <1-x>)"
-        elif number == 5:
-            message = "List of allowed mutation types. They are randomly chosen for each mutation"
-        elif number == 6:
-            message = "List of allowed crossover types. They are randomly chosen for each crossover"
-        messagebox.showinfo("Info", message)
+    def pause_algorithm(self):
+        self.gui.disable_buttons([0, 1, 2, 3])
+        self.gui.log("Pausing")
+        self.usb.attach("type", 4)
+        operation = "PAUSE"
+        self.usb.attach("operation", operation)
+        self.usb.send()
+        self.gui.enable_buttons([1, 2, 3])
+        # TODO implement second click to resume
