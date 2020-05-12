@@ -116,6 +116,30 @@ class GUI:
         except KeyError:
             raise IndexError("No checkbox in this row")
 
+    def disable_button(self, row):
+        try:
+            self.buttons[row].config(state='disabled')
+        except KeyError:
+            raise IndexError("No butoton in this row")
+
+    def enable_button(self, row):
+        try:
+            self.buttons[row].config(state='normal')
+        except KeyError:
+            raise IndexError("No button in this row")
+
+    def disable_entry(self, row):
+        try:
+            self.entries[row].config(state='disabled')
+        except KeyError:
+            raise IndexError("No entry in this row")
+
+    def enable_entry(self, row):
+        try:
+            self.entries[row].config(state='normal')
+        except KeyError:
+            raise IndexError("No entry in this row")
+
     def log(self, text):
         try:
             self.console.insert('end', text + '\n')
