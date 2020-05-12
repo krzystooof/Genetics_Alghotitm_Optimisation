@@ -12,23 +12,19 @@ class VCP:
     def __init__(self):
         """Opens VCP and waits for connection"""
         self.usb = pyb.USB_VCP()
-        self.list: list = []
+        self.dictionary = dict()
         Inform.waiting()
         while not self.usb.isconnected():
             pyb.delay(100)
 
-    def attach(self, index, value):
+    def attach(self, key, element):
         """Drop data to the package before sending it"""
-        self.list.insert(index, value)
+        self.dictionary[key] = element
 
     def send(self):
-        """Sends attached data. Clears buffer of attach()."""
-        dic = {
-            "type": "1",  # type of communication; more on that in __init__
-            "val": self.list
-        }
-        to_send = ujson.dump(dic)
-        print("Sent: ", self.usb.write(to_send), "bytes")
+        string = ujson.dumps(self.dictionary)
+        bytes_to_send = string.encode('utf-8')
+        self.usb.write(bytes_to_send)
 
     def read(self):
         """
@@ -44,41 +40,15 @@ class VCP:
 
         Type 3 is internal type and will not be forwarded.
         """
-        received: bytes = self.usb.readline()
-        str_rcv = received.decode('utf-8')
-        dictionary = ujson.loads(str_rcv)
-        if dictionary["type"] == 9:
-            Inform.error()
-        return dictionary
-
-
-class IO:
-    """
-    Gives access to individual pins.
-    """
-    stm_pins = [0 for x in range(32)]
-
-    @staticmethod
-    def write_pin(pin, value):
-        """method desc..."""
-        IO.stm_pins[pin] = value
-
-    @staticmethod
-    def read_pin(pin):
-        """
-        method desc...
-        @param pin:  param desc...
-        """
-        print("Value of Pin", pin, "is ")
-        print(IO.stm_pins[pin])
-
-    @staticmethod
-    def on_off_toggle(pin):
-        print("Toggle switched value of Pin", pin)
-        if IO.stm_pins[pin] == 1:
-            IO.stm_pins[pin] = 0
+        if self.usb.any():
+            read = self.usb.readline()
+            read_string = read.decode('utf-8')
+            while read_string.count('{') != read_string.count('}'):
+                read = self.usb.readline()
+                read_string += read.decode('utf-8')
+            return ujson.loads(read_string)
         else:
-            IO.stm_pins[pin] = 1
+            return {'type': 0}
 
 
 class Inform:
