@@ -114,19 +114,19 @@ class GUI:
         try:
             self.console.insert('end', text + '\n')
         finally:
-            print(text + '\n')
+            print(text)
 
     def log_info(self, text):
         try:
             self.console.insert('end', "\tINFO:" + text + '\n')
         finally:
-            print("\tINFO:" + text + '\n')
+            print("\tINFO:" + text)
 
     def log_error(self, text):
         try:
             self.console.insert('end', "\tERROR:" + text + '\n')
         finally:
-            print("\tERROR:" + text + '\n')
+            print("\tERROR:" + text)
 
     def work(self):
         self.window.mainloop()
@@ -134,7 +134,7 @@ class GUI:
     def check_values(self, one_checked):
         # one_checked - list of checkboxes rows that at least one option must be selected
         for key, value in self.min_max_spinbox_values.items():
-            spinbox_value = float(self.get_spinbox_value(key))
+            spinbox_value = float(self.get_entry_value(key))
             if spinbox_value > value[1]:
                 raise ValueError(self.get_label_text(key) + ' exceeded MAX: ' + str(value[1]))
             if spinbox_value < value[0]:
