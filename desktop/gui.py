@@ -110,6 +110,12 @@ class GUI:
         except IndexError:
             raise IndexError("No checkbox with this number")
 
+    def get_checkbox_values(self, row):
+        try:
+            return self.checkbox_values[row]
+        except KeyError:
+            raise IndexError("No checkbox in this row")
+
     def log(self, text):
         try:
             self.console.insert('end', text + '\n')
