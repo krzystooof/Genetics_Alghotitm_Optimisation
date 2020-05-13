@@ -1,6 +1,67 @@
 from desktop.gui import GUI
 from desktop.alghoritm_control import Controller
 
+
+def start_button_action(controller, gui, checkboxes_one_set):
+    gui.disable_buttons([0, 1, 2, 3])
+    gui.log("Starting")
+    try:
+        gui.check_values(checkboxes_one_set)
+    except ValueError as error:
+        print(repr(error))
+        gui.log_error(str(error))
+        gui.log("Start aborted")
+        gui.enable_buttons([0, 1, 2, 3])
+        return
+    generations = gui.get_entry_value(1)
+    population_chance_bonus = gui.get_entry_value(5)
+    population_size = gui.get_entry_value(2)
+    population_noise = gui.get_entry_value(4)
+    population_discard = gui.get_entry_value(3)
+    reverse_fitness = gui.get_checkbox_value(6, 0)
+    pyboard_port = gui.get_entry_value(0)
+
+    mutation_options = []
+
+    for x, boolean in enumerate(gui.get_checkbox_values(7)):
+        if boolean.get() is True:
+            mutation_options.append(x + 1)
+        x += 1
+
+    crossover_options = []
+
+    for x, boolean in enumerate(gui.get_checkbox_values(8)):
+        if boolean.get() is True:
+            crossover_options.append(x + 1)
+        x += 1
+    pyboard_port = controller.start_algorithm(generations, population_size, population_discard, population_chance_bonus,
+                                              population_noise, mutation_options, crossover_options, reverse_fitness,
+                                              pyboard_port)
+    gui.log_info("PyBoard port is set to " + pyboard_port)
+    gui.enable_entry(0)
+    gui.enable_buttons([1, 2, 3])
+
+
+def pause_button_action(controller, gui):
+    gui.disable_buttons([0, 1, 2, 3])
+    gui.log("Pausing")
+    controller.pause_algorithm()
+    gui.enable_buttons([0, 1, 2])
+
+
+def stop_button_action(controller, gui):
+    gui.disable_buttons([0, 1, 2, 3])
+    gui.log("Stopping")
+    controller.stop_algorithm()
+    gui.enable_entry(0)
+    gui.enable_button(0)
+
+
+def restart_button_action(controller, gui, checkboxes_one_set):
+    stop_button_action(controller, gui)
+    start_button_action(controller, gui, checkboxes_one_set)
+
+
 if __name__ == '__main__':
     gui = GUI("Desktop STM GA Control Panel")
 
@@ -19,16 +80,12 @@ if __name__ == '__main__':
 
     gui.add_console()
 
-    controller = Controller(gui, checkboxes_one_set)
+    controller = Controller()
 
-    start_button_action = lambda: controller.start_algorithm()
-    gui.add_button("START", start_button_action)
-    stop_button_action = lambda: controller.stop_algorithm()
-    gui.add_button("STOP", stop_button_action)
-    restart_button_action = lambda: controller.restart_algorithm()
-    gui.add_button("RESTART", restart_button_action)
-    pause_button_action = lambda: controller.pause_algorithm()
-    gui.add_button("PAUSE", pause_button_action)
+    gui.add_button("START", lambda: start_button_action(controller, gui, checkboxes_one_set))
+    gui.add_button("STOP", lambda: stop_button_action(controller, gui))
+    gui.add_button("RESTART", lambda: restart_button_action(controller, gui, checkboxes_one_set))
+    gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
 
     # must be at the end of main
     gui.work()
