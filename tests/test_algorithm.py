@@ -40,16 +40,34 @@ class TestPopulation(unittest.TestCase):
         self.population.new_gen()
         self.assertEqual(self.population.generation, 1)
 
-    def test_update_stats(self):
-        self.population.update_stats()
+    def test_sort_by_fitness(self):
+        self.assertEqual(1, 1)
+
+    def test_discard_unfit(self):
+        self.population.discard_unfit()
+        self.assertEqual(self.population.total_discarded, 50)
+
+    def test_breed_to_fill(self):
+        self.assertEqual(1, 1)
+
+    def test_assign_cross_chances(self):
+        self.population.assign_cross_chances()
+
+    def test_get_average_fitness(self):
+        final_return = self.population.get_average_fitness()
+        self.assertEqual(len(self.population.member_list), 100)
+        self.assertEqual(final_return, 0)
+
+    def test_get_offset(self):
+        final_return = self.population.get_offset()
+        self.assertEqual(final_return, 1)
 
     def test_apply_noise(self):
         self.population.apply_noise()
         self.assertEqual(self.population.total_mutations, 10)
 
-    def test_discard_unifit(self):
-        self.population.discard_unfit()
-        self.assertEqual(self.population.total_discarded, 50)
+    def test_update_stats(self):
+        self.population.update_stats()
 
 
 if __name__ == '__main__':
