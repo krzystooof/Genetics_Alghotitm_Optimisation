@@ -1,18 +1,18 @@
 import pyb
 
-from pyb.src.port import VCP
-from pyb.src.port import Inform
-from pyb.src.algorithm import Population
+from src.port import VCP
+from src.port import Inform
+from src.algorithm import Population
 
 
 class Main:
 
-    def __init__(self):
+    def __init__(self, ):
         """Main function. First to run"""
 
         # Variables
         self.usb = VCP()
-        self.population = Population()
+        self.population = Population({})
         self.started = False
         self.initiated = False
         self.is_error = False

@@ -57,7 +57,7 @@ class Inform:
     Should be used every time pyboard changes its state or important event happens.
     @author: Jakub Chodubski
     """
-    state: int = 0
+    state = 0
 
     @staticmethod
     def waiting():  # green on

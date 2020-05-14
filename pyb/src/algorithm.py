@@ -82,8 +82,8 @@ class Population:
         # Breed until population is full
         self.total_crossovers = 0
         while len(self.member_list) < self.population_size:
-            parent_1: Member = random.choice(self.member_list)
-            parent_2: Member = random.choice(self.member_list)
+            parent_1 = random.choice(self.member_list)
+            parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
                 self.member_list.append(parent_1.crossover(random.choice(self.crossover_options), parent_2))
                 self.total_crossovers += 1
@@ -120,7 +120,7 @@ class Population:
         self.total_mutations = math.floor(self.noise * self.population_size)
         # Mutate members
         for x in range(0, self.total_mutations):
-            mutating_member: Member = random.choice(self.member_list)
+            mutating_member = random.choice(self.member_list)
             mutating_member.mutate(random.choice(self.mutation_options))
 
     def load_config(self, config):
