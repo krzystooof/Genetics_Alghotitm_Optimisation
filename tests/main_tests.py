@@ -37,6 +37,7 @@ def get_config():
         'member_config': {
             'random_low': -100,
             'random_high': 100,
+            'num_values': 1,
             'member_mutation_options': mutate,
             'member_crossover_options': crossover
             }
