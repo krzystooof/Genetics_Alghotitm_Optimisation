@@ -13,6 +13,7 @@ WORKDIR /app/tests
 RUN apt-get update
 RUN apt-get -y install octave
 RUN apt-get install octave-ga
+RUN pip install coverage
 
 # Run tests
 RUN chmod 755 entrypoint.sh
