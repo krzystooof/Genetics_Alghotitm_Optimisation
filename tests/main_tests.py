@@ -6,7 +6,7 @@ def main():
     config = get_config()
     population = Population(config)
 
-    while population.generation < 100:  # TODO find good break condition
+    while population.generation < 1000:  # TODO find good break condition
         for member in population.member_list:
             member.fitness = get_fitness(member.operator)
         population.new_gen()

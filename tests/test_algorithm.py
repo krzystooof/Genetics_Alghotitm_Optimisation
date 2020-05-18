@@ -47,7 +47,7 @@ class TestPopulation(unittest.TestCase):
         """Testing for 1 generation"""
         self.population.new_gen()
         self.assertEqual(self.population.generation, 1)
-        """Testing for 1001 generation"""
+        # Testing for 1001 generation
         for x in range(1000):
             self.population.new_gen()
         self.assertEqual(self.population.generation, 1001)
@@ -65,7 +65,7 @@ class TestPopulation(unittest.TestCase):
         """Testing for basic values"""
         self.population.discard_unfit()
         self.assertEqual(self.population.total_discarded, 50)
-        """Testing for values multiplied by 100"""
+        # Testing for values multiplied by 100
         self.population.population_discard = self.population.population_discard * 100
         self.population.population_size = self.population.population_size * 100
         self.population.discard_unfit()
@@ -80,7 +80,7 @@ class TestPopulation(unittest.TestCase):
         self.population.assign_cross_chances()
         for member in self.population.member_list:
             self.assertEqual(member.crossover_chance, 0.5)
-        """Testing when member fitness is 2"""
+        # Testing when member fitness is 2
         for member in self.population.member_list:
             member.fitness = 2
         self.population.assign_cross_chances()
@@ -99,7 +99,7 @@ class TestPopulation(unittest.TestCase):
         """Basic test"""
         final_return = self.population.get_offset()
         self.assertEqual(final_return, 1)
-        """Test when first member fitness will be 10000"""
+        # Test when first member fitness will be 10000
         self.population.member_list[0].fitness = 10000
         final_return = self.population.get_offset()
         self.assertEqual(final_return, -9999)
@@ -108,7 +108,7 @@ class TestPopulation(unittest.TestCase):
         """Test of basic values"""
         self.population.apply_noise()
         self.assertEqual(self.population.total_mutations, 10)
-        """Test when noise is 100 and population size is 93"""
+        # Test when noise is 100 and population size is 93
         self.population.noise = 100
         self.population.population_size = 93
         self.population.apply_noise()
@@ -122,7 +122,3 @@ class TestPopulation(unittest.TestCase):
             counting = counting - 1
         self.population.update_stats()
         self.assertEqual(self.population.best_member.fitness, 1)
-
-
-if __name__ == '__main__':
-    unittest.main()
