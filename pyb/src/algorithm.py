@@ -84,7 +84,7 @@ class Population:
             parent_1 = random.choice(self.member_list)
             parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
-                self.member_list.append(parent_1.crossover(random.choice(), parent_2))
+                self.member_list.append(parent_1.crossover(parent_2))
                 self.total_crossovers += 1
 
     def assign_cross_chances(self):
