@@ -171,11 +171,11 @@ class Member:
                 1. One point
                 2. Multi point
         """
-        self.random_low = config["random_low"]
-        self.random_high = config["random_high"]
-        self.num_values = config["num_values"]
-        self.mutation_options = config["mutation_options"]
-        self.crossover_options = config["crossover_options"]
+        self.random_low = config['random_low']
+        self.random_high = config['random_high']
+        self.num_values = config['num_values']
+        self.mutation_options = config['mutation_options']
+        self.crossover_options = config['crossover_options']
         # make random operator
         operator_list = []
         for x in range(0, self.num_values):
