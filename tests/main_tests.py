@@ -34,10 +34,12 @@ def get_config():
         'population_noise': 0.1,
         'population_chance_bonus': 2,
         'population_reverse_fitness': True,
-        'population_base_start': -100,
-        'population_base_end': 100,
-        'member_mutation_options': mutate,
-        'member_crossover_options': crossover
+        'member_config': {
+            'random_low': -100,
+            'random_high': 100,
+            'member_mutation_options': mutate,
+            'member_crossover_options': crossover
+            }
 
     }
     return config_dict

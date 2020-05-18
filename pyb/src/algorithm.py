@@ -132,7 +132,7 @@ class Population:
           - population_noise - Percentage of random mutations for each generation (Value <0-1>)
           - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
           - population_reverse_fitness - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
-          - member_config - More on that in Member.__init__()
+          - member_config - Member's config dict. More on that in Member.__init__()
         """
 
         self.population_size = config["population_size"]
