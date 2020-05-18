@@ -19,7 +19,7 @@ class Population:
     """
         Class governing member reproduction and beeding mechanics.
         @author: Jakub Chodubski
-        @version: 2.1
+        @version: 2.2
     """
 
     def __init__(self, config):
@@ -32,12 +32,13 @@ class Population:
         self.mutation_options = 0
         self.crossover_options = 0
         self.reverse = False
+        self.member_config = dict()
         self.load_config(config)
 
         # Filling population with random members
         self.member_list = []
         for x in range(0, self.population_size):
-            self.member_list.append(Member(Operator([random.uniform(-100, 100)])))  # TODO randomize initial values
+            self.member_list.append(Member(self.member_config))
 
         # Statistics for current generation
         self.generation = 0
@@ -131,14 +132,7 @@ class Population:
           - population_noise - Percentage of random mutations for each generation (Value <0-1>)
           - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
           - population_reverse_fitness - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
-          - member_mutation_options - List of allowed mutation types. Possible values:
-            1. Random resetting (set random element to 0)
-            2. Swap mutation (swap two elements)
-            3. Scramble mutation (shuffle random part)
-            4. Inversion mutation (invert random part)
-          - member_crossover_options - List of allowed crossover types. Possible values:
-            1. One point
-            2. Multi point
+          - member_config - More on that in Member.__init__()
         """
 
         self.population_size = config["population_size"]
@@ -146,8 +140,7 @@ class Population:
         self.population_chance_bonus = config["population_chance_bonus"]
         self.noise = config["population_noise"]
         self.reverse = config["population_reverse_fitness"]
-        self.mutation_options = config["member_mutation_options"]
-        self.crossover_options = config["member_crossover_options"]
+        self.member_config = config["member_config"]
 
     def update_stats(self):
         self.sort_by_fitness()
@@ -161,12 +154,36 @@ class Member:
     @author: Krzysztof Greczka
     """
 
-    def __init__(self, operator):  # TODO must generate random operator if not given
+    def __init__(self, config):
         self.fitness = 0.0
         self.crossover_chance = 0
-        self.operator = operator
+        """
+        Member's config:
+            - random_low - initial values lower limit
+            - random_high - initial values higher limit
+            - num_values - how many values does operator keep
+            - member_mutation_options - List of allowed mutation types. Possible values:
+                1. Random resetting (set random element to 0)
+                2. Swap mutation (swap two elements)
+                3. Scramble mutation (shuffle random part)
+                4. Inversion mutation (invert random part)
+            - member_crossover_options - List of allowed crossover types. Possible values:
+                1. One point
+                2. Multi point
+        """
+        self.random_low = config["random_low"]
+        self.random_high = config["random_high"]
+        self.num_values = config["num_values"]
+        self.mutation_options = config["mutation_options"]
+        self.crossover_options = config["crossover_options"]
+        # make random operator
+        operator_list = []
+        for x in range(0, self.num_values):
+            operator_list.append(random.uniform(self.random_low, self.random_high))
+        self.operator = Operator(operator_list)
 
-    def mutate(self, mutation_method):
+    def mutate(self):
+        mutation_method = random.choice(self.mutation_options)
         # self.input - list
         i = 0
         j = 0
@@ -175,7 +192,7 @@ class Member:
                 i = random.randint(0, len(self.operator.values) - 1)
                 j = random.randint(i, len(self.operator.values) - 1)
         if mutation_method == 1:  # random resetting - sets random number to random value
-            self.operator.values[i] *= random.uniform(-100, 100)  # TODO no hardcoded values
+            self.operator.values[i] *= random.uniform(self.random_low, self.random_high)
         elif mutation_method == 2:  # swap mutation - swap two elements
             self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
         elif mutation_method == 3:  # scramble mutation - shuffle random part
@@ -185,7 +202,8 @@ class Member:
         elif mutation_method == 4:  # inversion mutation - invert random part
             self.operator.values[i:j] = list(reversed(self.operator.values[i:j]))
 
-    def crossover(self, crossover_method, parent):
+    def crossover(self, parent):
+        crossover_method = random.choice(self.crossover_options)
         # returns a child
         # self.operator.values - list
         i = 0
