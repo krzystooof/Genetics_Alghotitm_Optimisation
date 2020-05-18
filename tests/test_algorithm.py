@@ -6,7 +6,6 @@ import random
 
 
 def get_config():
-    """Configuration of Population"""
     mutate = [1, 2, 3, 4]
     crossover = [1, 2]
     config_dict = {
@@ -15,11 +14,13 @@ def get_config():
         'population_noise': 0.1,
         'population_chance_bonus': 2,
         'population_reverse_fitness': True,
-        'population_base_start': -100,
-        'population_base_end': 100,
-        'member_mutation_options': mutate,
-        'member_crossover_options': crossover
-
+        'member_config': {
+            'random_low': -100,
+            'random_high': 100,
+            'num_values': 1,
+            'mutation_options': mutate,
+            'crossover_options': crossover
+            }
     }
     return config_dict
 
@@ -32,7 +33,7 @@ class TestPopulation(unittest.TestCase):
         for x in range(0, self.population.population_size):
             self.member_list.append(Member(Operator([random.uniform(-100, 100)])))
 
-    def test_load_config(self):
+    def test_load_config(self):  # TODO This needs to be updated
         """Testing configuration"""
         self.population.load_config(self.config)
         self.assertEqual(self.population.population_size, 100)
