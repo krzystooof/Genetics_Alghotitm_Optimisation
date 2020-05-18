@@ -29,8 +29,6 @@ class Population:
         self.population_discard = 0
         self.population_chance_bonus = 0
         self.noise = 0
-        self.mutation_options = 0
-        self.crossover_options = 0
         self.reverse = False
         self.member_config = dict()
         self.load_config(config)
@@ -86,7 +84,7 @@ class Population:
             parent_1 = random.choice(self.member_list)
             parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
-                self.member_list.append(parent_1.crossover(random.choice(self.crossover_options), parent_2))
+                self.member_list.append(parent_1.crossover(random.choice(), parent_2))
                 self.total_crossovers += 1
 
     def assign_cross_chances(self):
@@ -122,7 +120,7 @@ class Population:
         # Mutate members
         for x in range(0, self.total_mutations):
             mutating_member = random.choice(self.member_list)
-            mutating_member.mutate(random.choice(self.mutation_options))
+            mutating_member.mutate(random.choice())
 
     def load_config(self, config):
         """
@@ -135,12 +133,12 @@ class Population:
           - member_config - Member's config dict. More on that in Member.__init__()
         """
 
-        self.population_size = config["population_size"]
-        self.population_discard = config["population_discard"]
-        self.population_chance_bonus = config["population_chance_bonus"]
-        self.noise = config["population_noise"]
-        self.reverse = config["population_reverse_fitness"]
-        self.member_config = config["member_config"]
+        self.population_size = config['population_size']
+        self.population_discard = config['population_discard']
+        self.population_chance_bonus = config['population_chance_bonus']
+        self.noise = config['population_noise']
+        self.reverse = config['population_reverse_fitness']
+        self.member_config = config['member_config']
 
     def update_stats(self):
         self.sort_by_fitness()
