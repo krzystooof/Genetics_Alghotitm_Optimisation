@@ -6,7 +6,7 @@ def main():
     config = get_config()
     population = Population(config)
 
-    while population.generation < 100:  # TODO find good break condition
+    while population.generation < 1000:  # TODO find good break condition
         for member in population.member_list:
             member.fitness = get_fitness(member.operator)
         population.new_gen()
@@ -34,10 +34,12 @@ def get_config():
         'population_noise': 0.1,
         'population_chance_bonus': 2,
         'population_reverse_fitness': True,
-        'population_base_start': -100,
-        'population_base_end': 100,
-        'member_mutation_options': mutate,
-        'member_crossover_options': crossover
+        'member_config': {
+            'random_low': -100,
+            'random_high': 100,
+            'member_mutation_options': mutate,
+            'member_crossover_options': crossover
+            }
 
     }
     return config_dict

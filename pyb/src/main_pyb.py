@@ -69,7 +69,8 @@ class Main:
     def load_config(self):
         """Feeds configuration variables into algorithm"""
         # TODO load generations number
-
+        # I dont remember what i meant by this ^^^
+        # Dont worry. I will once something breaks.
         if self.initiated:
             self.population.load_config(self.data['config'])
         else:
