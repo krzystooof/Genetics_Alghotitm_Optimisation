@@ -120,7 +120,7 @@ class Population:
         # Mutate members
         for x in range(0, self.total_mutations):
             mutating_member = random.choice(self.member_list)
-            mutating_member.mutate(random.choice())
+            mutating_member.mutate()
 
     def load_config(self, config):
         """
@@ -174,6 +174,7 @@ class Member:
         self.num_values = config['num_values']
         self.mutation_options = config['mutation_options']
         self.crossover_options = config['crossover_options']
+        self.config = config
         # make random operator
         operator_list = []
         for x in range(0, self.num_values):
@@ -214,10 +215,14 @@ class Member:
             j = random.randint(i, length)
         if crossover_method == 1:  # one point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:])
-            return Member(operator)
+            to_ret = Member(self.config)
+            to_ret.operator = operator
+            return to_ret
         elif crossover_method == 2:  # multi point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:j] + self.operator.values[j:])
-            return Member(operator)
+            to_ret = Member(self.config)
+            to_ret.operator = operator
+            return to_ret
 
 
 class Operator:
