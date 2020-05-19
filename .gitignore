@@ -4,3 +4,5 @@ src/.idea/
 tests/algorithm_results.json
 .idea/
 README_pyb.txt
+pyb/main_tests.py
+pyb/algorithm_results.json
