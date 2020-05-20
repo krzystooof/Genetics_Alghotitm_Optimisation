@@ -1,6 +1,8 @@
+from tkinter import END
+
+from desktop.graph import Graph
 from desktop.gui import GUI
 from desktop.alghoritm_control import Controller
-
 
 def start_button_action(controller, gui, checkboxes_one_set):
     gui.disable_buttons([0, 1, 2, 3])
@@ -52,6 +54,8 @@ def pause_button_action(controller, gui):
 def stop_button_action(controller, gui):
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
+    # TODO add operator to listbox0
+    # TODO add time to listbox1
     controller.stop_algorithm()
     gui.enable_entry(0)
     gui.enable_button(0)
@@ -59,7 +63,13 @@ def stop_button_action(controller, gui):
 
 def restart_button_action(controller, gui, checkboxes_one_set):
     stop_button_action(controller, gui)
+    gui.draw_graph()
     start_button_action(controller, gui, checkboxes_one_set)
+
+def draw_graph_button_action(gui):
+    graph = Graph("Time (function)", "function", "time", gui.listboxes[0].get(0, END))
+    graph.add_y_axis_data("", gui.listboxes[1].get(0, END), 'lines+markers')
+    graph.show()
 
 
 if __name__ == '__main__':
@@ -86,6 +96,10 @@ if __name__ == '__main__':
     gui.add_button("STOP", lambda: stop_button_action(controller, gui))
     gui.add_button("RESTART", lambda: restart_button_action(controller, gui, checkboxes_one_set))
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
+    gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action(gui))
+
+    gui.add_listbox()
+    gui.add_listbox()
 
     # must be at the end of main
     gui.work()
