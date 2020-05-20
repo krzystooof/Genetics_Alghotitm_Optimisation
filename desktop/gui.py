@@ -35,8 +35,6 @@ class GUI:
         self.checkbox_values = {}
         self.buttons = []
         self.listboxes = []
-        self.operators = []
-        self.times = []
 
     def add_text_entry(self, text):
         new_label = Label(self.window, text=text)
@@ -102,8 +100,9 @@ class GUI:
         new_listbox.grid(column=self.buttons_column + len(self.listboxes), row=self.free_row, padx=5, pady=5)
         self.listboxes.append(new_listbox)
 
-    def insert_listbox_data(self, listbox_numer, data:str):
+    def insert_listbox_data(self, listbox_numer, data: str):
         self.listboxes[listbox_numer].insert(END, data)
+
 
     def get_label_text(self, row):
         return self.labels[row].cget("text")
