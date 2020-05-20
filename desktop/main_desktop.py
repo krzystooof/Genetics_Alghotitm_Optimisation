@@ -1,8 +1,12 @@
+from multiprocessing import Process
 from tkinter import END
 
 from desktop.graph import Graph
 from desktop.gui import GUI
 from desktop.alghoritm_control import Controller
+
+p2 = None
+
 
 def start_button_action(controller, gui, checkboxes_one_set):
     gui.disable_buttons([0, 1, 2, 3])
@@ -42,6 +46,9 @@ def start_button_action(controller, gui, checkboxes_one_set):
     gui.log_info("PyBoard port is set to " + pyboard_port)
     gui.enable_entry(0)
     gui.enable_buttons([1, 2, 3])
+    global p2
+    p2 = Process(target=lambda: controller.fitness_reply())
+    p2.start()
 
 
 def pause_button_action(controller, gui):
@@ -52,6 +59,8 @@ def pause_button_action(controller, gui):
 
 
 def stop_button_action(controller, gui):
+    global p2
+    p2.terminate()
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
     # TODO add operator to listbox0
@@ -65,6 +74,7 @@ def restart_button_action(controller, gui, checkboxes_one_set):
     stop_button_action(controller, gui)
     gui.draw_graph()
     start_button_action(controller, gui, checkboxes_one_set)
+
 
 def draw_graph_button_action(gui):
     graph = Graph("Time (function)", "function", "time", gui.listboxes[0].get(0, END))
@@ -100,6 +110,5 @@ if __name__ == '__main__':
 
     gui.add_listbox()
     gui.add_listbox()
-
-    # must be at the end of main
-    gui.work()
+    p1 = Process(target=gui.work)
+    p1.start()
