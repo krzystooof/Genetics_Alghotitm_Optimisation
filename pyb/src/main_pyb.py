@@ -98,8 +98,10 @@ class Main:
                 self.test_index = 0
             else:
                 # Send next for testing
+                self.usb.attach("type", 9)
                 self.usb.attach('index', self.test_index)
                 self.usb.attach('operator', self.population.member_list[self.test_index].operator)
+                self.usb.send()
                 self.test_index += 1
 
 
