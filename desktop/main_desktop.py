@@ -112,6 +112,7 @@ if __name__ == '__main__':
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
     gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action(gui))
     gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
+    gui.disable_buttons([1,2,3])
 
     gui.add_listbox()
     gui.add_listbox()
