@@ -31,19 +31,22 @@ class Population:
         self.noise = 0
         self.reverse = False
         self.member_config = dict()
-        self.load_config(config)
+
+        # If config is available
+        if config is not None:
+            self.load_config(config)
 
         # Filling population with random members
-        self.member_list = []
-        for x in range(0, self.population_size):
-            self.member_list.append(Member(self.member_config))
+            self.member_list = []
+            for x in range(0, self.population_size):
+                self.member_list.append(Member(self.member_config))
 
         # Statistics for current generation
-        self.generation = 0
-        self.best_member = self.member_list[0]
-        self.total_crossovers = 0
-        self.total_mutations = 0
-        self.total_discarded = 0
+            self.generation = 0
+            self.best_member = self.member_list[0]
+            self.total_crossovers = 0
+            self.total_mutations = 0
+            self.total_discarded = 0
 
     def new_gen(self):
         """

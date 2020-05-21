@@ -34,13 +34,17 @@ class USB:
             # Catching pyboard tracebacks
             if "Traceback" in read_string:
                 sleep(1)
-                read = self.usb.readline()
-                read_string += read.decode('utf-8')
+                read_traceback = self.usb.readlines()
+                for line in read_traceback:
+                    read_string += line.decode('utf-8')
                 raise ConnectionAbortedError(read_string)
             while read_string.count('{') != read_string.count('}'):
                 read = self.usb.readline()
                 read_string += read.decode('utf-8')
-            return json.loads(read_string)
+            try:
+                return json.loads(read_string)
+            except json.decoder.JSONDecodeError:
+                raise ValueError(read_string)
         else:
             return {'type': 0}
 
