@@ -32,7 +32,7 @@ class USB:
             read = self.usb.readline()
             read_string = read.decode('utf-8')
             # Catching pyboard tracebacks
-            if "Traceback" in read_string:
+            if read_string[0] != '{':
                 sleep(1)
                 read_traceback = self.usb.readlines()
                 for line in read_traceback:
@@ -41,10 +41,7 @@ class USB:
             while read_string.count('{') != read_string.count('}'):
                 read = self.usb.readline()
                 read_string += read.decode('utf-8')
-            try:
-                return json.loads(read_string)
-            except json.decoder.JSONDecodeError:
-                raise ValueError(read_string)
+            return json.loads(read_string)
         else:
             return {'type': 0}
 
