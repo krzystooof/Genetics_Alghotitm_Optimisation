@@ -1,7 +1,7 @@
 """This module contains code used to control the algorithm on board"""
 import time
 
-from desktop.usb import USB
+from usb import USB
 
 
 class Controller:

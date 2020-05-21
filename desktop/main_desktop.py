@@ -1,9 +1,9 @@
 from multiprocessing import Process
 from tkinter import END
 
-from desktop.graph import Graph
-from desktop.gui import GUI
-from desktop.alghoritm_control import Controller
+from graph import Graph
+from gui import GUI
+from alghoritm_control import Controller
 
 p2 = None
 
@@ -82,6 +82,10 @@ def draw_graph_button_action(gui):
     graph.show()
 
 
+def debug_button_action(controller, gui):
+    gui.log(controller.usb.read_debug())
+
+
 if __name__ == '__main__':
     gui = GUI("Desktop STM GA Control Panel")
 
@@ -107,6 +111,7 @@ if __name__ == '__main__':
     gui.add_button("RESTART", lambda: restart_button_action(controller, gui, checkboxes_one_set))
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
     gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action(gui))
+    gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
 
     gui.add_listbox()
     gui.add_listbox()
