@@ -11,7 +11,6 @@ class Controller:
         """
 
     def __init__(self):
-        self.usb = USB()
         self.is_running = False
 
     def stop_algorithm(self):
