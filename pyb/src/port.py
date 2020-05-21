@@ -13,6 +13,7 @@ class VCP:
         """Opens VCP and waits for connection"""
         self.usb = pyb.USB_VCP()
         self.dictionary = dict()
+        self.fifo = []
         Inform.waiting()
         while not self.usb.isconnected():
             pyb.delay(100)
@@ -43,12 +44,33 @@ class VCP:
         if self.usb.any():
             read = self.usb.readline()
             read_string = read.decode('utf-8')
+
+            # Keep reading from buffer until json is complete
             while read_string.count('{') != read_string.count('}'):
                 read = self.usb.readline()
                 read_string += read.decode('utf-8')
-            return ujson.loads(read_string)
-        else:
-            return {'type': 0}
+
+            # Split and return
+            self.push(read_string)
+        return self.pop()
+
+    def push(self, line):
+        """Splits jsons string into single messages and puts in fifo"""
+        if line[0] != '{':
+            raise ValueError("Could not parse json: " + line)
+        message = ""
+        for character in line:
+            message += character
+            if message.count('{') == message.count('}'):
+                self.fifo.insert(0, message)
+                message = ""
+
+    def pop(self):
+        """Reads messages from fifo"""
+        if len(self.fifo) != 0:
+            message = self.fifo.pop()
+            return ujson.loads(message)
+        return {'type': 0}
 
 
 class Inform:

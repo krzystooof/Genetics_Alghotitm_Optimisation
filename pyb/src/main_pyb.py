@@ -12,7 +12,7 @@ class Main:
 
         # Variables
         self.usb = VCP()
-        self.population = Population({})
+        self.population = Population(None)
         self.started = False
         self.initiated = False
         self.is_error = False
@@ -25,28 +25,23 @@ class Main:
                 self.error()
 
             # Wait for valid data
-            Inform.waiting()
             self.data = self.usb.read()
-            try:
-                while self.data['type'] == 0:  # 0 means no new data
-                    pyb.delay(10)
-                    self.data = self.usb.read()
 
-                # Reading data
-                Inform.running()
-                if self.data['type'] == 1:  # desktop client error
-                    self.error()
-                elif self.data['type'] == 2:  # config received
-                    self.load_config()
-                elif self.data['type'] == 3:  # should never appear
-                    self.error()
-                elif self.data['type'] == 4:  # start, stop, pause, restart
-                    self.control()
-                elif self.data['type'] == 9:  # data to feed to population
-                    self.feed()
-            except KeyError:
-                print("Incomplete data")
-                self.is_error = True
+            while self.data['type'] == 0:  # 0 means no new data
+                Inform.waiting()
+                pyb.delay(10)
+                self.data = self.usb.read()              # Reading data
+            Inform.running()
+            if self.data['type'] == 1:  # desktop client error
+                self.error()
+            elif self.data['type'] == 2:  # config received
+                self.load_config()
+            elif self.data['type'] == 3:  # should never appear
+                self.error()
+            elif self.data['type'] == 4:  # start, stop, pause, restart
+                self.control()
+            elif self.data['type'] == 9:  # data to feed to population
+                self.feed()
 
             self.run()
 
@@ -98,8 +93,10 @@ class Main:
                 self.test_index = 0
             else:
                 # Send next for testing
+                self.usb.attach("type", 9)
                 self.usb.attach('index', self.test_index)
                 self.usb.attach('operator', self.population.member_list[self.test_index].operator)
+                self.usb.send()
                 self.test_index += 1
 
 

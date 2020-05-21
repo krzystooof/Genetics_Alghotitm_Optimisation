@@ -1,5 +1,7 @@
 """This module contains code used to control the algorithm on board"""
-from desktop.usb import USB
+import time
+
+from usb import USB
 
 
 class Controller:
@@ -9,13 +11,15 @@ class Controller:
         """
 
     def __init__(self):
-        self.usb = USB()
+        self.is_running = False
 
     def stop_algorithm(self):
+        self.is_running = False
         self.usb.attach("type", 4)
         operation = "STOP"
         self.usb.attach("operation", operation)
         self.usb.send()
+
 
     def start_algorithm(self, generations, population_size, population_discard, population_chance_bonus,
                         population_noise, mutation_options, crossover_options, reverse_fitness, pyboard_port):
@@ -43,6 +47,7 @@ class Controller:
         self.usb.attach("type", 4)
         self.usb.attach("operation", operation)
         self.usb.send()
+        self.is_running = True
         return pyboard_port
 
     def pause_algorithm(self):
@@ -50,3 +55,20 @@ class Controller:
         operation = "PAUSE"
         self.usb.attach("operation", operation)
         self.usb.send()
+
+    def fitness_reply(self):
+        while True:
+            reply = self.usb.read()
+            try:
+                if reply and reply['type'] == 9:
+                    index = reply['index']
+                    operator = reply['operator']
+                    # TODO fitness =
+                    self.usb.attach("type", 9)
+                    self.usb.attach('index', index)
+                    # TODO self.usb.attach('fitness', fitness)
+                    self.usb.send()
+            except KeyError as error:
+                raise IOError("Pyboard reply without expected field" + repr(error))
+            finally:
+                time.sleep(1)

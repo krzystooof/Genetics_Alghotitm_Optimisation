@@ -1,5 +1,11 @@
-from desktop.gui import GUI
-from desktop.alghoritm_control import Controller
+from multiprocessing import Process
+from tkinter import END
+
+from graph import Graph
+from gui import GUI
+from alghoritm_control import Controller
+
+p2 = None
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -40,6 +46,9 @@ def start_button_action(controller, gui, checkboxes_one_set):
     gui.log_info("PyBoard port is set to " + pyboard_port)
     gui.enable_entry(0)
     gui.enable_buttons([1, 2, 3])
+    global p2
+    p2 = Process(target=lambda: controller.fitness_reply())
+    p2.start()
 
 
 def pause_button_action(controller, gui):
@@ -50,8 +59,12 @@ def pause_button_action(controller, gui):
 
 
 def stop_button_action(controller, gui):
+    global p2
+    p2.terminate()
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
+    # TODO add operator to listbox0
+    # TODO add time to listbox1
     controller.stop_algorithm()
     gui.enable_entry(0)
     gui.enable_button(0)
@@ -59,7 +72,18 @@ def stop_button_action(controller, gui):
 
 def restart_button_action(controller, gui, checkboxes_one_set):
     stop_button_action(controller, gui)
+    gui.draw_graph()
     start_button_action(controller, gui, checkboxes_one_set)
+
+
+def draw_graph_button_action(gui):
+    graph = Graph("Time (function)", "function", "time", gui.listboxes[0].get(0, END))
+    graph.add_y_axis_data("", gui.listboxes[1].get(0, END), 'lines+markers')
+    graph.show()
+
+
+def debug_button_action(controller, gui):
+    gui.log(controller.usb.read_debug())
 
 
 if __name__ == '__main__':
@@ -86,6 +110,11 @@ if __name__ == '__main__':
     gui.add_button("STOP", lambda: stop_button_action(controller, gui))
     gui.add_button("RESTART", lambda: restart_button_action(controller, gui, checkboxes_one_set))
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
+    gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action(gui))
+    gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
+    gui.disable_buttons([1,2,3])
 
-    # must be at the end of main
-    gui.work()
+    gui.add_listbox()
+    gui.add_listbox()
+    p1 = Process(target=gui.work)
+    p1.start()

@@ -10,7 +10,8 @@ class GUI:
         @author: Krzysztof Greczka
     """
 
-    def __init__(self, window_title="window", entries_width=5,buttons_width=10,entries_column_anchor = "w",labels_column_anchor = "e"):
+    def __init__(self, window_title="window", entries_width=5, buttons_width=10, entries_column_anchor="w",
+                 labels_column_anchor="e"):
         self.window = Tk()
 
         self.window.title(window_title)
@@ -33,6 +34,7 @@ class GUI:
         self.min_max_spinbox_values = {}
         self.checkbox_values = {}
         self.buttons = []
+        self.listboxes = []
 
     def add_text_entry(self, text):
         new_label = Label(self.window, text=text)
@@ -90,8 +92,17 @@ class GUI:
         self.free_button_row += 1
 
     def add_console(self):
-        self.console = scrolledtext.ScrolledText(self.window)
+        self.console = scrolledtext.ScrolledText(self.window, height=10)
         self.console.grid(column=0, row=self.free_row, columnspan=self.buttons_column, padx=5, pady=5)
+
+    def add_listbox(self):
+        new_listbox = Listbox()
+        new_listbox.grid(column=self.buttons_column + len(self.listboxes), row=self.free_row, padx=5, pady=5)
+        self.listboxes.append(new_listbox)
+
+    def insert_listbox_data(self, listbox_numer, data: str):
+        self.listboxes[listbox_numer].insert(END, data)
+
 
     def get_label_text(self, row):
         return self.labels[row].cget("text")
