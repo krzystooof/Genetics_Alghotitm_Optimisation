@@ -6,3 +6,4 @@ tests/algorithm_results.json
 README_pyb.txt
 pyb/main_tests.py
 pyb/algorithm_results.json
+azure-pipelines.yml
