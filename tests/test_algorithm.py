@@ -1,9 +1,5 @@
 import unittest
 from pyb.src.algorithm import Population
-from pyb.src.algorithm import Member
-from pyb.src.algorithm import Operator
-import random
-
 
 def get_config():
     mutate = [1, 2, 3, 4]
@@ -20,7 +16,7 @@ def get_config():
             'num_values': 1,
             'mutation_options': mutate,
             'crossover_options': crossover
-            }
+        }
     }
     return config_dict
 
@@ -30,19 +26,21 @@ class TestPopulation(unittest.TestCase):
         self.config = get_config()
         self.population = Population(self.config)
         self.member_list = []
-        for x in range(0, self.population.population_size):
-            self.member_list.append(Member(Operator([random.uniform(-100, 100)])))
 
-#   def test_load_config(self):  # TODO This needs to be updated
-#       """Testing configuration"""
-#       self.population.load_config(self.config)
-#       self.assertEqual(self.population.population_size, 100)
-#       self.assertEqual(self.population.population_discard, 0.5)
-#       self.assertEqual(self.population.noise, 0.1)
-#       self.assertEqual(self.population.population_chance_bonus, 2)
-#       self.assertEqual(self.population.reverse, True)
-#       self.assertEqual(self.population.mutation_options, [1, 2, 3, 4])
-#       self.assertEqual(self.population.crossover_options, [1, 2])
+    def test_load_config(self):
+        """Testing configuration"""
+        self.population.load_config(self.config)
+        self.assertEqual(self.population.population_size, 100)
+        self.assertEqual(self.population.population_discard, 0.5)
+        self.assertEqual(self.population.noise, 0.1)
+        self.assertEqual(self.population.population_chance_bonus, 2)
+        self.assertEqual(self.population.reverse, True)
+        self.assertEqual(self.population.member_config["random_low"], -100)
+        self.assertEqual(self.population.member_config["random_high"], 100)
+        self.assertEqual(self.population.member_config["num_values"], 1)
+        self.assertEqual(self.population.member_config["mutation_options"], [1, 2, 3, 4])
+        self.assertEqual(self.population.member_config["crossover_options"], [1, 2])
+
 
     def test_new_gen(self):
         """Testing for 1 generation"""
@@ -123,3 +121,6 @@ class TestPopulation(unittest.TestCase):
             counting = counting - 1
         self.population.update_stats()
         self.assertEqual(self.population.best_member.fitness, 1)
+
+if __name__ == '__main__':
+    unittest.main()
