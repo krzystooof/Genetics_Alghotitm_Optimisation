@@ -6,10 +6,14 @@ from usb import USB
 
 
 def create_member_config(random_low, random_high, num_values, mutation_options, crossover_options):
+    for x in range(0,len(mutation_options)):
+        mutation_options[x] = int(mutation_options[x])
+    for x in range(0,len(crossover_options)):
+        crossover_options[x] = int(crossover_options[x])
     return {
-        "random_low": random_low,
-        "random_high": random_high,
-        "num_values": num_values,
+        "random_low": float(random_low),
+        "random_high": float(random_high),
+        "num_values": int(num_values),
         "member_mutation_options": mutation_options,
         "crossover_options": crossover_options
     }
@@ -18,12 +22,12 @@ def create_member_config(random_low, random_high, num_values, mutation_options, 
 def create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
                   reverse_fitness, member_config):
     return {
-        "generations": generations,
-        "population_size": population_size,
-        "population_discard": population_discard,
-        "population_chance_bonus": population_chance_bonus,
-        "population_noise": population_noise,
-        "population_reverse_fitness": reverse_fitness,
+        "generations": int(generations),
+        "population_size": int(population_size),
+        "population_discard": float(population_discard),
+        "population_chance_bonus": float(population_chance_bonus),
+        "population_noise": float(population_noise),
+        "population_reverse_fitness": bool(reverse_fitness),
         "member_config": member_config
     }
 
