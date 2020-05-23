@@ -116,7 +116,7 @@ class Population:
         if self.reverse:
             return -(self.member_list[0].fitness - 1)  # Fittest member is lower value
         else:
-            return -(self.member_list[len(self.member_list)].fitness - 1)  # Worst fit member is lower value
+            return -(self.member_list[len(self.member_list)-1].fitness - 1)  # Worst fit member is lower value
 
     def apply_noise(self):
         # Calculate how many members will be mutated
@@ -201,7 +201,7 @@ class Member:
             self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
         elif mutation_method == 3:  # scramble mutation - shuffle random part
             new_list = self.operator.values[i:j]
-            random.shuffle(new_list)
+            #  random.shuffle(new_list) TODO micropython does not have shuffle method
             self.operator.values[i:j] = new_list
         elif mutation_method == 4:  # inversion mutation - invert random part
             self.operator.values[i:j] = list(reversed(self.operator.values[i:j]))

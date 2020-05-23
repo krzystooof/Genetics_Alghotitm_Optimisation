@@ -41,10 +41,13 @@ class USB:
             read_string = read.decode('utf-8')
             # Catching pyboard tracebacks
             if read_string[0] != '{':
-                sleep(1)
                 read_traceback = self.usb.readlines()
                 for line in read_traceback:
                     read_string += line.decode('utf-8')
+                sleep(0.3)
+                if self.usb.in_waiting != 0:
+                    for line in read_traceback:
+                        read_string += line.decode('utf-8')
                 raise ConnectionAbortedError(read_string)
             while read_string.count('{') != read_string.count('}'):
                 read = self.usb.readline()
