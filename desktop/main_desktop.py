@@ -91,7 +91,7 @@ def debug_button_action(controller, gui):
 
 
 if __name__ == '__main__':
-    gui = GUI("Desktop STM GA Control Panel")
+    gui = GUI("Desktop STM GA Control Panel",10)
 
     gui.add_text_entry("PyBoard port:")
     gui.add_spinbox("Generations:", 0, 9999, '%1.f', 1)
@@ -111,6 +111,8 @@ if __name__ == '__main__':
     gui.add_spinbox("Number of operator values:", 0, 100, '%1.f', 1)
 
     gui.add_console()
+    gui.log("Fitness caclulating function is located in fintess.py")
+    gui.log("Please edit this function before running GUI")
 
     controller = Controller()
 

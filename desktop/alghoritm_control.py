@@ -1,6 +1,7 @@
 """This module contains code used to control the algorithm on board"""
 import time
 
+from fitness import get_fitness
 from usb import USB
 
 
@@ -74,10 +75,10 @@ class Controller:
                 if reply and reply['type'] == 9:
                     index = reply['index']
                     operator = reply['operator']
-                    # TODO fitness =
+                    fitness = get_fitness(operator)
                     self.usb.attach("type", 9)
                     self.usb.attach('index', index)
-                    # TODO self.usb.attach('fitness', fitness)
+                    self.usb.attach('fitness', fitness)
                     self.usb.send()
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
