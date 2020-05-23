@@ -135,6 +135,7 @@ class Main:
         self.usb.attach('discarded', self.population.total_discarded)
         self.usb.attach('time', stop - start)
         self.usb.attach('total_time', self.run_time)
+        self.usb.send()
 
 
 main = Main()
