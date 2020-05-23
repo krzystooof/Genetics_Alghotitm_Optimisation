@@ -1,6 +1,8 @@
 from multiprocessing import Process
 from tkinter import END
 
+import serial
+
 from graph import Graph
 from gui import GUI
 from alghoritm_control import *
@@ -46,13 +48,20 @@ def start_button_action(controller, gui, checkboxes_one_set):
     member_config = create_member_config(random_low, random_high, num_values, mutation_options, crossover_options)
     config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise, reverse_fitness, member_config)
 
-    pyboard_port = controller.start_algorithm(config, pyboard_port)
-    gui.log_info("PyBoard port is set to " + pyboard_port)
-    gui.enable_entry(0)
-    gui.enable_buttons([1, 2, 3])
-    global p2
-    p2 = Process(target=lambda: controller.fitness_reply())
-    p2.start()
+    try:
+        pyboard_port = controller.start_algorithm(config, pyboard_port)
+        gui.log_info("PyBoard port is set to " + pyboard_port)
+        global p2
+        p2 = Process(target=lambda: controller.fitness_reply())
+        p2.start()
+        gui.enable_buttons([1, 2, 3])
+    except serial.serialutil.SerialException:
+        gui.log_error("Failed connection to board")
+        gui.log("Start aborted")
+        gui.enable_button(0)
+    finally:
+        gui.enable_entry(0)
+
 
 
 def pause_button_action(controller, gui):
