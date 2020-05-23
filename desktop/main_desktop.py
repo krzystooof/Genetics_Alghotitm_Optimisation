@@ -3,7 +3,7 @@ from tkinter import END
 
 from graph import Graph
 from gui import GUI
-from alghoritm_control import Controller
+from alghoritm_control import *
 
 p2 = None
 
@@ -26,7 +26,9 @@ def start_button_action(controller, gui, checkboxes_one_set):
     population_discard = gui.get_entry_value(3)
     reverse_fitness = gui.get_checkbox_value(6, 0)
     pyboard_port = gui.get_entry_value(0)
-
+    random_low = gui.get_entry_value(9)
+    random_high = gui.get_entry_value(10)
+    num_values = gui.get_entry_value(11)
     mutation_options = []
 
     for x, boolean in enumerate(gui.get_checkbox_values(7)):
@@ -40,9 +42,11 @@ def start_button_action(controller, gui, checkboxes_one_set):
         if boolean.get() is True:
             crossover_options.append(x + 1)
         x += 1
-    pyboard_port = controller.start_algorithm(generations, population_size, population_discard, population_chance_bonus,
-                                              population_noise, mutation_options, crossover_options, reverse_fitness,
-                                              pyboard_port)
+
+    member_config = create_member_config(random_low, random_high, num_values, mutation_options, crossover_options)
+    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise, reverse_fitness, member_config)
+
+    pyboard_port = controller.start_algorithm(config, pyboard_port)
     gui.log_info("PyBoard port is set to " + pyboard_port)
     gui.enable_entry(0)
     gui.enable_buttons([1, 2, 3])
@@ -102,6 +106,10 @@ if __name__ == '__main__':
     # rows with checkboxes that must have at least one option set
     checkboxes_one_set = [7, 8]
 
+    gui.add_spinbox("Member min random:", 0, 9999, '%1.f', 1)
+    gui.add_spinbox("Member max random:", 0, 9999, '%1.f', 1)
+    gui.add_spinbox("Number of operator values:", 0, 100, '%1.f', 1)
+
     gui.add_console()
 
     controller = Controller()
@@ -112,7 +120,7 @@ if __name__ == '__main__':
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
     gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action(gui))
     gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
-    gui.disable_buttons([1,2,3])
+    gui.disable_buttons([1, 2, 3])
 
     gui.add_listbox()
     gui.add_listbox()
