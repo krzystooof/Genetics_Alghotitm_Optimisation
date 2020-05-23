@@ -103,7 +103,6 @@ class GUI:
     def insert_listbox_data(self, listbox_numer, data: str):
         self.listboxes[listbox_numer].insert(END, data)
 
-
     def get_label_text(self, row):
         return self.labels[row].cget("text")
 
