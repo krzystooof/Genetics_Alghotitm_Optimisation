@@ -14,7 +14,7 @@ def create_member_config(random_low, random_high, num_values, mutation_options, 
         "random_low": float(random_low),
         "random_high": float(random_high),
         "num_values": int(num_values),
-        "member_mutation_options": mutation_options,
+        "mutation_options": mutation_options,
         "crossover_options": crossover_options
     }
 

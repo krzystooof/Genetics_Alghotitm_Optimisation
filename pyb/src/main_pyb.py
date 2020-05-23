@@ -29,7 +29,7 @@ class Main:
 
             while self.data['type'] == 0:  # 0 means no new data
                 Inform.waiting()
-                pyb.delay(10)
+                pyb.delay(1)
                 self.data = self.usb.read()              # Reading data
             Inform.running()
             if self.data['type'] == 1:  # desktop client error
@@ -63,9 +63,6 @@ class Main:
 
     def load_config(self):
         """Feeds configuration variables into algorithm"""
-        # TODO load generations number
-        # I dont remember what i meant by this ^^^
-        # Dont worry. I will once something breaks.
         if self.initiated:
             self.population.load_config(self.data['config'])
         else:
@@ -86,18 +83,31 @@ class Main:
         self.population.member_list[self.data['index']].fitness = self.data['fitness']
 
     def run(self):
-        if self.started and self.initiated: # Not paused and population exists
+        if self.started and self.initiated:  # Not paused and population exists
             if self.test_index == self.population.population_size - 1:
                 # Tested everyone, new gen, test again
                 self.population.new_gen()
                 self.test_index = 0
+                if self.population.generation == self.population.break_generation:
+                    self.started = False
+                self.send_stats()
             else:
                 # Send next for testing
-                self.usb.attach("type", 9)
+                self.usb.attach('type', 9)
                 self.usb.attach('index', self.test_index)
-                self.usb.attach('operator', self.population.member_list[self.test_index].operator)
+                self.usb.attach('operator', self.population.member_list[self.test_index].operator.values)
                 self.usb.send()
                 self.test_index += 1
+
+    def send_stats(self):
+        self.usb.attach('type', 2)
+        self.population.update_stats()
+        self.usb.attach('best_operator', self.population.best_member.operator.values)
+        self.usb.attach('best_fitness', self.population.best_member.fitness)
+        self.usb.attach('generation', self.population.generation)
+        self.usb.attach('mutations', self.population.total_mutations)
+        self.usb.attach('crossovers', self.population.total_crossovers)
+        self.usb.attach('discarded', self.population.total_discarded)
 
 
 main = Main()

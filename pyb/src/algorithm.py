@@ -30,6 +30,7 @@ class Population:
         self.population_chance_bonus = 0
         self.noise = 0
         self.reverse = False
+        self.break_generation = 1000
         self.member_config = dict()
 
         # If config is available
@@ -139,6 +140,7 @@ class Population:
         self.population_size = config['population_size']
         self.population_discard = config['population_discard']
         self.population_chance_bonus = config['population_chance_bonus']
+        self.break_generation = config['generations']
         self.noise = config['population_noise']
         self.reverse = config['population_reverse_fitness']
         self.member_config = config['member_config']
