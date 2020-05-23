@@ -115,8 +115,8 @@ if __name__ == '__main__':
     # rows with checkboxes that must have at least one option set
     checkboxes_one_set = [7, 8]
 
-    gui.add_spinbox("Member min random:", 0, 9999, '%1.f', 1)
-    gui.add_spinbox("Member max random:", 0, 9999, '%1.f', 1)
+    gui.add_spinbox("Member min random:", -9999, 9999, '%1.f', 1)
+    gui.add_spinbox("Member max random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Number of operator values:", 0, 100, '%1.f', 1)
 
     gui.add_console()

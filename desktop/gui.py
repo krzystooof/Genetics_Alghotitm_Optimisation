@@ -192,7 +192,7 @@ class GUI:
             if spinbox_value > value[1]:
                 raise ValueError(self.get_label_text(key) + ' exceeded MAX: ' + str(value[1]))
             if spinbox_value < value[0]:
-                raise ValueError(self.get_label_text(key) + ' number under MIN: ' + str(value[1]))
+                raise ValueError(self.get_label_text(key) + ' number under MIN: ' + str(value[0]))
         for key, value in self.checkbox_values.items():
             if key in one_checked:
                 found_true = False
