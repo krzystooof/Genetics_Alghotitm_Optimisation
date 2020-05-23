@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pyb.src.port</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://dev.azure.com/putptm/">Optimisation via use of genetic algorithm</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;pyb ::
+        Package&nbsp;src ::
+        Module&nbsp;port
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pyb.src.port-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="pyb.src.port-module.html">Module pyb.src.port</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-docstring">"""File contains code necessary to run algorithm on pyboard."""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pyb</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">ujson</tt> </tt>
+<a name="VCP"></a><div id="VCP-def"><a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt> <a class="py-toggle" href="#" id="VCP-toggle" onclick="return toggle('VCP');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html">VCP</a><tt class="py-op">:</tt> </tt>
+</div><div id="VCP-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="VCP-expanded"><a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">    Class used to communicate via USB VCP. Needs initialization.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">    @author: Jakub Chodubski</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="VCP.__init__"></a><div id="VCP.__init__-def"><a name="L12"></a><tt class="py-lineno"> 12</tt> <a class="py-toggle" href="#" id="VCP.__init__-toggle" onclick="return toggle('VCP.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VCP.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VCP.__init__-expanded"><a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line">        <tt class="py-docstring">"""Opens VCP and waits for connection"""</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module usb=usb-module.html"><a title="usb" class="py-name" href="#" onclick="return doclink('link-0', 'usb', 'link-0');">usb</a></tt> <tt class="py-op">=</tt> <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">USB_VCP</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dictionary</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fifo</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">        <tt id="link-1" class="py-name" targets="Class pyb.src.port.Inform=pyb.src.port.Inform-class.html"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-1', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Static Method pyb.src.port.Inform.waiting()=pyb.src.port.Inform-class.html#waiting"><a title="pyb.src.port.Inform.waiting" class="py-name" href="#" onclick="return doclink('link-2', 'waiting', 'link-2');">waiting</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name"><a title="usb" class="py-name" href="#" onclick="return doclink('link-3', 'usb', 'link-0');">usb</a></tt><tt class="py-op">.</tt><tt class="py-name">isconnected</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">            <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">delay</tt><tt class="py-op">(</tt><tt class="py-number">100</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="VCP.attach"></a><div id="VCP.attach-def"><a name="L21"></a><tt class="py-lineno"> 21</tt> <a class="py-toggle" href="#" id="VCP.attach-toggle" onclick="return toggle('VCP.attach');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html#attach">attach</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">,</tt> <tt class="py-param">element</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VCP.attach-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VCP.attach-expanded"><a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-docstring">"""Drop data to the package before sending it"""</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dictionary</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">element</tt> </tt>
+</div><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="VCP.send"></a><div id="VCP.send-def"><a name="L25"></a><tt class="py-lineno"> 25</tt> <a class="py-toggle" href="#" id="VCP.send-toggle" onclick="return toggle('VCP.send');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html#send">send</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VCP.send-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VCP.send-expanded"><a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-name">string</tt> <tt class="py-op">=</tt> <tt class="py-name">ujson</tt><tt class="py-op">.</tt><tt class="py-name">dumps</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dictionary</tt><tt class="py-op">)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">        <tt class="py-name">bytes_to_send</tt> <tt class="py-op">=</tt> <tt class="py-name">string</tt><tt class="py-op">.</tt><tt class="py-name">encode</tt><tt class="py-op">(</tt><tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="usb" class="py-name" href="#" onclick="return doclink('link-4', 'usb', 'link-0');">usb</a></tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">bytes_to_send</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"> </tt>
+<a name="VCP.read"></a><div id="VCP.read-def"><a name="L30"></a><tt class="py-lineno"> 30</tt> <a class="py-toggle" href="#" id="VCP.read-toggle" onclick="return toggle('VCP.read');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html#read">read</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VCP.read-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VCP.read-expanded"><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">        Reads data from USB VCP. Always returns python dictionary with at least</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">        'type' field. Type values:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">        0 means there was no new data on usb buffer</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">        1 means desktop client encountered a problem</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">        2 means config was transferred</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">        3 means data was successfully transferred</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">        4 means there is data regarding algorithm control</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">        ...</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">        9 means there is data to feed to algorithm</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">        Type 3 is internal type and will not be forwarded.</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="usb" class="py-name" href="#" onclick="return doclink('link-5', 'usb', 'link-0');">usb</a></tt><tt class="py-op">.</tt><tt class="py-name">any</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt id="link-6" class="py-name" targets="Method pyb.src.port.VCP.read()=pyb.src.port.VCP-class.html#read,Method usb.USB.read()=usb.USB-class.html#read"><a title="pyb.src.port.VCP.read
+usb.USB.read" class="py-name" href="#" onclick="return doclink('link-6', 'read', 'link-6');">read</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="usb" class="py-name" href="#" onclick="return doclink('link-7', 'usb', 'link-0');">usb</a></tt><tt class="py-op">.</tt><tt class="py-name">readline</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-name">read_string</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="pyb.src.port.VCP.read
+usb.USB.read" class="py-name" href="#" onclick="return doclink('link-8', 'read', 'link-6');">read</a></tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">            <tt class="py-comment"># Keep reading from buffer until json is complete</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">            <tt class="py-keyword">while</tt> <tt class="py-name">read_string</tt><tt class="py-op">.</tt><tt class="py-name">count</tt><tt class="py-op">(</tt><tt class="py-string">'{'</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-name">read_string</tt><tt class="py-op">.</tt><tt class="py-name">count</tt><tt class="py-op">(</tt><tt class="py-string">'}'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">                <tt id="link-9" class="py-name"><a title="pyb.src.port.VCP.read
+usb.USB.read" class="py-name" href="#" onclick="return doclink('link-9', 'read', 'link-6');">read</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="usb" class="py-name" href="#" onclick="return doclink('link-10', 'usb', 'link-0');">usb</a></tt><tt class="py-op">.</tt><tt class="py-name">readline</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">                <tt class="py-name">read_string</tt> <tt class="py-op">+=</tt> <tt id="link-11" class="py-name"><a title="pyb.src.port.VCP.read
+usb.USB.read" class="py-name" href="#" onclick="return doclink('link-11', 'read', 'link-6');">read</a></tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt class="py-comment"># Split and return</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method pyb.src.port.VCP.push()=pyb.src.port.VCP-class.html#push"><a title="pyb.src.port.VCP.push" class="py-name" href="#" onclick="return doclink('link-12', 'push', 'link-12');">push</a></tt><tt class="py-op">(</tt><tt class="py-name">read_string</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method pyb.src.port.VCP.pop()=pyb.src.port.VCP-class.html#pop"><a title="pyb.src.port.VCP.pop" class="py-name" href="#" onclick="return doclink('link-13', 'pop', 'link-13');">pop</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="VCP.push"></a><div id="VCP.push-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="VCP.push-toggle" onclick="return toggle('VCP.push');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html#push">push</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">line</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VCP.push-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VCP.push-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-docstring">"""Splits jsons string into single messages and puts in fifo"""</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt class="py-string">'{'</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Could not parse json: "</tt> <tt class="py-op">+</tt> <tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">message</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">character</tt> <tt class="py-keyword">in</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">            <tt class="py-name">message</tt> <tt class="py-op">+=</tt> <tt class="py-name">character</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">message</tt><tt class="py-op">.</tt><tt class="py-name">count</tt><tt class="py-op">(</tt><tt class="py-string">'{'</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">message</tt><tt class="py-op">.</tt><tt class="py-name">count</tt><tt class="py-op">(</tt><tt class="py-string">'}'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fifo</tt><tt class="py-op">.</tt><tt class="py-name">insert</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-name">message</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">                <tt class="py-name">message</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+</div><a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"> </tt>
+<a name="VCP.pop"></a><div id="VCP.pop-def"><a name="L68"></a><tt class="py-lineno"> 68</tt> <a class="py-toggle" href="#" id="VCP.pop-toggle" onclick="return toggle('VCP.pop');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.VCP-class.html#pop">pop</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="VCP.pop-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="VCP.pop-expanded"><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-docstring">"""Reads messages from fifo"""</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fifo</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">            <tt class="py-name">message</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fifo</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="pyb.src.port.VCP.pop" class="py-name" href="#" onclick="return doclink('link-14', 'pop', 'link-13');">pop</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">ujson</tt><tt class="py-op">.</tt><tt class="py-name">loads</tt><tt class="py-op">(</tt><tt class="py-name">message</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">{</tt><tt class="py-string">'type'</tt><tt class="py-op">:</tt> <tt class="py-number">0</tt><tt class="py-op">}</tt> </tt>
+</div></div><a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="Inform"></a><div id="Inform-def"><a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt> <a class="py-toggle" href="#" id="Inform-toggle" onclick="return toggle('Inform');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="pyb.src.port.Inform-class.html">Inform</a><tt class="py-op">:</tt> </tt>
+</div><div id="Inform-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Inform-expanded"><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring">    This class is used to signalize pyboard status via LEDs. It is fully static to optimize runtime.</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">    Should be used every time pyboard changes its state or important event happens.</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring">    @author: Jakub Chodubski</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">    <tt id="link-15" class="py-name" targets="Variable pyb.src.port.Inform.state=pyb.src.port.Inform-class.html#state"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-15', 'state', 'link-15');">state</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">staticmethod</tt> </tt>
+<a name="Inform.waiting"></a><div id="Inform.waiting-def"><a name="L85"></a><tt class="py-lineno"> 85</tt> <a class="py-toggle" href="#" id="Inform.waiting-toggle" onclick="return toggle('Inform.waiting');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.Inform-class.html#waiting">waiting</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-comment"># green on</tt> </tt>
+</div><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">        Should be used if the board is waiting for new inputs.</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt id="link-16" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-16', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-17', 'state', 'link-15');">state</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">on</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">staticmethod</tt> </tt>
+<a name="Inform.running"></a><div id="Inform.running-def"><a name="L95"></a><tt class="py-lineno"> 95</tt> <a class="py-toggle" href="#" id="Inform.running-toggle" onclick="return toggle('Inform.running');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.Inform-class.html#running">running</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-comment"># blue on</tt> </tt>
+</div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">        Use this if board is not accepting any inputs at the moment.</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">        Any data send via USB VCP to board will be queued.</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt id="link-18" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-18', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-19', 'state', 'link-15');">state</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">on</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">staticmethod</tt> </tt>
+<a name="Inform.error"></a><div id="Inform.error-def"><a name="L106"></a><tt class="py-lineno">106</tt> <a class="py-toggle" href="#" id="Inform.error-toggle" onclick="return toggle('Inform.error');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.Inform-class.html#error">error</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-comment"># red on</tt> </tt>
+</div><a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-docstring">        Algorithm encountered a problem.</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring">        Board is waiting for debug and reset.</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt id="link-20" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-20', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-21', 'state', 'link-15');">state</a></tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">on</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">staticmethod</tt> </tt>
+<a name="Inform.connected"></a><div id="Inform.connected-def"><a name="L117"></a><tt class="py-lineno">117</tt> <a class="py-toggle" href="#" id="Inform.connected-toggle" onclick="return toggle('Inform.connected');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.Inform-class.html#connected">connected</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-comment"># quick flash green, blued</tt> </tt>
+</div><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">        Signal Virtual Comm Port has been connected.</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">        After signaling is done previous state will be displayed.</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">off</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">on</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">        <tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">LED</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">on</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt id="link-22" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-22', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Static Method pyb.src.port.Inform.correct_led()=pyb.src.port.Inform-class.html#correct_led"><a title="pyb.src.port.Inform.correct_led" class="py-name" href="#" onclick="return doclink('link-23', 'correct_led', 'link-23');">correct_led</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">staticmethod</tt> </tt>
+<a name="Inform.correct_led"></a><div id="Inform.correct_led-def"><a name="L128"></a><tt class="py-lineno">128</tt> <a class="py-toggle" href="#" id="Inform.correct_led-toggle" onclick="return toggle('Inform.correct_led');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyb.src.port.Inform-class.html#correct_led">correct_led</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Inform.correct_led-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Inform.correct_led-expanded"><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt class="py-docstring">"""Method used to correct currently displayed LEDs to state saved in Inform.state"""</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-24" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-24', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-25', 'state', 'link-15');">state</a></tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">            <tt id="link-26" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-26', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="pyb.src.port.Inform.waiting" class="py-name" href="#" onclick="return doclink('link-27', 'waiting', 'link-2');">waiting</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-28" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-28', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-29', 'state', 'link-15');">state</a></tt> <tt class="py-op">==</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt id="link-30" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-30', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Static Method pyb.src.port.Inform.running()=pyb.src.port.Inform-class.html#running"><a title="pyb.src.port.Inform.running" class="py-name" href="#" onclick="return doclink('link-31', 'running', 'link-31');">running</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-32" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-32', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="pyb.src.port.Inform.state" class="py-name" href="#" onclick="return doclink('link-33', 'state', 'link-15');">state</a></tt> <tt class="py-op">==</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt id="link-34" class="py-name"><a title="pyb.src.port.Inform" class="py-name" href="#" onclick="return doclink('link-34', 'Inform', 'link-1');">Inform</a></tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method pyb.src.main_pyb.Main.error()=pyb.src.main_pyb.Main-class.html#error,Static Method pyb.src.port.Inform.error()=pyb.src.port.Inform-class.html#error"><a title="pyb.src.main_pyb.Main.error
+pyb.src.port.Inform.error" class="py-name" href="#" onclick="return doclink('link-35', 'error', 'link-35');">error</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://dev.azure.com/putptm/">Optimisation via use of genetic algorithm</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat May 23 16:11:39 2020
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
