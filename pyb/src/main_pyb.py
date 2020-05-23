@@ -4,6 +4,14 @@ from src.port import VCP
 from src.port import Inform
 from src.algorithm import Population
 
+# Need to place it
+process = psutil.Process(os.getpid())
+print(process.memory_percent())
+
+
+algorithm_time = 0
+start = 0
+stop = 0
 
 class Main:
 
@@ -72,11 +80,15 @@ class Main:
     def control(self):
         """Starts, stops, pauses algorithm"""
         if self.data['operation'] == "STOP":
+            stop = timeit.default_timer()
             self.initiated = False
             self.started = False
         if self.data['operation'] == "PAUSE":
+            stop = timeit.default_timer()
+            algorithm_time = stop - start + algorithm_time
             self.started = False
         if self.data['operation'] == "START":
+            start = timeit.default_timer()
             self.started = True
 
     def feed(self):
@@ -111,3 +123,4 @@ class Main:
 
 
 main = Main()
+print(algorithm_time)
