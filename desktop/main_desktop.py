@@ -91,9 +91,10 @@ def save_results():
     for key, value in result.items():
         gui.log_info(str(key) + ": " + str(value))
     global full_times
+    global run_number
     try:
         full_times.append(str(result['total_time']))
-        global run_number
+
         gui.insert_listbox_data(0, run_number,
                                 str(run_number) + "[" + number_of_values[run_number - 1] + " values]" + " - " +
                                 full_times[
