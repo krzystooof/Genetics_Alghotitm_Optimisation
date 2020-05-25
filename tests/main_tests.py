@@ -9,7 +9,7 @@ def main():
     config = get_config()
     population = Population(config)
 
-    while population.generation < 1000:  # TODO find good break condition
+    while population.generation < 1000:
         for member in population.member_list:
             member.fitness = get_fitness(member.operator)
         population.new_gen()
@@ -40,7 +40,7 @@ def get_config():
         'population_discard': 0.5,
         'population_noise': 0.1,
         'population_chance_bonus': 2,
-        'population_reverse_fitness': False,
+        'population_reverse_fitness': True,
         'member_config': {
             'random_low': -100,
             'random_high': 100,

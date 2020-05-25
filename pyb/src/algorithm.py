@@ -1,16 +1,10 @@
-"""  A subset of all the possible  solutions to the given problem.
-
-operator - input (see operator class)
-population_size
-population_discard - fraction of members to remove at each generation (float from 0.0 to 1.0)
-noise - fraction of members to additionally mutate at each generation (float from 0.0 to 1.0)
-mutation_options - list of mutation options, when creating new generation one option is randomly selected
-for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
-    3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
-crossover_options - list of crossover options, when creating new generation one option is randomly selected
-    for each member: 1 - one point crossover, 2 - multi point crossover
 """
-# TODO shorten ^^^docstring^^^
+This module contains all code necessary to run genetic algorithm. It only provides bare minimum to
+create population and mutate/breed members. Loop running this algorithm must be placed in order to use it.
+@author: Jakub Chodubski
+@author: Krzysztof Greczka
+"""
+
 import random
 import math
 
@@ -243,8 +237,8 @@ class Operator:
         self.values = values
 
 
-def shuffle(list):
+def shuffle(to_shuffle):
     """Shuffles lists with Fisher–Yates algorithm for performance"""
-    for x in range(0, len(list)):
+    for x in range(0, len(to_shuffle)):
         y = random.randint(0, x)
-        list[x], list[y] = list[y], list[x]
+        to_shuffle[x], to_shuffle[y] = to_shuffle[y], to_shuffle[x]

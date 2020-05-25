@@ -26,8 +26,8 @@ def get_fitness(operator):
     r = np.ones(t.size)
 
     # controller gains
-    Kp = operator.values[0]
-    Ki = operator.values[1]
+    Kp = operator[0]
+    Ki = operator[1]
     ei = 0
 
     # simulation loop
