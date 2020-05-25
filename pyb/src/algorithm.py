@@ -49,7 +49,7 @@ class Population:
         new members will be created due to crossovers, mutations may appear.
         """
         self.generation += 1
-        self.sort_by_fitness()
+        self.update_stats()
         self.discard_unfit()
         self.breed_to_fill()
         self.apply_noise()

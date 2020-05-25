@@ -123,7 +123,6 @@ class Main:
 
     def send_stats(self):
         self.usb.attach('type', 2)
-        self.population.update_stats()
 
         self.usb.attach('best_operator', self.population.best_member.operator.values)
         self.usb.attach('best_fitness', self.population.best_member.fitness)

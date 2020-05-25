@@ -34,6 +34,7 @@ class USB:
         string = json.dumps(self.dictionary)
         bytes_to_send = string.encode('utf-8')
         self.usb.write(bytes_to_send)
+        self.dictionary = dict()
 
     def read(self):
         """Always returns python dictionary. Read 'type' to see what's inside"""
@@ -88,5 +89,6 @@ class USB:
         """Reads messages from fifo"""
         if len(self.fifo) != 0:
             message = self.fifo.pop()
+            print("INCOMING MESSAGE: " + message)
             return json.loads(message)
         return {'type': 0}

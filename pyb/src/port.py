@@ -26,6 +26,7 @@ class VCP:
         string = ujson.dumps(self.dictionary)
         bytes_to_send = string.encode('utf-8')
         self.usb.write(bytes_to_send)
+        self.dictionary = dict()
 
     def read(self):
         """
