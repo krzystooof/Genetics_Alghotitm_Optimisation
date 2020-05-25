@@ -8,6 +8,8 @@ from gui import GUI
 from alghoritm_control import *
 
 p2 = None
+run_number = 1
+full_times = []
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -19,7 +21,7 @@ def start_button_action(controller, gui, checkboxes_one_set):
         print(repr(error))
         gui.log_error(str(error))
         gui.log("Start aborted")
-        gui.enable_buttons([0, 1, 2, 3])
+        gui.enable_button(0)
         return
     generations = gui.get_entry_value(1)
     population_chance_bonus = gui.get_entry_value(5)
@@ -46,7 +48,8 @@ def start_button_action(controller, gui, checkboxes_one_set):
         x += 1
 
     member_config = create_member_config(random_low, random_high, num_values, mutation_options, crossover_options)
-    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise, reverse_fitness, member_config)
+    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
+                           reverse_fitness, member_config)
 
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port)
@@ -63,7 +66,6 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.enable_entry(0)
 
 
-
 def pause_button_action(controller, gui):
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Pausing")
@@ -76,8 +78,19 @@ def stop_button_action(controller, gui):
     p2.terminate()
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
-    # TODO add operator to listbox0
-    # TODO add time to listbox1
+    times = ""
+    with open("results.txt", "r") as file:
+        for line in file:
+            times += line
+    times = times.splitlines()
+    # clear file
+    open("results.txt", "w").close()
+    gui.log_info("Function times = " + str(times))
+    global full_times
+    full_times.append(times[len(times) - 1])
+    global run_number
+    gui.insert_listbox_data(0, run_number, str(run_number) + " - " + full_times[run_number - 1] + "s")
+    run_number += 1
     controller.stop_algorithm()
     gui.enable_entry(0)
     gui.enable_button(0)
@@ -100,7 +113,7 @@ def debug_button_action(controller, gui):
 
 
 if __name__ == '__main__':
-    gui = GUI("Desktop STM GA Control Panel",10)
+    gui = GUI("Desktop STM GA Control Panel", 10)
 
     gui.add_text_entry("PyBoard port:")
     gui.add_spinbox("Generations:", 0, 9999, '%1.f', 1)
@@ -133,7 +146,6 @@ if __name__ == '__main__':
     gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
     gui.disable_buttons([1, 2, 3])
 
-    gui.add_listbox()
     gui.add_listbox()
     p1 = Process(target=gui.work)
     p1.start()
