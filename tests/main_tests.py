@@ -13,6 +13,9 @@ def main():
         for member in population.member_list:
             member.fitness = get_fitness(member.operator)
         population.new_gen()
+        print("Best member's fitness: ", population.best_member.fitness)
+        print("Best member's operator: ", population.best_member.operator.values)
+        print("Generation:", population.generation)
 
     for member in population.member_list:
         member.fitness = get_fitness(member.operator)
@@ -37,7 +40,7 @@ def get_config():
         'population_discard': 0.5,
         'population_noise': 0.1,
         'population_chance_bonus': 2,
-        'population_reverse_fitness': True,
+        'population_reverse_fitness': False,
         'member_config': {
             'random_low': -100,
             'random_high': 100,
@@ -97,18 +100,18 @@ def get_fitness(operator):  # simpleFitFunc, but in python
     # ax.set_xlabel('Time [s]')
     # plt.plot(t, y)
     # plt.show()
-    global minimum
-    global maximum
-    if q < minimum:
-        minimum = q
-    if q > maximum:
-        maximum = q
-    print(q)
-    print("Minimum: ", minimum)
-    print("Maximum: ", maximum)
-    global counter
-    counter = counter + 1
-    print("Counter: ", counter)
+    # global minimum
+    # global maximum
+    # if q < minimum:
+    #     minimum = q
+    # if q > maximum:
+    #     maximum = q
+    # print(q)
+    # print("Minimum: ", minimum)
+    # print("Maximum: ", maximum)
+    # global counter
+    # counter = counter + 1
+    # print("Counter: ", counter)
     return q
 
 main()
