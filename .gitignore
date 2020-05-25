@@ -7,3 +7,4 @@ README_pyb.txt
 pyb/main_tests.py
 pyb/algorithm_results.json
 desktop/venv/
+desktop/results.txt

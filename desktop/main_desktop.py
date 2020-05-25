@@ -8,6 +8,10 @@ from gui import GUI
 from alghoritm_control import *
 
 p2 = None
+run_number = 1
+full_times = []
+number_of_values = []
+paused = False
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -19,7 +23,7 @@ def start_button_action(controller, gui, checkboxes_one_set):
         print(repr(error))
         gui.log_error(str(error))
         gui.log("Start aborted")
-        gui.enable_buttons([0, 1, 2, 3])
+        gui.enable_button(0)
         return
     generations = gui.get_entry_value(1)
     population_chance_bonus = gui.get_entry_value(5)
@@ -32,6 +36,12 @@ def start_button_action(controller, gui, checkboxes_one_set):
     random_high = gui.get_entry_value(10)
     num_values = gui.get_entry_value(11)
     mutation_options = []
+
+    global paused
+    if not paused:
+        global number_of_values
+        number_of_values.append(num_values)
+    paused = False
 
     for x, boolean in enumerate(gui.get_checkbox_values(7)):
         if boolean.get() is True:
@@ -46,7 +56,8 @@ def start_button_action(controller, gui, checkboxes_one_set):
         x += 1
 
     member_config = create_member_config(random_low, random_high, num_values, mutation_options, crossover_options)
-    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise, reverse_fitness, member_config)
+    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
+                           reverse_fitness, member_config)
 
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port)
@@ -63,10 +74,11 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.enable_entry(0)
 
 
-
 def pause_button_action(controller, gui):
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Pausing")
+    global paused
+    paused = True
     controller.pause_algorithm()
     gui.enable_buttons([0, 1, 2])
 
@@ -76,8 +88,21 @@ def stop_button_action(controller, gui):
     p2.terminate()
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
-    # TODO add operator to listbox0
-    # TODO add time to listbox1
+    times = ""
+    with open("results.txt", "r") as file:
+        for line in file:
+            times += line
+    times = times.splitlines()
+    # clear file
+    open("results.txt", "w").close()
+    gui.log_info("Function times = " + str(times))
+    global full_times
+    full_times.append(times[len(times) - 1])
+    global run_number
+    gui.insert_listbox_data(0, run_number,
+                            str(run_number) + "[" + number_of_values[run_number - 1] + " values]" + " - " + full_times[
+                                run_number - 1] + "s")
+    run_number += 1
     controller.stop_algorithm()
     gui.enable_entry(0)
     gui.enable_button(0)
@@ -89,9 +114,9 @@ def restart_button_action(controller, gui, checkboxes_one_set):
     start_button_action(controller, gui, checkboxes_one_set)
 
 
-def draw_graph_button_action(gui):
-    graph = Graph("Time (function)", "function", "time", gui.listboxes[0].get(0, END))
-    graph.add_y_axis_data("", gui.listboxes[1].get(0, END), 'lines+markers')
+def draw_graph_button_action():
+    graph = Graph("Time (function)", "function", "time")
+    graph.add_y_axis_data("", number_of_values, full_times, 'lines+markers')
     graph.show()
 
 
@@ -100,7 +125,10 @@ def debug_button_action(controller, gui):
 
 
 if __name__ == '__main__':
-    gui = GUI("Desktop STM GA Control Panel",10)
+    # clear file
+    open("results.txt", "w").close()
+
+    gui = GUI("Desktop STM GA Control Panel", 10)
 
     gui.add_text_entry("PyBoard port:")
     gui.add_spinbox("Generations:", 0, 9999, '%1.f', 1)
@@ -117,7 +145,7 @@ if __name__ == '__main__':
 
     gui.add_spinbox("Member min random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Member max random:", -9999, 9999, '%1.f', 1)
-    gui.add_spinbox("Number of operator values:", 0, 100, '%1.f', 1)
+    gui.add_spinbox("Number of operator values:", 1, 100, '%1.f', 1)
 
     gui.add_console()
     gui.log("Fitness caclulating function is located in fintess.py")
@@ -129,11 +157,10 @@ if __name__ == '__main__':
     gui.add_button("STOP", lambda: stop_button_action(controller, gui))
     gui.add_button("RESTART", lambda: restart_button_action(controller, gui, checkboxes_one_set))
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
-    gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action(gui))
+    gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action())
     gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
     gui.disable_buttons([1, 2, 3])
 
-    gui.add_listbox()
     gui.add_listbox()
     p1 = Process(target=gui.work)
     p1.start()

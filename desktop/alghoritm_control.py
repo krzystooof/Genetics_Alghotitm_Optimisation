@@ -36,7 +36,7 @@ class Controller:
     """
             Handles controlling PyBoard
             @author: Krzysztof Greczka
-        """
+    """
 
     def __init__(self):
         self.is_running = False
@@ -50,7 +50,6 @@ class Controller:
 
     def start_algorithm(self, config, pyboard_port):
         operation = "START"
-
         pyboard_port = pyboard_port
         if len(pyboard_port) != 0:
             self.usb = USB(pyboard_port)
@@ -76,14 +75,18 @@ class Controller:
         while True:
             reply = self.usb.read()
             try:
-                if reply and reply['type'] == 9:
-                    index = reply['index']
-                    operator = reply['operator']
-                    fitness = get_fitness(operator)
-                    self.usb.attach("type", 9)
-                    self.usb.attach('index', index)
-                    self.usb.attach('fitness', fitness)
-                    self.usb.send()
+                if reply:
+                    if reply['type'] == 9:
+                        index = reply['index']
+                        operator = reply['operator']
+                        fitness = get_fitness(operator)
+                        self.usb.attach("type", 9)
+                        self.usb.attach('index', index)
+                        self.usb.attach('fitness', fitness)
+                        self.usb.send()
+                    elif reply['type'] == 2:
+                        with open("results.txt","a") as file:
+                            file.write(str(reply['total_time'])+"\n")
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
             finally:
