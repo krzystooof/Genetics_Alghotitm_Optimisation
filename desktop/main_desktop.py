@@ -1,5 +1,5 @@
+import json
 from multiprocessing import Process
-from tkinter import END
 
 import serial
 
@@ -88,20 +88,22 @@ def stop_button_action(controller, gui):
     p2.terminate()
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
-    times = ""
     with open("results.txt", "r") as file:
-        for line in file:
-            times += line
-    times = times.splitlines()
-    # clear file
-    open("results.txt", "w").close()
-    gui.log_info("Function times = " + str(times))
+        data = file.read()
+    result = json.loads(data)
+    gui.log_info("Result: ")
+    for key, value in result.items():
+        gui.log_info(str(key) + ": " + str(value))
     global full_times
-    full_times.append(times[len(times) - 1])
-    global run_number
-    gui.insert_listbox_data(0, run_number,
-                            str(run_number) + "[" + number_of_values[run_number - 1] + " values]" + " - " + full_times[
-                                run_number - 1] + "s")
+    try:
+        full_times.append(str(result['total_time']))
+        global run_number
+        gui.insert_listbox_data(0, run_number,
+                                str(run_number) + "[" + number_of_values[run_number - 1] + " values]" + " - " +
+                                full_times[
+                                    run_number - 1] + "s")
+    except ValueError:
+        gui.log_error("Could not read results")
     run_number += 1
     controller.stop_algorithm()
     gui.enable_entry(0)
@@ -125,9 +127,6 @@ def debug_button_action(controller, gui):
 
 
 if __name__ == '__main__':
-    # clear file
-    open("results.txt", "w").close()
-
     gui = GUI("Desktop STM GA Control Panel", 10)
 
     gui.add_text_entry("PyBoard port:")

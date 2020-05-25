@@ -172,7 +172,7 @@ class GUI:
 
     def log_info(self, text):
         try:
-            self.console.insert('end', "\tINFO:" + text + '\n')
+            self.console.insert('end', "\t" + text + '\n')
         finally:
             print("\tINFO:" + text)
 

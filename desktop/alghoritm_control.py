@@ -1,4 +1,5 @@
 """This module contains code used to control the algorithm on board"""
+import json
 import time
 
 from fitness import get_fitness
@@ -85,8 +86,8 @@ class Controller:
                         self.usb.attach('fitness', fitness)
                         self.usb.send()
                     elif reply['type'] == 2:
-                        with open("results.txt","a") as file:
-                            file.write(str(reply['total_time'])+"\n")
+                        with open("results.txt","w") as file:
+                            json.dump(reply, file)
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
             finally:
