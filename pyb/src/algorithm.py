@@ -201,7 +201,7 @@ class Member:
             self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
         elif mutation_method == 3:  # scramble mutation - shuffle random part
             new_list = self.operator.values[i:j]
-            #  random.shuffle(new_list) TODO micropython does not have shuffle method
+            shuffle(new_list)
             self.operator.values[i:j] = new_list
         elif mutation_method == 4:  # inversion mutation - invert random part
             self.operator.values[i:j] = list(reversed(self.operator.values[i:j]))
@@ -241,3 +241,10 @@ class Operator:
 
     def __init__(self, values):
         self.values = values
+
+
+def shuffle(list):
+    """Shuffles lists with Fisher–Yates algorithm for performance"""
+    for x in range(0, len(list)):
+        y = random.randint(0, x)
+        list[x], list[y] = list[y], list[x]
