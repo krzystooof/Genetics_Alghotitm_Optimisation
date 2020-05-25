@@ -5,14 +5,18 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def main():
     config = get_config()
     population = Population(config)
+    for member in population.member_list:
+        member.fitness = get_fitness(member.operator)
 
     while population.generation < 1000:
+        population.new_gen()
         for member in population.member_list:
             member.fitness = get_fitness(member.operator)
-        population.new_gen()
+        population.update_stats()
         print("Best member's fitness: ", population.best_member.fitness)
         print("Best member's operator: ", population.best_member.operator.values)
         print("Generation:", population.generation)
@@ -38,7 +42,7 @@ def get_config():
         'generations': 1000,
         'population_size': 100,
         'population_discard': 0.5,
-        'population_noise': 0.1,
+        'population_noise': 0.3,
         'population_chance_bonus': 2,
         'population_reverse_fitness': True,
         'member_config': {

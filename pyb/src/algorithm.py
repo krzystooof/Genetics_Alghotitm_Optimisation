@@ -69,7 +69,11 @@ class Population:
         # Rewrite fit members to new list
         new_list = []
         for x in range(0, fit_n):
-            new_list.append(self.member_list[x])
+            # If statement discards nan and inf values
+            if not math.isnan(self.member_list[x].fitness) and not math.isinf(self.member_list[x].fitness):
+                new_list.append(self.member_list[x])
+            else:
+                self.total_discarded += 1
         # Substitute lists
         self.member_list = new_list
 
@@ -78,39 +82,25 @@ class Population:
         self.assign_cross_chances()
         # Breed until population is full
         self.total_crossovers = 0
-        while len(self.member_list) < self.population_size:
+        new_members = []
+        while len(new_members) < self.population_size - len(self.member_list):
             parent_1 = random.choice(self.member_list)
             parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
-                self.member_list.append(parent_1.crossover(parent_2))
-                self.total_crossovers += 1
+                new_members.append(parent_1.crossover(parent_2))
+        self.total_crossovers = len(new_members)
+        self.member_list += new_members
 
     def assign_cross_chances(self):
         """Assigns crossover chances to every member of population based on fitness"""
-        average = self.get_average_fitness()
-        #  Offset ensures always positive non-zero fitness
-        offset = self.get_offset()
-        for member in self.member_list:
-            #  0.5 is base value. Average member will get crossover_chance of 0.5
-            #  Basic formula for calculating crossover chance is (member_fitness/average_fitness)*0.5
-            #  Here implemented, but with offset and reverse mode, when lower fitness should give higher chance
-            if self.reverse:
-                delta = average - member.fitness
-                member.crossover_chance = ((average + delta + offset) / (average + offset)) * 0.5
-            else:
-                member.crossover_chance = ((member.fitness + offset) / (average + offset)) * 0.5
+        self.sort_by_fitness()
+        step = 1/len(self.member_list)
+        for x in range(0, len(self.member_list)):
+            self.member_list[x].crossover_chance = 1 - (step * x)
 
-    def get_average_fitness(self):
-        total = 0
-        for member in self.member_list:
-            total += member.fitness
-        return total / len(self.member_list)
-
-    def get_offset(self):
-        if self.reverse:
-            return -(self.member_list[0].fitness - 1)  # Fittest member is lower value
-        else:
-            return -(self.member_list[len(self.member_list)-1].fitness - 1)  # Worst fit member is lower value
+            # Check for weird values
+            if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
+                self.member_list[x].crossover_chance = 0
 
     def apply_noise(self):
         # Calculate how many members will be mutated
