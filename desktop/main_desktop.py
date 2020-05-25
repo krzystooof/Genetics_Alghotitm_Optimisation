@@ -83,11 +83,7 @@ def pause_button_action(controller, gui):
     gui.enable_buttons([0, 1, 2])
 
 
-def stop_button_action(controller, gui):
-    global p2
-    p2.terminate()
-    gui.disable_buttons([0, 1, 2, 3])
-    gui.log("Stopping")
+def save_results():
     with open("results.txt", "r") as file:
         data = file.read()
     result = json.loads(data)
@@ -105,6 +101,14 @@ def stop_button_action(controller, gui):
     except ValueError:
         gui.log_error("Could not read results")
     run_number += 1
+
+
+def stop_button_action(controller, gui):
+    global p2
+    p2.terminate()
+    gui.disable_buttons([0, 1, 2, 3])
+    gui.log("Stopping")
+    save_results()
     controller.stop_algorithm()
     gui.enable_entry(0)
     gui.enable_button(0)
