@@ -25,7 +25,7 @@ class Population:
         self.noise = 0
         self.reverse = False
         self.break_generation = 1000
-        self.member_config = dict()
+        self.member_config = {}
 
         # If config is available
         if config is not None:
@@ -33,7 +33,7 @@ class Population:
 
         # Filling population with random members
             self.member_list = []
-            for x in range(0, self.population_size):
+            for x in range(self.population_size):
                 self.member_list.append(Member(self.member_config))
 
         # Statistics for current generation
@@ -57,6 +57,8 @@ class Population:
 
     def sort_by_fitness(self):
         if self.reverse:
+            # TODO: inplace sort
+            # think using arrays
             self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=False)
         else:
             self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=True)
@@ -68,7 +70,7 @@ class Population:
         fit_n = self.population_size - self.total_discarded
         # Rewrite fit members to new list
         new_list = []
-        for x in range(0, fit_n):
+        for x in range(fit_n):
             # If statement discards nan and inf values
             if not math.isnan(self.member_list[x].fitness) and not math.isinf(self.member_list[x].fitness):
                 new_list.append(self.member_list[x])
@@ -95,7 +97,7 @@ class Population:
         """Assigns crossover chances to every member of population based on fitness"""
         self.sort_by_fitness()
         step = 1/len(self.member_list)
-        for x in range(0, len(self.member_list)):
+        for x in range(len(self.member_list)):
             self.member_list[x].crossover_chance = 1 - (step * x)
 
             # Check for weird values
@@ -106,7 +108,7 @@ class Population:
         # Calculate how many members will be mutated
         self.total_mutations = math.floor(self.noise * self.population_size)
         # Mutate members
-        for x in range(0, self.total_mutations):
+        for x in range(self.total_mutations):
             mutating_member = random.choice(self.member_list)
             mutating_member.mutate()
 
@@ -142,8 +144,6 @@ class Member:
     """
 
     def __init__(self, config):
-        self.fitness = 0.0
-        self.crossover_chance = 0
         """
         Member's config:
             - random_low - initial values lower limit
@@ -158,6 +158,9 @@ class Member:
                 1. One point
                 2. Multi point
         """
+        self.fitness = 0.0
+        self.crossover_chance = 0
+
         self.random_low = config['random_low']
         self.random_high = config['random_high']
         self.num_values = config['num_values']
@@ -166,7 +169,7 @@ class Member:
         self.config = config
         # make random operator
         operator_list = []
-        for x in range(0, self.num_values):
+        for x in range(self.num_values):
             operator_list.append(random.uniform(self.random_low, self.random_high))
         self.operator = Operator(operator_list)
 
@@ -188,7 +191,7 @@ class Member:
             shuffle(new_list)
             self.operator.values[i:j] = new_list
         elif mutation_method == 4:  # inversion mutation - invert random part
-            self.operator.values[i:j] = list(reversed(self.operator.values[i:j]))
+            self.operator.values[i:j] = [(reversed(self.operator.values[i:j]))]
 
     def crossover(self, parent):
         crossover_method = random.choice(self.crossover_options)
@@ -229,6 +232,6 @@ class Operator:
 
 def shuffle(to_shuffle):
     """Shuffles lists with Fisher–Yates algorithm for performance"""
-    for x in range(0, len(to_shuffle)):
-        y = random.randint(0, x)
+    for x in range(len(to_shuffle)):
+        y = random.randint(x)
         to_shuffle[x], to_shuffle[y] = to_shuffle[y], to_shuffle[x]
