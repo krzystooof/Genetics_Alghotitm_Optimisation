@@ -31,12 +31,12 @@ class Population:
         if config is not None:
             self.load_config(config)
 
-        # Filling population with random members
+            # Filling population with random members
             self.member_list = []
             for x in range(self.population_size):
                 self.member_list.append(Member(self.member_config))
 
-        # Statistics for current generation
+            # Statistics for current generation
             self.generation = 0
             self.best_member = self.member_list[0]
             self.total_crossovers = 0
@@ -96,7 +96,7 @@ class Population:
     def assign_cross_chances(self):
         """Assigns crossover chances to every member of population based on fitness"""
         self.sort_by_fitness()
-        step = 1/len(self.member_list)
+        step = 1 / len(self.member_list)
         for x in range(len(self.member_list)):
             self.member_list[x].crossover_chance = 1 - (step * x)
 
@@ -175,22 +175,40 @@ class Member:
 
     def mutate(self):
         mutation_method = random.choice(self.mutation_options)
-        # self.input - list
+        variables_number = len(self.operator.values)
         i = 0
         j = 0
         if len(self.operator.values) > 1:
             while j - i < 1:
-                i = random.randint(0, len(self.operator.values) - 1)
-                j = random.randint(i, len(self.operator.values) - 1)
-        if mutation_method == 1:  # random resetting - sets random number to random value
+                i = random.randint(variables_number - 1)
+                j = random.randint(i, variables_number - 1)
+        if mutation_method == 1:  # May have big or small impact, configurable
             self.operator.values[i] *= random.uniform(self.random_low, self.random_high)
-        elif mutation_method == 2:  # swap mutation - swap two elements
-            self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
-        elif mutation_method == 3:  # scramble mutation - shuffle random part
+        # Maybe we need more mutation methods ?
+        elif mutation_method == 3 and variables_number == 2:
+            # Temporarily, special mutation method for two variables function
+            # To be configured
+            go_up = random.getrandbits(1)
+            go_left = random.getrandbits(1)
+
+            if go_up:
+                self.operator.values[i] *= 2
+            else:
+                self.operator.values[i] /= 2
+
+            noise = random.uniform(self.random_low, self.random_high)
+            if go_left:
+                self.operator.values[j] -= noise
+            else:
+                self.operator.values[j] += noise
+        # Disable destructive methods (as for two variables functions)
+        elif mutation_method == 3 and variables_number > 3:
             new_list = self.operator.values[i:j]
             shuffle(new_list)
             self.operator.values[i:j] = new_list
-        elif mutation_method == 4:  # inversion mutation - invert random part
+        elif mutation_method == 2 and variables_number > 3:  # swap mutation - swap two elements
+            self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
+        elif mutation_method == 4 and variables_number > 3:  # inversion mutation - invert random part
             self.operator.values[i:j] = [(reversed(self.operator.values[i:j]))]
 
     def crossover(self, parent):
