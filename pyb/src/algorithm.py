@@ -84,13 +84,13 @@ class Population:
         # Breed until population is full
         self.total_crossovers = 0
         new_members = []
-        while len(new_members) < self.population_size - len(self.member_list):
+        while len(new_members) < self.population_size:
             parent_1 = random.choice(self.member_list)
             parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
                 new_members.append(parent_1.crossover(parent_2))
         self.total_crossovers = len(new_members)
-        self.member_list += new_members
+        self.member_list = new_members
 
     # def assign_cross_chances(self):
     #     """Assigns crossover chances to every member of population based on fitness"""
@@ -182,7 +182,7 @@ class Member:
         self.num_values = config['num_values']
         self.crossover_options = config['crossover_options']
         self.config = config
-        self.noise = 0.7  # TODO
+        self.noise = 0.7  # TODO get this from config
         # make random operator
         operator_list = []
         for x in range(self.num_values):
