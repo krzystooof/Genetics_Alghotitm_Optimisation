@@ -13,7 +13,7 @@ def main():
         member.fitness = get_fitness(member.operator)
 
 
-    while population.generation < 3000:  # TODO find good break condition
+    while population.generation < population.break_generation:  # TODO find good break condition
         population.new_gen()
 
         for member in population.member_list:
@@ -38,9 +38,9 @@ def main():
 
 
 def get_config():
-    crossover = [1,2,3]
+    crossover = [1]
     config_dict = {
-        'generations': 1000,
+        'generations': 100,
         'population_size': 100,
         'population_discard': 0.5,
         'population_noise': 0.3,

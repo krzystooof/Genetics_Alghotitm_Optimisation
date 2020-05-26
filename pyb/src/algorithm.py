@@ -201,8 +201,6 @@ class Member:
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:])
         elif crossover_method == 2:  # multi point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:j] + self.operator.values[j:])
-        elif crossover_method == 3:  # average
-            operator = Operator([x + y / 2 for x, y in zip(self.operator.values, parent.operator.values)])
         to_ret.operator = operator
 
         if random.random() < self.noise:
