@@ -84,24 +84,49 @@ class Population:
         # Breed until population is full
         self.total_crossovers = 0
         new_members = []
-        while len(new_members) < self.population_size - len(self.member_list):
+        while len(new_members) < self.population_size:
             parent_1 = random.choice(self.member_list)
             parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
                 new_members.append(parent_1.crossover(parent_2))
         self.total_crossovers = len(new_members)
-        self.member_list += new_members
+        self.member_list = new_members
+
+    # def assign_cross_chances(self):
+    #     """Assigns crossover chances to every member of population based on fitness"""
+    #     self.sort_by_fitness()
+    #     step = 1 / len(self.member_list)
+    #     for x in range(len(self.member_list)):
+    #         self.member_list[x].crossover_chance = 1 - (step * x)
+    #
+    #         # Check for weird values
+    #         if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
+    #             self.member_list[x].crossover_chance = 0
 
     def assign_cross_chances(self):
-        """Assigns crossover chances to every member of population based on fitness"""
         self.sort_by_fitness()
-        step = 1 / len(self.member_list)
-        for x in range(len(self.member_list)):
-            self.member_list[x].crossover_chance = 1 - (step * x)
+        high = self.member_list[0].fitness
+        low = self.member_list[len(self.member_list)-1].fitness
 
-            # Check for weird values
-            if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
-                self.member_list[x].crossover_chance = 0
+        if high < low:
+            high, low = low, high
+
+        high -= low
+        try:
+            for member in self.member_list:
+                # Catch weird values
+                if math.isnan(member.fitness) or math.isinf(member.fitness):
+                    member.crossover_chance = 0
+                    continue
+
+                fitness = member.fitness - low
+                chance = fitness / high
+                if self.reverse:
+                    member.crossover_chance = 1-chance
+                else:
+                    member.crossover_chance = chance
+        except ZeroDivisionError:
+            raise ValueError("Fitness differences too small")
 
     def load_config(self, config):
         """
@@ -157,7 +182,7 @@ class Member:
         self.num_values = config['num_values']
         self.crossover_options = config['crossover_options']
         self.config = config
-        self.noise = 0.7  # TODO
+        self.noise = 0.7  # TODO get this from config
         # make random operator
         operator_list = []
         for x in range(self.num_values):

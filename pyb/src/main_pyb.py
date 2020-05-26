@@ -5,7 +5,7 @@ from src.port import VCP
 from src.port import Inform
 from src.algorithm import Population
 
-
+    #  MA BYĆ PRZESYŁANE DO KOMPA @grzegorz
 # Run a garbage collection
 # gc.collect()
 # Return the number of bytes of available heap RAM
