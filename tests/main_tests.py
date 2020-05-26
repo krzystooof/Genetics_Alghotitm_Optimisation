@@ -36,8 +36,7 @@ def main():
 
 
 def get_config():
-    mutate = [1, 2, 3, 4]
-    crossover = [1, 2]
+    crossover = [3]
     config_dict = {
         'generations': 1000,
         'population_size': 100,
@@ -49,7 +48,6 @@ def get_config():
             'random_low': -100,
             'random_high': 100,
             'num_values': 2,
-            'mutation_options': mutate,
             'crossover_options': crossover
             }
 

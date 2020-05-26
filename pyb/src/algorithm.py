@@ -52,7 +52,6 @@ class Population:
         self.update_stats()
         self.discard_unfit()
         self.breed_to_fill()
-        self.apply_noise()
         # Population is now ready for testing
 
     def sort_by_fitness(self):
@@ -103,14 +102,6 @@ class Population:
             # Check for weird values
             if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
                 self.member_list[x].crossover_chance = 0
-
-    def apply_noise(self):
-        # Calculate how many members will be mutated
-        self.total_mutations = math.floor(self.noise * self.population_size)
-        # Mutate members
-        for x in range(self.total_mutations):
-            mutating_member = random.choice(self.member_list)
-            mutating_member.mutate()
 
     def load_config(self, config):
         """
@@ -164,52 +155,21 @@ class Member:
         self.random_low = config['random_low']
         self.random_high = config['random_high']
         self.num_values = config['num_values']
-        self.mutation_options = config['mutation_options']
         self.crossover_options = config['crossover_options']
         self.config = config
+        self.noise = 0.7  # TODO
         # make random operator
         operator_list = []
         for x in range(self.num_values):
             operator_list.append(random.uniform(self.random_low, self.random_high))
         self.operator = Operator(operator_list)
 
-    def mutate(self):
-        mutation_method = random.choice(self.mutation_options)
-        variables_number = len(self.operator.values)
-        i = 0
-        j = 0
-        if len(self.operator.values) > 1:
-            while j - i < 1:
-                i = random.randint(variables_number - 1)
-                j = random.randint(i, variables_number - 1)
-        if mutation_method == 1:  # May have big or small impact, configurable
-            self.operator.values[i] *= random.uniform(self.random_low, self.random_high)
-        # Maybe we need more mutation methods ?
-        elif mutation_method == 3 and variables_number == 2:
-            # Temporarily, special mutation method for two variables function
-            # To be configured
-            go_up = random.getrandbits(1)
-            go_left = random.getrandbits(1)
-
-            if go_up:
-                self.operator.values[i] *= 2
-            else:
-                self.operator.values[i] /= 2
-
-            noise = random.uniform(self.random_low, self.random_high)
-            if go_left:
-                self.operator.values[j] -= noise
-            else:
-                self.operator.values[j] += noise
-        # Disable destructive methods (as for two variables functions)
-        elif mutation_method == 3 and variables_number > 3:
-            new_list = self.operator.values[i:j]
-            shuffle(new_list)
-            self.operator.values[i:j] = new_list
-        elif mutation_method == 2 and variables_number > 3:  # swap mutation - swap two elements
-            self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
-        elif mutation_method == 4 and variables_number > 3:  # inversion mutation - invert random part
-            self.operator.values[i:j] = [(reversed(self.operator.values[i:j]))]
+    def mutate_value(self, index, scale):
+        # value = value +- scale * n
+        if random.random() > 0.5:
+            self.operator.values[index] += scale * normal(0, 2)
+        else:
+            self.operator.values[index] -= scale * normal(0, 2)
 
     def crossover(self, parent):
         crossover_method = random.choice(self.crossover_options)
@@ -217,6 +177,8 @@ class Member:
         # self.operator.values - list
         i = 0
         j = 0
+        to_ret = Member(self.config)
+        operator = 0
         while j - i < 1:
             length = len(self.operator.values)
             if len(parent.operator.values) < length:
@@ -225,14 +187,18 @@ class Member:
             j = random.randint(i, length)
         if crossover_method == 1:  # one point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:])
-            to_ret = Member(self.config)
-            to_ret.operator = operator
-            return to_ret
         elif crossover_method == 2:  # multi point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:j] + self.operator.values[j:])
-            to_ret = Member(self.config)
-            to_ret.operator = operator
-            return to_ret
+        elif crossover_method == 3:  # average
+            operator = Operator([x+y/2 for x, y in zip(self.operator.values, parent.operator.values)])
+        to_ret.operator = operator
+
+        if random.random() < self.noise:
+            index = random.randint(0, len(self.operator.values)-1)
+            scale = parent.operator.values[index] - self.operator.values[index]
+            to_ret.mutate_value(index, scale)
+
+        return to_ret
 
 
 class Operator:
@@ -248,8 +214,5 @@ class Operator:
         self.values = values
 
 
-def shuffle(to_shuffle):
-    """Shuffles lists with Fisher–Yates algorithm for performance"""
-    for x in range(len(to_shuffle)):
-        y = random.randint(x)
-        to_shuffle[x], to_shuffle[y] = to_shuffle[y], to_shuffle[x]
+def normal(x, y):
+    return random.uniform(x, y)
