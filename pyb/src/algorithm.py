@@ -13,7 +13,7 @@ class Population:
     """
         Class governing member reproduction and beeding mechanics.
         @author: Jakub Chodubski
-        @version: 2.2
+        @version: 2.4
     """
 
     def __init__(self, config):
@@ -56,11 +56,9 @@ class Population:
 
     def sort_by_fitness(self):
         if self.reverse:
-            # TODO: inplace sort
-            # think using arrays
-            self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=False)
+            self.member_list.sort(key=lambda member: member.fitness, reverse=False)
         else:
-            self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=True)
+            self.member_list.sort(key=lambda member: member.fitness, reverse=True)
 
     def discard_unfit(self):
         # Calculate how many members will be discarded
@@ -92,21 +90,10 @@ class Population:
         self.total_crossovers = len(new_members)
         self.member_list = new_members
 
-    # def assign_cross_chances(self):
-    #     """Assigns crossover chances to every member of population based on fitness"""
-    #     self.sort_by_fitness()
-    #     step = 1 / len(self.member_list)
-    #     for x in range(len(self.member_list)):
-    #         self.member_list[x].crossover_chance = 1 - (step * x)
-    #
-    #         # Check for weird values
-    #         if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
-    #             self.member_list[x].crossover_chance = 0
-
     def assign_cross_chances(self):
         self.sort_by_fitness()
         high = self.member_list[0].fitness
-        low = self.member_list[len(self.member_list)-1].fitness
+        low = self.member_list[len(self.member_list) - 1].fitness
 
         if high < low:
             high, low = low, high
@@ -122,7 +109,7 @@ class Population:
                 fitness = member.fitness - low
                 chance = fitness / high
                 if self.reverse:
-                    member.crossover_chance = 1-chance
+                    member.crossover_chance = 1 - chance
                 else:
                     member.crossover_chance = chance
         except ZeroDivisionError:
@@ -215,11 +202,11 @@ class Member:
         elif crossover_method == 2:  # multi point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:j] + self.operator.values[j:])
         elif crossover_method == 3:  # average
-            operator = Operator([x+y/2 for x, y in zip(self.operator.values, parent.operator.values)])
+            operator = Operator([x + y / 2 for x, y in zip(self.operator.values, parent.operator.values)])
         to_ret.operator = operator
 
         if random.random() < self.noise:
-            index = random.randint(0, len(self.operator.values)-1)
+            index = random.randint(0, len(self.operator.values) - 1)
             scale = parent.operator.values[index] - self.operator.values[index]
             to_ret.mutate_value(index, scale)
 
@@ -240,4 +227,4 @@ class Operator:
 
 
 def normal(x, y):
-    return random.uniform(x, y)
+    return random.uniform(x, y)  # TODO get uniform with normal distribution
