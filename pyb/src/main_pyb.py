@@ -5,15 +5,6 @@ from src.port import VCP
 from src.port import Inform
 from src.algorithm import Population
 
-    #  MA BYĆ PRZESYŁANE DO KOMPA @grzegorz
-# Run a garbage collection
-# gc.collect()
-# Return the number of bytes of available heap RAM
-# gc.mem_free()
-# Return the number of bytes of heap RAM that are allocated
-# gc.mem_alloc()
-
-
 class Main:
 
     def __init__(self, ):
@@ -27,6 +18,8 @@ class Main:
         self.is_error = False
         self.test_index = 0
         self.run_time = 0
+        # Return the number of bytes of available heap RAM, or -1 if this amount is not known
+        self.memory_usage = 0
 
         # Main loop
         while True:
@@ -100,7 +93,8 @@ class Main:
 
                 # Start timer
                 start = utime.ticks_us()
-
+                gc.collect()
+                before = gc.mem.free()
                 # Run code
                 self.population.new_gen()
                 self.test_index = 0
@@ -110,8 +104,11 @@ class Main:
                     self.started = False
 
                 # Stop the timer, save the time
+                gc.collect()
+                after = gc.mem.free()
                 stop = utime.ticks_us()
                 self.run_time = utime.ticks_diff(stop, start) + self.run_time
+                self.memory_usage = after - before
                 self.send_stats()
             else:
                 # Send next for testing
@@ -131,6 +128,7 @@ class Main:
         self.usb.attach('crossovers', self.population.total_crossovers)
         self.usb.attach('discarded', self.population.total_discarded)
         self.usb.attach('time_us', self.run_time)
+        self.usb.attach('memory_usage', self.memory_usage)
 
         self.usb.send()
 
