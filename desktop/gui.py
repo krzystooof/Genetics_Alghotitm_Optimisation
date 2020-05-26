@@ -100,9 +100,8 @@ class GUI:
         new_listbox.grid(column=self.buttons_column + len(self.listboxes), row=self.free_row, padx=5, pady=5)
         self.listboxes.append(new_listbox)
 
-    def insert_listbox_data(self, listbox_numer, data: str):
-        self.listboxes[listbox_numer].insert(END, data)
-
+    def insert_listbox_data(self, listbox_numer,position, data: str):
+        self.listboxes[listbox_numer].insert(position, data)
 
     def get_label_text(self, row):
         return self.labels[row].cget("text")
@@ -173,7 +172,7 @@ class GUI:
 
     def log_info(self, text):
         try:
-            self.console.insert('end', "\tINFO:" + text + '\n')
+            self.console.insert('end', "\t" + text + '\n')
         finally:
             print("\tINFO:" + text)
 
@@ -193,7 +192,7 @@ class GUI:
             if spinbox_value > value[1]:
                 raise ValueError(self.get_label_text(key) + ' exceeded MAX: ' + str(value[1]))
             if spinbox_value < value[0]:
-                raise ValueError(self.get_label_text(key) + ' number under MIN: ' + str(value[1]))
+                raise ValueError(self.get_label_text(key) + ' number under MIN: ' + str(value[0]))
         for key, value in self.checkbox_values.items():
             if key in one_checked:
                 found_true = False

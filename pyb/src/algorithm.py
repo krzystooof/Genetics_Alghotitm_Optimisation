@@ -1,16 +1,10 @@
-"""  A subset of all the possible  solutions to the given problem.
-
-operator - input (see operator class)
-population_size
-population_discard - fraction of members to remove at each generation (float from 0.0 to 1.0)
-noise - fraction of members to additionally mutate at each generation (float from 0.0 to 1.0)
-mutation_options - list of mutation options, when creating new generation one option is randomly selected
-for each member: 1 - random resetting - set random element to 0, 2 - swap mutation - swap two elements,
-    3 - scramble mutation - shuffle random part, 4 - inversion mutation - invert random part
-crossover_options - list of crossover options, when creating new generation one option is randomly selected
-    for each member: 1 - one point crossover, 2 - multi point crossover
 """
-# TODO shorten ^^^docstring^^^
+This module contains all code necessary to run genetic algorithm. It only provides bare minimum to
+create population and mutate/breed members. Loop running this algorithm must be placed in order to use it.
+@author: Jakub Chodubski
+@author: Krzysztof Greczka
+"""
+
 import random
 import math
 
@@ -30,18 +24,19 @@ class Population:
         self.population_chance_bonus = 0
         self.noise = 0
         self.reverse = False
-        self.member_config = dict()
+        self.break_generation = 1000
+        self.member_config = {}
 
         # If config is available
         if config is not None:
             self.load_config(config)
 
-        # Filling population with random members
+            # Filling population with random members
             self.member_list = []
-            for x in range(0, self.population_size):
+            for x in range(self.population_size):
                 self.member_list.append(Member(self.member_config))
 
-        # Statistics for current generation
+            # Statistics for current generation
             self.generation = 0
             self.best_member = self.member_list[0]
             self.total_crossovers = 0
@@ -54,14 +49,15 @@ class Population:
         new members will be created due to crossovers, mutations may appear.
         """
         self.generation += 1
-        self.sort_by_fitness()
+        self.update_stats()
         self.discard_unfit()
         self.breed_to_fill()
-        self.apply_noise()
         # Population is now ready for testing
 
     def sort_by_fitness(self):
         if self.reverse:
+            # TODO: inplace sort
+            # think using arrays
             self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=False)
         else:
             self.member_list = sorted(self.member_list, key=lambda member: member.fitness, reverse=True)
@@ -73,8 +69,12 @@ class Population:
         fit_n = self.population_size - self.total_discarded
         # Rewrite fit members to new list
         new_list = []
-        for x in range(0, fit_n):
-            new_list.append(self.member_list[x])
+        for x in range(fit_n):
+            # If statement discards nan and inf values
+            if not math.isnan(self.member_list[x].fitness) and not math.isinf(self.member_list[x].fitness):
+                new_list.append(self.member_list[x])
+            else:
+                self.total_discarded += 1
         # Substitute lists
         self.member_list = new_list
 
@@ -83,47 +83,25 @@ class Population:
         self.assign_cross_chances()
         # Breed until population is full
         self.total_crossovers = 0
-        while len(self.member_list) < self.population_size:
+        new_members = []
+        while len(new_members) < self.population_size - len(self.member_list):
             parent_1 = random.choice(self.member_list)
             parent_2 = random.choice(self.member_list)
             if random.random() < parent_1.crossover_chance * parent_2.crossover_chance:
-                self.member_list.append(parent_1.crossover(parent_2))
-                self.total_crossovers += 1
+                new_members.append(parent_1.crossover(parent_2))
+        self.total_crossovers = len(new_members)
+        self.member_list += new_members
 
     def assign_cross_chances(self):
         """Assigns crossover chances to every member of population based on fitness"""
-        average = self.get_average_fitness()
-        #  Offset ensures always positive non-zero fitness
-        offset = self.get_offset()
-        for member in self.member_list:
-            #  0.5 is base value. Average member will get crossover_chance of 0.5
-            #  Basic formula for calculating crossover chance is (member_fitness/average_fitness)*0.5
-            #  Here implemented, but with offset and reverse mode, when lower fitness should give higher chance
-            if self.reverse:
-                delta = average - member.fitness
-                member.crossover_chance = ((average + delta + offset) / (average + offset)) * 0.5
-            else:
-                member.crossover_chance = ((member.fitness + offset) / (average + offset)) * 0.5
+        self.sort_by_fitness()
+        step = 1 / len(self.member_list)
+        for x in range(len(self.member_list)):
+            self.member_list[x].crossover_chance = 1 - (step * x)
 
-    def get_average_fitness(self):
-        total = 0
-        for member in self.member_list:
-            total += member.fitness
-        return total / len(self.member_list)
-
-    def get_offset(self):
-        if self.reverse:
-            return -(self.member_list[0].fitness - 1)  # Fittest member is lower value
-        else:
-            return -(self.member_list[len(self.member_list)].fitness - 1)  # Worst fit member is lower value
-
-    def apply_noise(self):
-        # Calculate how many members will be mutated
-        self.total_mutations = math.floor(self.noise * self.population_size)
-        # Mutate members
-        for x in range(0, self.total_mutations):
-            mutating_member = random.choice(self.member_list)
-            mutating_member.mutate()
+            # Check for weird values
+            if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
+                self.member_list[x].crossover_chance = 0
 
     def load_config(self, config):
         """
@@ -139,6 +117,7 @@ class Population:
         self.population_size = config['population_size']
         self.population_discard = config['population_discard']
         self.population_chance_bonus = config['population_chance_bonus']
+        self.break_generation = config['generations']
         self.noise = config['population_noise']
         self.reverse = config['population_reverse_fitness']
         self.member_config = config['member_config']
@@ -156,8 +135,6 @@ class Member:
     """
 
     def __init__(self, config):
-        self.fitness = 0.0
-        self.crossover_chance = 0
         """
         Member's config:
             - random_low - initial values lower limit
@@ -172,37 +149,27 @@ class Member:
                 1. One point
                 2. Multi point
         """
+        self.fitness = 0.0
+        self.crossover_chance = 0
+
         self.random_low = config['random_low']
         self.random_high = config['random_high']
         self.num_values = config['num_values']
-        self.mutation_options = config['mutation_options']
         self.crossover_options = config['crossover_options']
         self.config = config
+        self.noise = 0.7  # TODO
         # make random operator
         operator_list = []
-        for x in range(0, self.num_values):
+        for x in range(self.num_values):
             operator_list.append(random.uniform(self.random_low, self.random_high))
         self.operator = Operator(operator_list)
 
-    def mutate(self):
-        mutation_method = random.choice(self.mutation_options)
-        # self.input - list
-        i = 0
-        j = 0
-        if len(self.operator.values) > 1:
-            while j - i < 1:
-                i = random.randint(0, len(self.operator.values) - 1)
-                j = random.randint(i, len(self.operator.values) - 1)
-        if mutation_method == 1:  # random resetting - sets random number to random value
-            self.operator.values[i] *= random.uniform(self.random_low, self.random_high)
-        elif mutation_method == 2:  # swap mutation - swap two elements
-            self.operator.values[i], self.operator.values[j] = self.operator.values[j], self.operator.values[i]
-        elif mutation_method == 3:  # scramble mutation - shuffle random part
-            new_list = self.operator.values[i:j]
-            random.shuffle(new_list)
-            self.operator.values[i:j] = new_list
-        elif mutation_method == 4:  # inversion mutation - invert random part
-            self.operator.values[i:j] = list(reversed(self.operator.values[i:j]))
+    def mutate_value(self, index, scale):
+        # value = value +- scale * n
+        if random.random() > 0.5:
+            self.operator.values[index] += scale * normal(0, 2)
+        else:
+            self.operator.values[index] -= scale * normal(0, 2)
 
     def crossover(self, parent):
         crossover_method = random.choice(self.crossover_options)
@@ -210,6 +177,8 @@ class Member:
         # self.operator.values - list
         i = 0
         j = 0
+        to_ret = Member(self.config)
+        operator = 0
         while j - i < 1:
             length = len(self.operator.values)
             if len(parent.operator.values) < length:
@@ -218,14 +187,18 @@ class Member:
             j = random.randint(i, length)
         if crossover_method == 1:  # one point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:])
-            to_ret = Member(self.config)
-            to_ret.operator = operator
-            return to_ret
         elif crossover_method == 2:  # multi point
             operator = Operator(self.operator.values[:i] + parent.operator.values[i:j] + self.operator.values[j:])
-            to_ret = Member(self.config)
-            to_ret.operator = operator
-            return to_ret
+        elif crossover_method == 3:  # average
+            operator = Operator([x+y/2 for x, y in zip(self.operator.values, parent.operator.values)])
+        to_ret.operator = operator
+
+        if random.random() < self.noise:
+            index = random.randint(0, len(self.operator.values)-1)
+            scale = parent.operator.values[index] - self.operator.values[index]
+            to_ret.mutate_value(index, scale)
+
+        return to_ret
 
 
 class Operator:
@@ -239,3 +212,7 @@ class Operator:
 
     def __init__(self, values):
         self.values = values
+
+
+def normal(x, y):
+    return random.uniform(x, y)

@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class Hierarchy</title>
+  <title>pyb.boot</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -16,8 +16,8 @@
   <tr valign="middle">
 
   <!-- Tree link -->
-      <th bgcolor="#70b0f0" class="navbar-select"
-          >&nbsp;&nbsp;&nbsp;Trees&nbsp;&nbsp;&nbsp;</th>
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
 
   <!-- Index link -->
       <th>&nbsp;&nbsp;&nbsp;<a
@@ -37,7 +37,12 @@
 </table>
 <table width="100%" cellpadding="0" cellspacing="0">
   <tr valign="top">
-    <td width="100%">&nbsp;</td>
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;pyb ::
+        Module&nbsp;boot
+      </span>
+    </td>
     <td>
       <table cellpadding="0" cellspacing="0">
         <!-- hide/show private -->
@@ -45,53 +50,36 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="class-tree.html"
+            >]&nbsp;|&nbsp;<a href="pyb.boot-pysrc.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
-<center><b>
- [ <a href="module-tree.html">Module Hierarchy</a>
- | <a href="class-tree.html">Class Hierarchy</a> ]
-</b></center><br />
-<h1 class="epydoc">Class Hierarchy</h1>
-<ul class="nomargin-top">
-    <li> <strong class="uidlink"><a href="alghoritm_control.Controller-class.html">alghoritm_control.Controller</a></strong>:
-      <em class="summary">Handles controlling PyBoard</em>
-    </li>
-    <li> <strong class="uidlink"><a href="graph.Graph-class.html">graph.Graph</a></strong>:
-      <em class="summary">Graph creating and showing</em>
-    </li>
-    <li> <strong class="uidlink"><a href="pyb.src.port.Inform-class.html">pyb.src.port.Inform</a></strong>:
-      <em class="summary">This class is used to signalize pyboard status via LEDs.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="pyb.src.main_pyb.Main-class.html">pyb.src.main_pyb.Main</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="pyb.src.algorithm.Member-class.html">pyb.src.algorithm.Member</a></strong>:
-      <em class="summary">One such solution to the given problem.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="pyb.src.algorithm.Operator-class.html">pyb.src.algorithm.Operator</a></strong>:
-      <em class="summary">Class that implements polynomial input for member</em>
-    </li>
-    <li> <strong class="uidlink"><a href="pyb.src.algorithm.Population-class.html">pyb.src.algorithm.Population</a></strong>:
-      <em class="summary">Class governing member reproduction and beeding mechanics.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="usb.USB-class.html">usb.USB</a></strong>:
-      <em class="summary">Handles communication via USB VCP</em>
-    </li>
-    <li> <strong class="uidlink"><a href="pyb.src.port.VCP-class.html">pyb.src.port.VCP</a></strong>:
-      <em class="summary">Class used to communicate via USB VCP.</em>
-    </li>
-</ul>
+<h1 class="epydoc">Source Code for <a href="pyb.boot-module.html">Module pyb.boot</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">2</tt>  <tt class="py-line"><tt class="py-docstring">Entrypoint for pyboard.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">3</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pyb</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">5</tt>  <tt class="py-line"><tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">country</tt><tt class="py-op">(</tt><tt class="py-string">'US'</tt><tt class="py-op">)</tt>  <tt class="py-comment"># ISO 3166-1 Alpha-2 code, eg US, GB, DE, AU</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">6</tt>  <tt class="py-line"><tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable pyb.src.main_pyb.main=pyb.src.main_pyb-module.html#main"><a title="pyb.src.main_pyb.main" class="py-name" href="#" onclick="return doclink('link-0', 'main', 'link-0');">main</a></tt><tt class="py-op">(</tt><tt class="py-string">'src/main_pyb.py'</tt><tt class="py-op">)</tt>  <tt class="py-comment"># main script to run after this one</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">7</tt>  <tt class="py-line"><tt class="py-name">pyb</tt><tt class="py-op">.</tt><tt class="py-name">usb_mode</tt><tt class="py-op">(</tt><tt class="py-string">'VCP+MSC'</tt><tt class="py-op">)</tt>  <tt class="py-comment"># act as a serial and a storage device</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">8</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
   <tr valign="middle">
 
   <!-- Tree link -->
-      <th bgcolor="#70b0f0" class="navbar-select"
-          >&nbsp;&nbsp;&nbsp;Trees&nbsp;&nbsp;&nbsp;</th>
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
 
   <!-- Index link -->
       <th>&nbsp;&nbsp;&nbsp;<a
