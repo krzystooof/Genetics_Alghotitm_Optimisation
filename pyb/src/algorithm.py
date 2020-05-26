@@ -92,16 +92,41 @@ class Population:
         self.total_crossovers = len(new_members)
         self.member_list += new_members
 
-    def assign_cross_chances(self):
-        """Assigns crossover chances to every member of population based on fitness"""
-        self.sort_by_fitness()
-        step = 1 / len(self.member_list)
-        for x in range(len(self.member_list)):
-            self.member_list[x].crossover_chance = 1 - (step * x)
+    # def assign_cross_chances(self):
+    #     """Assigns crossover chances to every member of population based on fitness"""
+    #     self.sort_by_fitness()
+    #     step = 1 / len(self.member_list)
+    #     for x in range(len(self.member_list)):
+    #         self.member_list[x].crossover_chance = 1 - (step * x)
+    #
+    #         # Check for weird values
+    #         if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
+    #             self.member_list[x].crossover_chance = 0
 
-            # Check for weird values
-            if math.isnan(self.member_list[x].fitness) or math.isinf(self.member_list[x].fitness):
-                self.member_list[x].crossover_chance = 0
+    def assign_cross_chances(self):
+        self.sort_by_fitness()
+        high = self.member_list[0].fitness
+        low = self.member_list[len(self.member_list)-1].fitness
+
+        if high < low:
+            high, low = low, high
+
+        high -= low
+        try:
+            for member in self.member_list:
+                # Catch weird values
+                if math.isnan(member.fitness) or math.isinf(member.fitness):
+                    member.crossover_chance = 0
+                    continue
+
+                fitness = member.fitness - low
+                chance = fitness / high
+                if self.reverse:
+                    member.crossover_chance = 1-chance
+                else:
+                    member.crossover_chance = chance
+        except ZeroDivisionError:
+            raise ValueError("Fitness differences too small")
 
     def load_config(self, config):
         """
