@@ -6,16 +6,13 @@ from fitness import get_fitness
 from usb import USB
 
 
-def create_member_config(random_low, random_high, num_values, mutation_options, crossover_options):
-    for x in range(0,len(mutation_options)):
-        mutation_options[x] = int(mutation_options[x])
+def create_member_config(random_low, random_high, num_values, crossover_options):
     for x in range(0,len(crossover_options)):
         crossover_options[x] = int(crossover_options[x])
     return {
         "random_low": float(random_low),
         "random_high": float(random_high),
         "num_values": int(num_values),
-        "mutation_options": mutation_options,
         "crossover_options": crossover_options
     }
 
