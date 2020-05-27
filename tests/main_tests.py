@@ -1,7 +1,7 @@
 # This file will not exist, Algorithm class will take care of it
 
-from pyb.src.algorithm import Population
-from pyb.src.algorithm import Config
+from pyb.src.algorithm_core import Population
+from pyb.src.algorithm_core import Config
 import json
 
 import math

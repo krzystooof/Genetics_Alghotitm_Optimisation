@@ -39,6 +39,14 @@ def test_1(operator):  # TODO: find relevant name
     q = math.sqrt(np.sum(np.square(r - y)) / t.size)
     return q
 
-def quadratic(x): # TODO test for this function
-    # x^2 + 3x +7
-    return x[0] * x[0] + x[0] * 3 + 7
+
+def sample_function(list_of_values):
+    import random
+
+    # Sometimes throws StopIteration
+    if random.random() < 0.05:
+        raise StopIteration
+
+    # But usually returns: x^2 + 3x +7
+    x = list_of_values[0]
+    return x * x + x * 3 + 7

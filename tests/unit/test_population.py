@@ -1,6 +1,6 @@
 import unittest
-from pyb.src.algorithm import Population
-from pyb.src.algorithm import Config
+from pyb.src.algorithm_core import Population
+from pyb.src.algorithm_core import Config
 
 
 def get_config():
