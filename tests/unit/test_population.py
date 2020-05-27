@@ -1,6 +1,7 @@
 import unittest
 from pyb.src.algorithm import Population
 
+
 def get_config():
     mutate = [1, 2, 3, 4]
     crossover = [1, 2]
@@ -40,7 +41,6 @@ class TestPopulation(unittest.TestCase):
         self.assertEqual(self.population.member_config["num_values"], 1)
         self.assertEqual(self.population.member_config["mutation_options"], [1, 2, 3, 4])
         self.assertEqual(self.population.member_config["crossover_options"], [1, 2])
-
 
     def test_new_gen(self):
         """Testing for 1 generation"""
@@ -121,6 +121,3 @@ class TestPopulation(unittest.TestCase):
             counting = counting - 1
         self.population.update_stats()
         self.assertEqual(self.population.best_member.fitness, 1)
-
-if __name__ == '__main__':
-    unittest.main()
