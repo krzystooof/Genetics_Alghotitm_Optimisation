@@ -29,10 +29,10 @@ class Main:
                 self.error()
 
             # Wait for valid data
-            self.data = VCP.read()
+            self.read_delay()
 
             while self.data['type'] == 0:  # 0 means no new data
-                Inform.waiting()
+
                 pyb.delay(1)
                 self.data = VCP.read()  # Reading data
             Inform.running()
@@ -48,6 +48,19 @@ class Main:
                 self.feed()
 
             self.run()
+
+    def read_delay(self):
+        self.data = VCP.read()
+        delay = 5
+        while self.data['type'] == 0:
+            if delay < 10000000:  # tenth of a second
+                delay = round(delay*1.5)
+            utime.sleep_us(delay)
+            Inform.waiting()
+            self.data = VCP.read()
+
+
+
 
     def error(self):
         Inform.error()
