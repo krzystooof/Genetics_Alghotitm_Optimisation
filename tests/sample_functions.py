@@ -1,4 +1,5 @@
 def test_1(operator):  # TODO: find relevant name
+    # TODO test for this function
     import numpy as np
     import math
 
@@ -38,6 +39,6 @@ def test_1(operator):  # TODO: find relevant name
     q = math.sqrt(np.sum(np.square(r - y)) / t.size)
     return q
 
-def quadratic(x):
+def quadratic(x): # TODO test for this function
     # x^2 + 3x +7
     return x[0] * x[0] + x[0] * 3 + 7
