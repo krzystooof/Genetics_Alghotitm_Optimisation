@@ -38,7 +38,7 @@ def main():
 
 
 def get_config():
-    crossover = [1]
+    crossover = [1, 2]
     config_dict = {
         'generations': 100,
         'population_size': 100,
