@@ -107,7 +107,7 @@ class Main:
                 after = gc.mem.free()
                 stop = utime.ticks_us()
                 self.run_time = utime.ticks_diff(stop, start) + self.run_time
-                self.memory_usage = after - before
+                self.memory_usage = after - before + self.memory_usage
                 self.send_stats()
             else:
                 # Send next for testing
