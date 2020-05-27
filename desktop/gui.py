@@ -2,6 +2,7 @@
 
 from tkinter import *
 from tkinter import scrolledtext
+from tkinter.ttk import Combobox
 
 
 class GUI:
@@ -85,6 +86,19 @@ class GUI:
         self.entries.append(checkbuttons)
         self.free_row += 1
 
+    def add_combo_box(self, text, values):
+        new_label = Label(self.window, text=text)
+        new_label.grid(column=self.labels_column, row=self.free_row, sticky=self.labels_column_anchor)
+        self.labels.append(new_label)
+
+        new_entry = Combobox(self.window, width=self.entries_width)
+        new_entry['values'] = values
+        new_entry.current(1)
+        new_entry.grid(column=self.entries_column, row=self.free_row, sticky=self.entries_column_anchor)
+        self.entries.append(new_entry)
+
+        self.free_row += 1
+
     def add_button(self, text, function):
         new_button = Button(self.window, text=text, command=function, width=self.buttons_width)
         new_button.grid(column=self.buttons_column, row=self.free_button_row)
@@ -100,7 +114,7 @@ class GUI:
         new_listbox.grid(column=self.buttons_column + len(self.listboxes), row=self.free_row, padx=5, pady=5)
         self.listboxes.append(new_listbox)
 
-    def insert_listbox_data(self, listbox_numer,position, data: str):
+    def insert_listbox_data(self, listbox_numer, position, data: str):
         self.listboxes[listbox_numer].insert(position, data)
 
     def get_label_text(self, row):
