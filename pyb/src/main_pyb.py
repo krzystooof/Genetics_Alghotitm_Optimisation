@@ -113,7 +113,7 @@ class Main:
                 self.test_index = 0
 
                 # Check for break condition
-                if self.population.generation > 100: # TODO remove hardcoded stop condition
+                if self.population.generation > 100:  # TODO remove hardcoded stop condition
                     self.started = False
 
                 # Stop the timer, save the time
