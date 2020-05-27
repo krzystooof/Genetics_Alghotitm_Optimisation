@@ -1,4 +1,4 @@
-from multiprocessing import Process
+import threading
 
 import serial
 
@@ -6,12 +6,22 @@ from graph import Graph
 from gui import GUI
 from alghoritm_control import *
 
-p2 = None
 run_number = 1
 full_times = []
 full_memory_usage = []
 number_of_values_per_cycle = []
 paused = False
+
+reply_thread = None
+
+
+def board_reply():
+    thread = threading.current_thread()
+    while getattr(thread, "do_run", True):
+        result = controller.fitness_reply()
+        if result is not None:
+            gui.log(result)
+
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -56,10 +66,11 @@ def start_button_action(controller, gui, checkboxes_one_set):
     print(config)
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port)
-        gui.log_info("PyBoard port is set to " + pyboard_port)
-        global p2
-        p2 = Process(target=lambda: controller.fitness_reply())
-        p2.start()
+        gui.log("PyBoard port is set to " + pyboard_port)
+        global reply_thread
+        reply_thread = threading.Thread(target=board_reply)
+        reply_thread.do_run = True
+        reply_thread.start()
         gui.enable_buttons([1, 2, 3])
     except serial.serialutil.SerialException:
         gui.log_error("Failed connection to board")
@@ -106,8 +117,9 @@ def save_results():
 
 
 def stop_button_action(controller, gui):
-    global p2
-    p2.terminate()
+    global reply_thread
+    reply_thread.do_run = False
+    reply_thread = None
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
     save_results()
@@ -170,5 +182,4 @@ if __name__ == '__main__':
     gui.insert_listbox_data(0, 0, "Time:")
     gui.add_listbox()
     gui.insert_listbox_data(1, 0, "Memory:")
-    p1 = Process(target=gui.work)
-    p1.start()
+    gui.work()
