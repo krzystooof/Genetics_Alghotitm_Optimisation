@@ -11,12 +11,13 @@ import math
 
 class Population:
     """
-        Class governing member reproduction and beeding mechanics.
+        Class governing member reproduction and beeding mechanics. Throws ValueError when no further generations
+        are possible.
         @author: Jakub Chodubski
         @version: 2.4
     """
 
-    def __init__(self, config):
+    def __init__(self, config):  # TODO config as keyword args
         """Creates new random population"""
         # Configuration variables
         self.population_size = 0
@@ -115,7 +116,7 @@ class Population:
         except ZeroDivisionError:
             raise ValueError("Fitness differences too small")
 
-    def load_config(self, config):
+    def load_config(self, config):  # TODO remove
         """
         Loads configuration variables. Takes dictionary as argument. This dictionary must contain fields:
           - population_size - Size of population (Value <1-x>)
@@ -146,7 +147,7 @@ class Member:
     @author: Krzysztof Greczka
     """
 
-    def __init__(self, config):
+    def __init__(self, config):  # TODO config to keyword args
         """
         Member's config:
             - random_low - initial values lower limit

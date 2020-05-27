@@ -3,7 +3,7 @@ import pyb
 import ujson
 
 
-class VCP:
+class VCP:  # TODO make this static
     """
     Class used to communicate via USB VCP. Needs initialization.
     @author: Jakub Chodubski
