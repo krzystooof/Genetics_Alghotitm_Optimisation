@@ -4,6 +4,8 @@ import gc
 from src.port import VCP
 from src.port import Inform
 from src.algorithm import Population
+from src.algorithm import Config
+
 
 class Main:
 
@@ -11,7 +13,7 @@ class Main:
         """Main function. First to run"""
 
         # Variables
-        self.population = Population(None)
+        self.population = Population(Config())
         self.started = False
         self.initiated = False
         self.is_error = False
@@ -65,10 +67,22 @@ class Main:
 
     def load_config(self):
         """Feeds configuration variables into algorithm"""
+        try:
+            config = Config(population_size=self.data['config']['population_size'],
+                            population_discard=self.data['config']['population_discard'],
+                            population_chance_bonus=self.data['config']['population_chance_bonus'],
+                            noise=self.data['config']['population_noise'],
+                            reverse=self.data['config']['population_reverse_fitness'],
+                            random_low=self.data['config']['member_config']['random_low'],
+                            random_high=self.data['config']['member_config']['random_high'],
+                            num_values=self.data['config']['member_config']['num_values'],
+                            crossover_options=self.data['config']['member_config']['crossover_options'])
+        except KeyError:
+            raise KeyError(str(self.data))
         if self.initiated:
-            self.population.load_config(self.data['config'])
+            self.population.config = config
         else:
-            self.population = Population(self.data['config'])
+            self.population = Population(config)
             self.initiated = True
 
     def control(self):
@@ -87,24 +101,24 @@ class Main:
 
     def run(self):
         if self.started and self.initiated:  # Not paused and population exists
-            if self.test_index == self.population.population_size - 1:
+            if self.test_index == self.population.config.population_size - 1:
                 # Tested everyone, new gen, test again
 
                 # Start timer
                 start = utime.ticks_us()
                 gc.collect()
-                before = gc.mem.free()
+                before = gc.mem_free()
                 # Run code
                 self.population.new_gen()
                 self.test_index = 0
 
                 # Check for break condition
-                if self.population.generation == self.population.break_generation:
+                if self.population.generation > 100: # TODO remove hardcoded stop condition
                     self.started = False
 
                 # Stop the timer, save the time
                 gc.collect()
-                after = gc.mem.free()
+                after = gc.mem_free()
                 stop = utime.ticks_us()
                 self.run_time = utime.ticks_diff(stop, start) + self.run_time
                 self.memory_usage = after - before + self.memory_usage
@@ -133,4 +147,3 @@ class Main:
 
 
 main = Main()
-

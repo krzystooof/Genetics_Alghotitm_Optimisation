@@ -44,8 +44,9 @@ class Config:  # Basically a struct to keep data and pass it easily
                 2. Multi point
         """
         # TODO cleanup docstring
-        if crossover_options is None:
-            self.crossover_options = [1, 2]
+        self.crossover_options = [1, 2]
+        if crossover_options is not None:
+            self.crossover_options = crossover_options
         self.population_size = population_size
         self.population_discard = population_discard
         self.population_chance_bonus = population_chance_bonus

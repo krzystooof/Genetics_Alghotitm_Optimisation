@@ -73,7 +73,7 @@ class VCP:
                 message = ""
 
     @staticmethod
-    def pop(VCP):
+    def pop():
         """Reads messages from fifo"""
         if len(VCP.fifo) != 0:
             message = VCP.fifo.pop()

@@ -6,7 +6,7 @@ from fitness import get_fitness
 from usb import USB
 
 
-def create_member_config(random_low, random_high, num_values, crossover_options):
+def create_member_config(random_low, random_high, num_values, crossover_options):  # TODO remove member config
     for x in range(0, len(crossover_options)):
         crossover_options[x] = int(crossover_options[x])
     return {
@@ -19,14 +19,15 @@ def create_member_config(random_low, random_high, num_values, crossover_options)
 
 def create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
                   reverse_fitness, member_config):
-    return {
+    return {  # TODO simplify this
+        # This is read by load_config in main_pyb.py. Needs to be compatible on both sides
         "generations": int(generations),
         "population_size": int(population_size),
         "population_discard": float(population_discard),
         "population_chance_bonus": float(population_chance_bonus),
         "population_noise": float(population_noise),
         "population_reverse_fitness": bool(reverse_fitness),
-        "member_config": member_config
+        "member_config": member_config  # TODO remove member config
     }
 
 
@@ -71,7 +72,7 @@ class Controller:
 
     def fitness_reply(self):
         reply = self.usb.read()
-        to_ret=None
+        to_ret = None
         try:
             if reply:
                 if reply['type'] == 9:
@@ -82,9 +83,9 @@ class Controller:
                     self.usb.attach('index', index)
                     self.usb.attach('fitness', fitness)
                     self.usb.send()
-                    to_ret = "Operator: " + str(operator)+", returned fitness: "+ str(fitness)
+                    to_ret = "Operator: " + str(operator) + ", returned fitness: " + str(fitness)
                 elif reply['type'] == 2:
-                    to_ret="Received generation results: \n"+ str(reply)
+                    to_ret = "Received generation results: \n" + str(reply)
                     with open("results.txt", "w") as file:
                         json.dump(reply, file)
         except KeyError as error:
