@@ -11,7 +11,6 @@ class Main:
         """Main function. First to run"""
 
         # Variables
-        self.usb = VCP()
         self.population = Population(None)
         self.started = False
         self.initiated = False
@@ -28,12 +27,12 @@ class Main:
                 self.error()
 
             # Wait for valid data
-            self.data = self.usb.read()
+            self.data = VCP.read()
 
             while self.data['type'] == 0:  # 0 means no new data
                 Inform.waiting()
                 pyb.delay(1)
-                self.data = self.usb.read()  # Reading data
+                self.data = VCP.read()  # Reading data
             Inform.running()
             if self.data['type'] == 1:  # desktop client error
                 self.error()
@@ -53,7 +52,7 @@ class Main:
         self.is_error = True
         # periodically check for stop
         while self.is_error:
-            data = self.usb.read()
+            data = VCP.read()
             try:
                 if data['type'] == 4:
                     if data['operation'] == "STOP":
@@ -112,25 +111,25 @@ class Main:
                 self.send_stats()
             else:
                 # Send next for testing
-                self.usb.attach('type', 9)
-                self.usb.attach('index', self.test_index)
-                self.usb.attach('operator', self.population.member_list[self.test_index].operator.values)
-                self.usb.send()
+                VCP.attach('type', 9)
+                VCP.attach('index', self.test_index)
+                VCP.attach('operator', self.population.member_list[self.test_index].operator.values)
+                VCP.send()
                 self.test_index += 1
 
     def send_stats(self):
-        self.usb.attach('type', 2)
+        VCP.attach('type', 2)
 
-        self.usb.attach('best_operator', self.population.best_member.operator.values)
-        self.usb.attach('best_fitness', self.population.best_member.fitness)
-        self.usb.attach('generation', self.population.generation)
-        self.usb.attach('mutations', self.population.total_mutations)
-        self.usb.attach('crossovers', self.population.total_crossovers)
-        self.usb.attach('discarded', self.population.total_discarded)
-        self.usb.attach('time_us', self.run_time)
-        self.usb.attach('memory_usage', self.memory_usage)
+        VCP.attach('best_operator', self.population.best_member.operator.values)
+        VCP.attach('best_fitness', self.population.best_member.fitness)
+        VCP.attach('generation', self.population.generation)
+        VCP.attach('mutations', self.population.total_mutations)
+        VCP.attach('crossovers', self.population.total_crossovers)
+        VCP.attach('discarded', self.population.total_discarded)
+        VCP.attach('time_us', self.run_time)
+        VCP.attach('memory_usage', self.memory_usage)
 
-        self.usb.send()
+        VCP.send()
 
 
 main = Main()

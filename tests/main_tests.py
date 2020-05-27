@@ -1,4 +1,5 @@
 from pyb.src.algorithm import Population
+from pyb.src.algorithm import Config
 import json
 
 import math
@@ -7,13 +8,11 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    config = get_config()
-    population = Population(config)
+    population = Population(Config(noise=0.7, reverse=True, num_values=2))
     for member in population.member_list:
         member.fitness = get_fitness(member.operator)
 
-
-    while population.generation < population.break_generation:  # TODO find good break condition
+    while population.generation < 100:  # TODO break condition dependent on accuarcy
         population.new_gen()
 
         for member in population.member_list:
@@ -37,24 +36,7 @@ def main():
         json.dump(final_results, write_file)
 
 
-def get_config():
-    crossover = [1, 2]
-    config_dict = {
-        'generations': 100,
-        'population_size': 100,
-        'population_discard': 0.5,
-        'population_noise': 0.3,
-        'population_chance_bonus': 2,
-        'population_reverse_fitness': True,
-        'member_config': {
-            'random_low': -100,
-            'random_high': 100,
-            'num_values': 2,
-            'crossover_options': crossover
-            }
 
-    }
-    return config_dict
 
 minimum = 10000
 maximum = 0.0

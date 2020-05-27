@@ -3,32 +3,37 @@ import pyb
 import ujson
 
 
-class VCP:  # TODO make this static
+class VCP:
     """
     Class used to communicate via USB VCP. Needs initialization.
     @author: Jakub Chodubski
     """
 
-    def __init__(self):
+    usb = pyb.USB_VCP()
+    dictionary = {}
+    fifo = []  # TODO make this a bytes array
+
+    @staticmethod
+    def open():
         """Opens VCP and waits for connection"""
-        self.usb = pyb.USB_VCP()
-        self.dictionary = dict()
-        self.fifo = []
         Inform.waiting()
-        while not self.usb.isconnected():
+        while not VCP.usb.isconnected():
             pyb.delay(100)
 
-    def attach(self, key, element):
+    @staticmethod
+    def attach(key, element):
         """Drop data to the package before sending it"""
-        self.dictionary[key] = element
+        VCP.dictionary[key] = element
 
-    def send(self):
-        string = ujson.dumps(self.dictionary)
+    @staticmethod
+    def send():
+        string = ujson.dumps(VCP.dictionary)
         bytes_to_send = string.encode('utf-8')
-        self.usb.write(bytes_to_send)
-        self.dictionary = dict()
+        VCP.usb.write(bytes_to_send)
+        VCP.dictionary = dict()
 
-    def read(self):
+    @staticmethod
+    def read():
         """
         Reads data from USB VCP. Always returns python dictionary with at least
         'type' field. Type values:
@@ -42,20 +47,21 @@ class VCP:  # TODO make this static
 
         Type 3 is internal type and will not be forwarded.
         """
-        if self.usb.any():
-            read = self.usb.readline()
+        if VCP.usb.any():
+            read = VCP.usb.readline()
             read_string = read.decode('utf-8')
 
             # Keep reading from buffer until json is complete
             while read_string.count('{') != read_string.count('}'):
-                read = self.usb.readline()
+                read = VCP.usb.readline()
                 read_string += read.decode('utf-8')
 
             # Split and return
-            self.push(read_string)
-        return self.pop()
+            VCP.push(read_string)
+        return VCP.pop()
 
-    def push(self, line):
+    @staticmethod
+    def push(line):
         """Splits jsons string into single messages and puts in fifo"""
         if line[0] != '{':
             raise ValueError("Could not parse json: " + line)
@@ -63,13 +69,14 @@ class VCP:  # TODO make this static
         for character in line:
             message += character
             if message.count('{') == message.count('}'):
-                self.fifo.insert(0, message)
+                VCP.fifo.insert(0, message)
                 message = ""
 
-    def pop(self):
+    @staticmethod
+    def pop(VCP):
         """Reads messages from fifo"""
-        if len(self.fifo) != 0:
-            message = self.fifo.pop()
+        if len(VCP.fifo) != 0:
+            message = VCP.fifo.pop()
             return ujson.loads(message)
         return {'type': 0}
 
