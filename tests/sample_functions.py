@@ -44,8 +44,8 @@ def sample_function(list_of_values):
     import random
 
     # Sometimes throws StopIteration
-    if random.random() < 0.05:
-        raise StopIteration
+    # if random.random() < 0.04:
+    #     raise StopIteration
 
     # But usually returns: x^2 + 3x +7
     x = list_of_values[0]
