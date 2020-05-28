@@ -1,6 +1,6 @@
 import json
 
-with open('e2e/algorithm_results.json') as algorithm:
+with open('algorithm_results.json') as algorithm:
     with open(r'results_octave.txt', "r") as octave:
         algorithm_results = json.load(algorithm)['calculated_result']
 

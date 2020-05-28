@@ -28,7 +28,7 @@ def main():
     final_results = {
         'calculated_result': population.best_member.operator.values,
     }
-    with open("e2e/algorithm_results.json", "w") as write_file:
+    with open("algorithm_results.json", "w") as write_file:
         json.dump(final_results, write_file)
 
 

@@ -6,15 +6,19 @@ ENV PYTHONPATH=/app
 
 RUN mkdir /app
 COPY . /app/
-# Set tests as workdir
-WORKDIR /app/tests
 
 # Install octave with ga package
 RUN apt-get update
 RUN apt-get -y install octave
 RUN apt-get install octave-ga
 RUN pip install coverage
+# Run e2e tests
+WORKDIR /app/tests/e2e
+RUN chmod 755 entrypoint.sh
+RUN bash entrypoint.sh
+# Run unit tests
 
-# Run tests
-RUN chmod 755 e2e/entrypoint.sh
-RUN bash e2e/entrypoint.sh
+### Uncomment this, when propper unit test are delivered ###
+#WORKDIR /app/tests/unit
+#RUN python -m coverage run -m unittest discover
+#RUN python -m coverage report
