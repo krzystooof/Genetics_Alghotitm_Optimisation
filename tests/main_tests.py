@@ -39,8 +39,11 @@ def print_stats(population):
 
 def get_fitness(operator):
     # HERE CHANGE WHAT FUNCTION IS IMPORTED \/\/\/
-    from tests.sample_functions import simple_fit_func as fitness_func
-    return fitness_func(operator.values)
+    from tests.fitness_functions import simple_fit_func as fitness_func
+    try:
+        return fitness_func(operator.values)
+    except StopIteration:
+        return get_fitness(operator)
     # After changing function make sure to update population's config - L11
 
 
