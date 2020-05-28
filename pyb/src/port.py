@@ -80,6 +80,10 @@ class VCP:
             return ujson.loads(message)
         return {'type': 0}
 
+    @staticmethod
+    def unread(message):
+        pass
+
 
 class Inform:
     """

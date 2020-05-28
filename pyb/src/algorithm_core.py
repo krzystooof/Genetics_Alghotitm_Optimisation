@@ -9,6 +9,11 @@ import random
 import math
 
 
+class FitnessDifferencesTooSmall(Exception):
+    def __init__(self, message="Algorithm cannot produce more accurate result. Please stop invoking new_gen()"):
+        super().__init__(message)
+
+
 class Config:  # Basically a struct to keep data and pass it easily
 
     def __init__(self, population_size=100,
@@ -156,7 +161,7 @@ class Population:
                 else:
                     member.crossover_chance = chance
         except ZeroDivisionError:
-            raise ValueError("Fitness differences too small")
+            raise FitnessDifferencesTooSmall
 
 
 class Member:
