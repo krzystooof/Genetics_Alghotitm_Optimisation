@@ -1,6 +1,6 @@
-from pyb.src.algorithm_core import Population
-from pyb.src.algorithm_core import Config
-from pyb.src.algorithm_core import FitnessDifferencesTooSmall
+from src.algorithm_core import Population
+from src.algorithm_core import Config
+from src.algorithm_core import FitnessDifferencesTooSmall
 
 
 class Algorithm:
@@ -19,7 +19,7 @@ class Algorithm:
             else:
                 self.best_fitness_in_gen.append(self.population.best_member.operator.values[0])
                 self.population.update_stats()
-                self.__print_stats()
+                # self.__print_stats()
                 if self.population.generation > 5 and self.__check_stop_condition(self.best_fitness_in_gen):
                     return self.population.best_member.operator.values
                 try:
@@ -43,7 +43,7 @@ class Algorithm:
 
         return newest_fitness - self.accuracy < avg_fitness < newest_fitness + self.accuracy
 
-    def __print_stats(self):
+    def __print_stats(self):  # Printing not allowed
         print("Generation:", self.population.generation)
         print("Best member's fitness: ", self.population.best_member.fitness)
         print("Best member's operator: ", self.population.best_member.operator.values)

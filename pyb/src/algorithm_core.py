@@ -14,8 +14,8 @@ class FitnessDifferencesTooSmall(Exception):
         super().__init__(message)
 
 
-class Config:  # Basically a struct to keep data and pass it easily
-
+class Config:
+    """Keeps data so it can be passed easily"""
     def __init__(self, population_size=100,
                  population_discard=0.5,
                  population_chance_bonus=1,

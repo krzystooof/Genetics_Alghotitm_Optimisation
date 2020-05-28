@@ -73,9 +73,12 @@ def start_button_action(controller, gui, checkboxes_one_set):
             crossover_options.append(x + 1)
         x += 1
 
-    member_config = create_member_config(random_low, random_high, number_of_values, crossover_options)
-    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
-                           reverse_fitness, member_config)
+    config = {
+        'config': create_config(population_size, population_discard, population_noise,
+                           reverse_fitness, random_low, random_high, crossover_options),
+        'num_values': int(number_of_values),
+        'accuracy': 0.005  # TODO get from user
+    }
     print(config)
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port)

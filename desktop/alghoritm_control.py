@@ -6,28 +6,16 @@ from fitness import get_fitness
 from usb import USB
 
 
-def create_member_config(random_low, random_high, num_values, crossover_options):  # TODO remove member config
-    for x in range(0, len(crossover_options)):
-        crossover_options[x] = int(crossover_options[x])
+def create_config(population_size, population_discard, population_noise,
+                  reverse_fitness, random_low, random_high, crossover_options):
     return {
-        "random_low": float(random_low),
-        "random_high": float(random_high),
-        "num_values": int(num_values),
-        "crossover_options": crossover_options
-    }
-
-
-def create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
-                  reverse_fitness, member_config):
-    return {  # TODO simplify this
-        # This is read by load_config in main_pyb.py. Needs to be compatible on both sides
-        "generations": int(generations),
         "population_size": int(population_size),
         "population_discard": float(population_discard),
-        "population_chance_bonus": float(population_chance_bonus),
-        "population_noise": float(population_noise),
-        "population_reverse_fitness": bool(reverse_fitness),
-        "member_config": member_config  # TODO remove member config
+        "noise": float(population_noise),
+        "reverse": bool(reverse_fitness),
+        "random_low": int(random_low),
+        "random_high": int(random_high),
+        "crossover_options": crossover_options
     }
 
 

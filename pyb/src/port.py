@@ -1,6 +1,6 @@
 """File contains code necessary to run algorithm on pyboard."""
-import pyb
 import ujson
+import pyb
 
 
 class VCP:
@@ -9,13 +9,14 @@ class VCP:
     @author: Jakub Chodubski
     """
 
-    usb = pyb.USB_VCP()
+    usb = None
     dictionary = {}
     fifo = []  # TODO make this a bytes array
 
     @staticmethod
     def open():
         """Opens VCP and waits for connection"""
+        VCP.usb = pyb.USB_VCP()
         Inform.waiting()
         while not VCP.usb.isconnected():
             pyb.delay(100)
@@ -30,7 +31,7 @@ class VCP:
         string = ujson.dumps(VCP.dictionary)
         bytes_to_send = string.encode('utf-8')
         VCP.usb.write(bytes_to_send)
-        VCP.dictionary = dict()
+        VCP.dictionary = {}
 
     @staticmethod
     def read():
@@ -80,9 +81,6 @@ class VCP:
             return ujson.loads(message)
         return {'type': 0}
 
-    @staticmethod
-    def unread(message):  # TODO
-        pass
 
 
 class Inform:
