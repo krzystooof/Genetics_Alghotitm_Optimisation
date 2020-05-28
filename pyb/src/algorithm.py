@@ -4,7 +4,7 @@ from pyb.src.algorithm_core import Config
 
 class Algorithm:
     def __init__(self, fitness_callback, variables, population_size=100, accuracy=0.005, rand_low=-100, rand_high=100,
-                 reverse=False, noise=0.5, population_discard=0.5, population_chance_bonus=1, crossover_options=None):
+                 reverse=True, noise=0.5, population_discard=0.5, population_chance_bonus=1, crossover_options=None):
 
         self.crossover_options = crossover_options
         self.population_chance_bonus = population_chance_bonus

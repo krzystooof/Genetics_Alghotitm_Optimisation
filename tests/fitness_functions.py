@@ -20,13 +20,6 @@ def dynamic_object_sim(list_of_values):
 
 
 def dummy_function(list_of_values):
-    import random
-
-    # Sometimes throws StopIteration
-    # if random.random() < 0.0005:
-    #     raise StopIteration
-
-    # But usually returns: x^2 + 3x +7
     x = list_of_values[0]
     return x * x + x * 3 + 7
 

@@ -3,12 +3,8 @@
 # Create octave results as reference
 octave-cli ga_example.m > results_octave.txt
 
-# Run alogrithm, create another results
-python main_tests.py
-
-# Run unit tests
-python -m coverage run -m unittest discover
-python -m coverage report
+# Run algorithm, implicitly create another results in json file
+python run_algorithm.py
 
 # Compare given results
-python compare_results.py
+python compare.py

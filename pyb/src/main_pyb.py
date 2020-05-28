@@ -7,6 +7,7 @@ from src.algorithm import Population
 from src.algorithm import Config
 
 
+
 class Main:
 
     def __init__(self, ):
