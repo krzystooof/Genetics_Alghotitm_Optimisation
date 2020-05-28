@@ -4,14 +4,8 @@ import gc
 from src.port import VCP
 from src.port import Inform
 from src.algorithm import Population
+from src.algorithm import Config
 
-    #  MA BYĆ PRZESYŁANE DO KOMPA @grzegorz
-# Run a garbage collection
-# gc.collect()
-# Return the number of bytes of available heap RAM
-# gc.mem_free()
-# Return the number of bytes of heap RAM that are allocated
-# gc.mem_alloc()
 
 
 class Main:
@@ -20,13 +14,14 @@ class Main:
         """Main function. First to run"""
 
         # Variables
-        self.usb = VCP()
-        self.population = Population(None)
+        self.population = Population(Config())
         self.started = False
         self.initiated = False
         self.is_error = False
         self.test_index = 0
         self.run_time = 0
+        # Return the number of bytes of available heap RAM, or -1 if this amount is not known
+        self.memory_usage = 0
 
         # Main loop
         while True:
@@ -35,12 +30,12 @@ class Main:
                 self.error()
 
             # Wait for valid data
-            self.data = self.usb.read()
+            self.read_delay()
 
             while self.data['type'] == 0:  # 0 means no new data
-                Inform.waiting()
+
                 pyb.delay(1)
-                self.data = self.usb.read()  # Reading data
+                self.data = VCP.read()  # Reading data
             Inform.running()
             if self.data['type'] == 1:  # desktop client error
                 self.error()
@@ -55,12 +50,25 @@ class Main:
 
             self.run()
 
+    def read_delay(self):
+        self.data = VCP.read()
+        delay = 5
+        while self.data['type'] == 0:
+            if delay < 10000000:  # tenth of a second
+                delay = round(delay*1.5)
+            utime.sleep_us(delay)
+            Inform.waiting()
+            self.data = VCP.read()
+
+
+
+
     def error(self):
         Inform.error()
         self.is_error = True
         # periodically check for stop
         while self.is_error:
-            data = self.usb.read()
+            data = VCP.read()
             try:
                 if data['type'] == 4:
                     if data['operation'] == "STOP":
@@ -73,10 +81,22 @@ class Main:
 
     def load_config(self):
         """Feeds configuration variables into algorithm"""
+        try:
+            config = Config(population_size=self.data['config']['population_size'],
+                            population_discard=self.data['config']['population_discard'],
+                            population_chance_bonus=self.data['config']['population_chance_bonus'],
+                            noise=self.data['config']['population_noise'],
+                            reverse=self.data['config']['population_reverse_fitness'],
+                            random_low=self.data['config']['member_config']['random_low'],
+                            random_high=self.data['config']['member_config']['random_high'],
+                            num_values=self.data['config']['member_config']['num_values'],
+                            crossover_options=self.data['config']['member_config']['crossover_options'])
+        except KeyError:
+            raise KeyError(str(self.data))
         if self.initiated:
-            self.population.load_config(self.data['config'])
+            self.population.config = config
         else:
-            self.population = Population(self.data['config'])
+            self.population = Population(config)
             self.initiated = True
 
     def control(self):
@@ -95,45 +115,49 @@ class Main:
 
     def run(self):
         if self.started and self.initiated:  # Not paused and population exists
-            if self.test_index == self.population.population_size - 1:
+            if self.test_index == self.population.config.population_size - 1:
                 # Tested everyone, new gen, test again
 
                 # Start timer
                 start = utime.ticks_us()
-
+                gc.collect()
+                before = gc.mem_free()
                 # Run code
                 self.population.new_gen()
                 self.test_index = 0
 
                 # Check for break condition
-                if self.population.generation == self.population.break_generation:
+                if self.population.generation > 100:  # TODO remove hardcoded stop condition
                     self.started = False
 
                 # Stop the timer, save the time
+                gc.collect()
+                after = gc.mem_free()
                 stop = utime.ticks_us()
                 self.run_time = utime.ticks_diff(stop, start) + self.run_time
+                self.memory_usage = after - before + self.memory_usage
                 self.send_stats()
             else:
                 # Send next for testing
-                self.usb.attach('type', 9)
-                self.usb.attach('index', self.test_index)
-                self.usb.attach('operator', self.population.member_list[self.test_index].operator.values)
-                self.usb.send()
+                VCP.attach('type', 9)
+                VCP.attach('index', self.test_index)
+                VCP.attach('operator', self.population.member_list[self.test_index].operator.values)
+                VCP.send()
                 self.test_index += 1
 
     def send_stats(self):
-        self.usb.attach('type', 2)
+        VCP.attach('type', 2)
 
-        self.usb.attach('best_operator', self.population.best_member.operator.values)
-        self.usb.attach('best_fitness', self.population.best_member.fitness)
-        self.usb.attach('generation', self.population.generation)
-        self.usb.attach('mutations', self.population.total_mutations)
-        self.usb.attach('crossovers', self.population.total_crossovers)
-        self.usb.attach('discarded', self.population.total_discarded)
-        self.usb.attach('time_us', self.run_time)
+        VCP.attach('best_operator', self.population.best_member.operator.values)
+        VCP.attach('best_fitness', self.population.best_member.fitness)
+        VCP.attach('generation', self.population.generation)
+        VCP.attach('mutations', self.population.total_mutations)
+        VCP.attach('crossovers', self.population.total_crossovers)
+        VCP.attach('discarded', self.population.total_discarded)
+        VCP.attach('time_us', self.run_time)
+        VCP.attach('memory_usage', self.memory_usage)
 
-        self.usb.send()
+        VCP.send()
 
 
 main = Main()
-

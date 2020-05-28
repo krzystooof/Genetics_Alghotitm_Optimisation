@@ -6,30 +6,28 @@ from fitness import get_fitness
 from usb import USB
 
 
-def create_member_config(random_low, random_high, num_values, mutation_options, crossover_options):
-    for x in range(0,len(mutation_options)):
-        mutation_options[x] = int(mutation_options[x])
-    for x in range(0,len(crossover_options)):
+def create_member_config(random_low, random_high, num_values, crossover_options):  # TODO remove member config
+    for x in range(0, len(crossover_options)):
         crossover_options[x] = int(crossover_options[x])
     return {
         "random_low": float(random_low),
         "random_high": float(random_high),
         "num_values": int(num_values),
-        "mutation_options": mutation_options,
         "crossover_options": crossover_options
     }
 
 
 def create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
                   reverse_fitness, member_config):
-    return {
+    return {  # TODO simplify this
+        # This is read by load_config in main_pyb.py. Needs to be compatible on both sides
         "generations": int(generations),
         "population_size": int(population_size),
         "population_discard": float(population_discard),
         "population_chance_bonus": float(population_chance_bonus),
         "population_noise": float(population_noise),
         "population_reverse_fitness": bool(reverse_fitness),
-        "member_config": member_config
+        "member_config": member_config  # TODO remove member config
     }
 
 
@@ -73,22 +71,25 @@ class Controller:
         self.usb.send()
 
     def fitness_reply(self):
-        while True:
-            reply = self.usb.read()
+        reply = self.usb.read()
+        if not reply['type'] == 0:
             try:
-                if reply:
-                    if reply['type'] == 9:
-                        index = reply['index']
-                        operator = reply['operator']
-                        fitness = get_fitness(operator)
-                        self.usb.attach("type", 9)
-                        self.usb.attach('index', index)
-                        self.usb.attach('fitness', fitness)
-                        self.usb.send()
-                    elif reply['type'] == 2:
-                        with open("results.txt","w") as file:
-                            json.dump(reply, file)
+                if reply['type'] == 9:
+                    index = reply['index']
+                    operator = reply['operator']
+                    fitness = get_fitness(operator)
+                    self.usb.attach("type", 9)
+                    self.usb.attach('index', index)
+                    self.usb.attach('fitness', fitness)
+                    self.usb.send()
+                    to_ret = "Operator: " + str(operator) + ", returned fitness: " + str(fitness)
+                elif reply['type'] == 2:
+                    to_ret = "Received generation results: \n" + str(reply)
+                    with open("results.txt", "w") as file:
+                        json.dump(reply, file)
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
             finally:
-                time.sleep(1)
+                return to_ret
+        else:
+            time.sleep(0.00001)

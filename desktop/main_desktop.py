@@ -1,5 +1,4 @@
-import json
-from multiprocessing import Process
+import threading
 
 import serial
 
@@ -7,15 +6,27 @@ from graph import Graph
 from gui import GUI
 from alghoritm_control import *
 
-p2 = None
 run_number = 1
 full_times = []
-number_of_values = []
+full_memory_usage = []
+parameter_per_cycle = []
 paused = False
+
+reply_thread = None
+
+
+def board_reply():
+    thread = threading.current_thread()
+    while getattr(thread, "do_run", True):
+        result = controller.fitness_reply()
+        if result is not None:
+            gui.log(result)
+
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
     gui.disable_buttons([0, 1, 2, 3])
+    gui.disable_entry(11)
     gui.log("Starting")
     try:
         gui.check_values(checkboxes_one_set)
@@ -32,39 +43,47 @@ def start_button_action(controller, gui, checkboxes_one_set):
     population_discard = gui.get_entry_value(3)
     reverse_fitness = gui.get_checkbox_value(6, 0)
     pyboard_port = gui.get_entry_value(0)
-    random_low = gui.get_entry_value(9)
-    random_high = gui.get_entry_value(10)
-    num_values = gui.get_entry_value(11)
-    mutation_options = []
+    random_low = gui.get_entry_value(8)
+    random_high = gui.get_entry_value(9)
+    number_of_values = gui.get_entry_value(10)
 
     global paused
     if not paused:
-        global number_of_values
-        number_of_values.append(num_values)
+        global parameter_per_cycle
+        selected = gui.get_entry_value(11)
+        if "size" in selected:
+            parameter_per_cycle.append(population_size)
+        elif "generations" in selected:
+            parameter_per_cycle.append(generations)
+        elif "discard" in selected:
+            parameter_per_cycle.append(population_discard)
+        elif "noise" in selected:
+            parameter_per_cycle.append(population_noise)
+        elif "bonus" in selected:
+            parameter_per_cycle.append(population_chance_bonus)
+        elif "values" in selected:
+            parameter_per_cycle.append(number_of_values)
     paused = False
 
-    for x, boolean in enumerate(gui.get_checkbox_values(7)):
-        if boolean.get() is True:
-            mutation_options.append(x + 1)
-        x += 1
 
     crossover_options = []
 
-    for x, boolean in enumerate(gui.get_checkbox_values(8)):
+    for x, boolean in enumerate(gui.get_checkbox_values(7)):
         if boolean.get() is True:
             crossover_options.append(x + 1)
         x += 1
 
-    member_config = create_member_config(random_low, random_high, num_values, mutation_options, crossover_options)
+    member_config = create_member_config(random_low, random_high, number_of_values, crossover_options)
     config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
                            reverse_fitness, member_config)
-
+    print(config)
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port)
-        gui.log_info("PyBoard port is set to " + pyboard_port)
-        global p2
-        p2 = Process(target=lambda: controller.fitness_reply())
-        p2.start()
+        gui.log("PyBoard port is set to " + pyboard_port)
+        global reply_thread
+        reply_thread = threading.Thread(target=board_reply)
+        reply_thread.do_run = True
+        reply_thread.start()
         gui.enable_buttons([1, 2, 3])
     except serial.serialutil.SerialException:
         gui.log_error("Failed connection to board")
@@ -86,27 +105,34 @@ def pause_button_action(controller, gui):
 def save_results():
     with open("results.txt", "r") as file:
         data = file.read()
-    result = json.loads(data)
-    gui.log_info("Result: ")
-    for key, value in result.items():
-        gui.log_info(str(key) + ": " + str(value))
-    global full_times
-    global run_number
     try:
+        result = json.loads(data)
+        gui.log_info("Result: ")
+        for key, value in result.items():
+            gui.log_info(str(key) + ": " + str(value))
+        global full_times
+        global run_number
+        global full_memory_usage
         full_times.append(str(result['time_us']))
+        full_memory_usage.append(str(result['memory_usage']))
 
         gui.insert_listbox_data(0, run_number,
-                                str(run_number) + "[" + number_of_values[run_number - 1] + " values]" + " - " +
-                                full_times[
-                                    run_number - 1] + "s")
-    except ValueError:
+                                str(run_number) + "[" + parameter_per_cycle[
+                                    run_number - 1] + "]" + " - " +
+                                full_times[run_number - 1] + "s")
+        gui.insert_listbox_data(1, run_number,
+                                str(run_number) + "[" + parameter_per_cycle[
+                                    run_number - 1] + "]" + " - " +
+                                full_memory_usage[run_number - 1] + "B")
+    except ValueError or json.decoder.JSONDecodeError:
         gui.log_error("Could not read results")
     run_number += 1
 
 
 def stop_button_action(controller, gui):
-    global p2
-    p2.terminate()
+    global reply_thread
+    reply_thread.do_run = False
+    reply_thread = None
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
     save_results()
@@ -122,8 +148,9 @@ def restart_button_action(controller, gui, checkboxes_one_set):
 
 
 def draw_graph_button_action():
-    graph = Graph("Time (function)", "function", "time")
-    graph.add_y_axis_data("", number_of_values, full_times, 'lines+markers')
+    graph = Graph("Graph", "run number", "value", parameter_per_cycle)
+    graph.add_y_axis_data("time", full_times, 'lines+markers')
+    graph.add_y_axis_data("memory usage", full_memory_usage, 'lines+markers')
     graph.show()
 
 
@@ -142,14 +169,14 @@ if __name__ == '__main__':
     gui.add_spinbox("Population chance bonus::", 1, 9999, '%1.3f', 0.001)
 
     gui.add_checkboxes("Population reverse fitness:", [""], False)
-    gui.add_checkboxes("Member mutation options:", ["Random resetting", "Swap", "Scramble", "Inversion"], False)
     gui.add_checkboxes("Member crossover options:", ["One point", "Multi point"], False)
     # rows with checkboxes that must have at least one option set
-    checkboxes_one_set = [7, 8]
+    checkboxes_one_set = [8]
 
     gui.add_spinbox("Member min random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Member max random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Number of operator values:", 1, 100, '%1.f', 1)
+    gui.add_combo_box("Graph parameter:", ["generations","size","discard","noise","chance bonus","no. of operator values"])
 
     gui.add_console()
     gui.log("Fitness caclulating function is located in fintess.py")
@@ -166,5 +193,7 @@ if __name__ == '__main__':
     gui.disable_buttons([1, 2, 3])
 
     gui.add_listbox()
-    p1 = Process(target=gui.work)
-    p1.start()
+    gui.insert_listbox_data(0, 0, "Time:")
+    gui.add_listbox()
+    gui.insert_listbox_data(1, 0, "Memory:")
+    gui.work()

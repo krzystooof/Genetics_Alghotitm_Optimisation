@@ -1,24 +1,10 @@
 import unittest
-from pyb.src.algorithm import Population
+from pyb.src.algorithm_core import Population
+from pyb.src.algorithm_core import Config
+
 
 def get_config():
-    mutate = [1, 2, 3, 4]
-    crossover = [1, 2]
-    config_dict = {
-        'population_size': 100,
-        'population_discard': 0.5,
-        'population_noise': 0.1,
-        'population_chance_bonus': 2,
-        'population_reverse_fitness': True,
-        'member_config': {
-            'random_low': -100,
-            'random_high': 100,
-            'num_values': 1,
-            'mutation_options': mutate,
-            'crossover_options': crossover
-        }
-    }
-    return config_dict
+    return Config()  # TODO make config work
 
 
 class TestPopulation(unittest.TestCase):
@@ -27,7 +13,7 @@ class TestPopulation(unittest.TestCase):
         self.population = Population(self.config)
         self.member_list = []
 
-    def test_load_config(self):
+    def test_load_config(self):  # TODO make config testing work or delete this
         """Testing configuration"""
         self.population.load_config(self.config)
         self.assertEqual(self.population.population_size, 100)
@@ -40,7 +26,6 @@ class TestPopulation(unittest.TestCase):
         self.assertEqual(self.population.member_config["num_values"], 1)
         self.assertEqual(self.population.member_config["mutation_options"], [1, 2, 3, 4])
         self.assertEqual(self.population.member_config["crossover_options"], [1, 2])
-
 
     def test_new_gen(self):
         """Testing for 1 generation"""
@@ -85,7 +70,7 @@ class TestPopulation(unittest.TestCase):
         self.population.assign_cross_chances()
         self.assertEqual(self.population.member_list[0].crossover_chance, 0.5)
 
-    def test_get_average_fitness(self):
+    def test_get_average_fitness(self): # TODO nonexistant functions dont need testing
         """Every member has 1 fitness and there are 100 members"""
         for member in self.population.member_list:
             member.fitness = 1
@@ -94,7 +79,7 @@ class TestPopulation(unittest.TestCase):
         self.assertEqual(len(self.population.member_list), 100)
         self.assertEqual(final_return, 1)
 
-    def test_get_offset(self):
+    def test_get_offset(self):  # TODO nonexistant functions dont need testing
         """Basic test"""
         final_return = self.population.get_offset()
         self.assertEqual(final_return, 1)
@@ -103,7 +88,7 @@ class TestPopulation(unittest.TestCase):
         final_return = self.population.get_offset()
         self.assertEqual(final_return, -9999)
 
-    def test_apply_noise(self):
+    def test_apply_noise(self): # TODO nonexistant functions dont need testing
         """Test of basic values"""
         self.population.apply_noise()
         self.assertEqual(self.population.total_mutations, 10)
@@ -121,6 +106,3 @@ class TestPopulation(unittest.TestCase):
             counting = counting - 1
         self.population.update_stats()
         self.assertEqual(self.population.best_member.fitness, 1)
-
-if __name__ == '__main__':
-    unittest.main()

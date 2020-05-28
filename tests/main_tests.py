@@ -1,33 +1,28 @@
-from pyb.src.algorithm import Population
+"""Will continue to exist for pipeline purposes"""
+from pyb.src.algorithm_core import Population
+from pyb.src.algorithm_core import Config
+from pyb.src.algorithm_core import FitnessDifferencesTooSmall
 import json
-
-import math
-import numpy as np
-import matplotlib.pyplot as plt
 
 
 def main():
-    config = get_config()
-    population = Population(config)
+    # Creating population
+    population = Population(Config(noise=0.7, reverse=True, num_values=1))
+
+    # You cant call new_gen without assigned fitness
     for member in population.member_list:
         member.fitness = get_fitness(member.operator)
 
-
-    while population.generation < 3000:  # TODO find good break condition
-        population.new_gen()
-
-        for member in population.member_list:
-            member.fitness = get_fitness(member.operator)
-        population.update_stats()
-        print("Best member's fitness: ", population.best_member.fitness)
-        print("Best member's operator: ", population.best_member.operator.values)
-        print("Generation:", population.generation)
-
-    for member in population.member_list:
-        member.fitness = get_fitness(member.operator)
-    population.update_stats()
-    print("Best member's fitness: ", population.best_member.fitness)
-    print("Best member's operator: ", population.best_member.operator.values)
+    # Running algorithm until it can't get more accurate
+    while True:
+        # True can be changed to stop condition
+        try:
+            population.new_gen()
+            for member in population.member_list:
+                member.fitness = get_fitness(member.operator)
+            print_stats(population)
+        except FitnessDifferencesTooSmall:
+            break
 
     # Saving final results into json
     final_results = {
@@ -37,85 +32,19 @@ def main():
         json.dump(final_results, write_file)
 
 
-def get_config():
-    crossover = [1,2,3]
-    config_dict = {
-        'generations': 1000,
-        'population_size': 100,
-        'population_discard': 0.5,
-        'population_noise': 0.3,
-        'population_chance_bonus': 2,
-        'population_reverse_fitness': True,
-        'member_config': {
-            'random_low': -100,
-            'random_high': 100,
-            'num_values': 2,
-            'crossover_options': crossover
-            }
+def print_stats(population):
+    print("Generation", str(population.generation) + ":")
+    print("Best member: ", population.best_member.operator.values, " => ", population.best_member.fitness)
 
-    }
-    return config_dict
 
-minimum = 10000
-maximum = 0.0
-counter = 0
+def get_fitness(operator):
+    # HERE CHANGE WHAT FUNCTION IS IMPORTED \/\/\/
+    from tests.fitness_functions import simple_fit_func as fitness_func
+    try:
+        return fitness_func(operator.values)
+    except StopIteration:
+        return get_fitness(operator)
+    # After changing function make sure to update population's config - L11
 
-def get_fitness(operator):  # simpleFitFunc, but in python
-    # model
-    M = np.array([1.995908286, -0.996008084, 0.000024949, 0.000049899, 0.000024949])
-
-    # simulation time
-    tsim = 30  # [s]
-
-    # sample time
-    ts = 0.01  # [s]
-
-    # time vector
-    t = np.arange(0, tsim, ts)  # [s]
-
-    # model output signal
-    y = np.zeros(t.size)
-
-    # model input signal
-    u = np.zeros(t.size)
-
-    # model reference signal
-    r = np.ones(t.size)
-
-    # controller gains
-    Kp = operator.values[0]
-    Ki = operator.values[1]
-    ei = 0
-
-    # simulation loop
-    for i in range(2, t.size):
-        e = r[i - 1] - y[i - 1]
-        ei = ei + e
-        u[i] = Kp * e + Ki * ei * ts
-        y[i] = M.dot(np.array([y[i - 1], y[i - 2], u[i], u[i - 1], u[i - 2]]).transpose())
-
-    q = math.sqrt(np.sum(np.square(r - y)) / t.size)
-
-    # plot results - disable for optimization !!!
-    # fig = plt.figure()
-    # ax = fig.gca()
-    # ax.grid(True)
-    # ax.set_ylabel('Output signal [-]')
-    # ax.set_xlabel('Time [s]')
-    # plt.plot(t, y)
-    # plt.show()
-    # global minimum
-    # global maximum
-    # if q < minimum:
-    #     minimum = q
-    # if q > maximum:
-    #     maximum = q
-    # print(q)
-    # print("Minimum: ", minimum)
-    # print("Maximum: ", maximum)
-    # global counter
-    # counter = counter + 1
-    # print("Counter: ", counter)
-    return q
 
 main()
