@@ -10,3 +10,5 @@ azure-pipelines.yml
 desktop/venv/
 desktop/results.txt
 venv/
+tests/e2e/algorithm_results.json
+tests/e2e/results_octave.txt

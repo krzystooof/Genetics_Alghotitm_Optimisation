@@ -26,29 +26,19 @@ class Config:  # Basically a struct to keep data and pass it easily
                  num_values=10,
                  crossover_options=None):
         """
-        Loads configuration variables. Takes dictionary as argument. This dictionary must contain fields:
+        Loads configuration variables. Variables:
           - population_size - Size of population (Value <1-x>)
           - population_discard - Percentage of discarded members with each generation (Value <0-1>)
-          - population_noise - Percentage of random mutations for each generation (Value <0-1>)
+          - noise - Percentage of random mutations for each generation (Value <0-1>)
           - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
-          - population_reverse_fitness - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
-          - member_config - Member's config dict. More on that in Member.__init__()
+          - reverse - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
+          - random_low - initial values lower limit
+          - random_high - initial values higher limit
+          - num_values - how many values does operator keep
+          - member_crossover_options - List of allowed crossover types. Possible values:
+              1. One point
+              2. Multi point
         """
-        """
-        Member's config:
-            - random_low - initial values lower limit
-            - random_high - initial values higher limit
-            - num_values - how many values does operator keep
-            - member_mutation_options - List of allowed mutation types. Possible values:
-                1. Random resetting (set random element to 0)
-                2. Swap mutation (swap two elements)
-                3. Scramble mutation (shuffle random part)
-                4. Inversion mutation (invert random part)
-            - member_crossover_options - List of allowed crossover types. Possible values:
-                1. One point
-                2. Multi point
-        """
-        # TODO cleanup docstring
         self.crossover_options = [1, 2]
         if crossover_options is not None:
             self.crossover_options = crossover_options
@@ -70,7 +60,7 @@ class Population:
         @version: 2.4
     """
 
-    def __init__(self, config):
+    def __init__(self, config=Config()):
         """Creates new random population"""
         # Configuration variables
         self.config = config
