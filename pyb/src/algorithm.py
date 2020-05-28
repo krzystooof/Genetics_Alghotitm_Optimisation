@@ -4,28 +4,14 @@ from pyb.src.algorithm_core import FitnessDifferencesTooSmall
 
 
 class Algorithm:
-    def __init__(self, fitness_callback, variables, population_size=100, accuracy=0.005, rand_low=-100, rand_high=100,
-                 reverse=True, noise=0.5, population_discard=0.5, population_chance_bonus=1, crossover_options=None):
-
-        self.population = Population(
-            Config(population_size=population_size, num_values=variables, random_low=rand_low, random_high=rand_high,
-                   reverse=reverse, population_discard=population_discard, noise=noise,
-                   crossover_options=crossover_options, population_chance_bonus=population_chance_bonus))
-        self.crossover_options = crossover_options
-        self.population_chance_bonus = population_chance_bonus
-        self.population_discard = population_discard
-        self.noise = noise
-        self.reverse = reverse
-        self.rand_high = rand_high
-        self.rand_low = rand_low
+    def __init__(self, fitness_callback, num_values, accuracy=0.005, **kwargs):
+        self.population = Population(Config(num_values=num_values, **kwargs))
+        self.execute_callback = fitness_callback
         self.accuracy = accuracy
-        self.size = population_size
-        self.values = variables
-        self.calculate_fitness = fitness_callback
         self.best_fitness_in_gen = []
 
     def optimise(self):
-        while self.population.generation < self.size:
+        while self.population.generation < self.population.config.population_size:
             try:
                 self.__calculate_generation_fitness()
             except StopIteration:
@@ -43,7 +29,7 @@ class Algorithm:
 
     def __calculate_generation_fitness(self):
         for member in self.population.member_list:
-            member.fitness = self.calculate_fitness(member.operator.values)
+            member.fitness = self.execute_callback(member.operator.values)
 
     def __check_stop_condition(self, best_fitness_in_gen):
         # Sum of fitness of last 5 generations
