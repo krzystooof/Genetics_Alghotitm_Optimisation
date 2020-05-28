@@ -16,5 +16,5 @@ RUN apt-get install octave-ga
 RUN pip install coverage
 
 # Run tests
-RUN chmod 755 entrypoint.sh
-RUN bash entrypoint.sh
+RUN chmod 755 e2e/entrypoint.sh
+RUN bash e2e/entrypoint.sh

@@ -11,4 +11,4 @@ python -m coverage run -m unittest discover
 python -m coverage report
 
 # Compare given results
-python compare_results.py
+python e2e/compare_results.py
