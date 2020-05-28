@@ -7,7 +7,7 @@ ENV PYTHONPATH=/app
 RUN mkdir /app
 COPY . /app/
 # Set tests as workdir
-WORKDIR /app/tests
+WORKDIR /app/tests/e2e
 
 # Install octave with ga package
 RUN apt-get update
