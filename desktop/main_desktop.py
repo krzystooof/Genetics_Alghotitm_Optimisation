@@ -71,7 +71,6 @@ def start_button_action(controller, gui, checkboxes_one_set):
             parameter_per_cycle.append(number_of_values)
     else:
         recreate_usb = False
-    paused = False
 
     crossover_options = []
 
@@ -117,17 +116,23 @@ def save_results():
         global full_times
         global run_number
         global full_memory_usage
-        full_times.append(str(result['time_us']))
-        full_memory_usage.append(str(result['memory_usage']))
+        parmeter = parameter_per_cycle[run_number - 1]
+        time = str(result['time_us'])
+        memory = str(result['memory_usage'])
+        # TODO remove comment below, when board will send time
+        # full_times.append(time)
 
-        gui.insert_listbox_data(0, run_number,
-                                str(run_number) + "[" + parameter_per_cycle[
-                                    run_number - 1] + "]" + " - " +
-                                full_times[run_number - 1] + "s")
+        full_memory_usage.append(memory)
+
+
+
+        # TODO remove comment below, when board will send time
+        # gui.insert_listbox_data(0, run_number,
+        #                         str(run_number) + "[" + parmeter + "]" + " - " +
+        #                         time + "s")
         gui.insert_listbox_data(1, run_number,
-                                str(run_number) + "[" + parameter_per_cycle[
-                                    run_number - 1] + "]" + " - " +
-                                full_memory_usage[run_number - 1] + "B")
+                                str(run_number) + "[" + parmeter + "]" + " - " +
+                                memory + "B")
     except ValueError:
         gui.log_error("Could not read results")
     run_number += 1
@@ -141,19 +146,21 @@ def stop_button_action(controller, gui):
     gui.log("Stopping")
     save_results()
     controller.stop_algorithm()
+    global paused
+    paused = False
     gui.enable_entry(0)
     gui.enable_button(0)
 
 
 def restart_button_action(controller, gui, checkboxes_one_set):
     stop_button_action(controller, gui)
-    gui.draw_graph()
     start_button_action(controller, gui, checkboxes_one_set)
 
 
 def draw_graph_button_action():
     graph = Graph("Graph", "run number", "value", parameter_per_cycle)
-    graph.add_y_axis_data("time", full_times, 'lines+markers')
+    # TODO remove comment below, when board will send time
+    # graph.add_y_axis_data("time", full_times, 'lines+markers')
     graph.add_y_axis_data("memory usage", full_memory_usage, 'lines+markers')
     graph.show()
 
@@ -175,7 +182,7 @@ if __name__ == '__main__':
     gui.add_checkboxes("Population reverse fitness:", [""], False)
     gui.add_checkboxes("Member crossover options:", ["One point", "Multi point"], False)
     # rows with checkboxes that must have at least one option set
-    checkboxes_one_set = [8]
+    checkboxes_one_set = [7]
 
     gui.add_spinbox("Member min random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Member max random:", -9999, 9999, '%1.f', 1)
