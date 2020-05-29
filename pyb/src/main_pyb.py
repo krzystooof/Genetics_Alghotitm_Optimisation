@@ -28,7 +28,6 @@ class Main:
         # Variables
         self.algorithm = None
         self.finished = False
-        self.is_error = False
         self.current_best = []
 
         VCP.open()
@@ -36,8 +35,6 @@ class Main:
         # Main loop
         while True:
             # Check for errors
-            if self.is_error:
-                self.error()
 
             # Wait for valid data
             self.read_data()
@@ -57,23 +54,6 @@ class Main:
             time.sleep_us(delay)
             Inform.waiting()
             self.data = VCP.read()
-
-    def error(self):
-        """Flashes red diode and waits for STOP"""
-        Inform.error()
-        self.is_error = True
-        # periodically check for stop
-        while self.is_error:
-            data = VCP.read()
-            try:
-                if data['type'] == 4:
-                    if data['operation'] == "STOP":
-                        self.started = False
-                        self.is_error = False
-                        Inform.waiting()
-            except KeyError:
-                print("Unable to read 'type' field from received data")
-            pyb.delay(10)
 
     def load_config(self):
         """Feeds configuration variables into algorithm"""

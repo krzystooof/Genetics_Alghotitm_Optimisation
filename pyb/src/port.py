@@ -117,17 +117,6 @@ class Inform:
         pyb.LED(3).off()
 
     @staticmethod
-    def error():  # red on
-        """
-        Algorithm encountered a problem.
-        Board is waiting for debug and reset.
-        """
-        Inform.state = 2
-        pyb.LED(1).off()
-        pyb.LED(2).off()
-        pyb.LED(3).on()
-
-    @staticmethod
     def connected():  # quick flash green, blued
         """
         Signal Virtual Comm Port has been connected.
