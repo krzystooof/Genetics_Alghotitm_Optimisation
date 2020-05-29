@@ -18,18 +18,27 @@ reply_thread = None
 
 def board_reply():
     thread = threading.current_thread()
+    delay_ms = 5
     while getattr(thread, "do_run", True):
         result = controller.fitness_reply()
         if result is not None:
+            delay_ms = 5
             type = result['type']
             if type == 9:
                 operator = str(result['operator'])
                 fitness = str(result['fitness'])
-                gui.log("Received operator: " + operator + ", sent fitness: " + fitness)
+                index = str(result['index'])
+                gui.log("Received operator: " + operator + " for index: " + index + ", sent fitness: " + fitness)
             elif type == 2:
                 global last_result
                 last_result = result
                 gui.log("Received results:\n" + str(result))
+        else:
+            if delay_ms < 300000:  # tenth of a second
+                delay_ms = round(delay_ms * 1.5)
+                print(delay_ms)
+                delay_s = delay_ms * 0.000001
+            time.sleep(delay_s)
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -124,8 +133,6 @@ def save_results():
 
         full_memory_usage.append(memory)
 
-
-
         # TODO remove comment below, when board will send time
         # gui.insert_listbox_data(0, run_number,
         #                         str(run_number) + "[" + parmeter + "]" + " - " +
@@ -133,7 +140,7 @@ def save_results():
         gui.insert_listbox_data(1, run_number,
                                 str(run_number) + "[" + parmeter + "]" + " - " +
                                 memory + "B")
-    except ValueError:
+    except AttributeError or ValueError:
         gui.log_error("Could not read results")
     run_number += 1
 
