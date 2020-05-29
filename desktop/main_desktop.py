@@ -11,22 +11,38 @@ full_times = []
 full_memory_usage = []
 parameter_per_cycle = []
 paused = False
+last_result = None
 
 reply_thread = None
 
 
 def board_reply():
     thread = threading.current_thread()
+    delay_ms = 5
     while getattr(thread, "do_run", True):
         result = controller.fitness_reply()
         if result is not None:
-            gui.log(result)
-
+            delay_ms = 5
+            type = result['type']
+            if type == 9:
+                operator = str(result['operator'])
+                fitness = str(result['fitness'])
+                index = str(result['index'])
+                gui.log("Received operator: " + operator + " for index: " + index + ", sent fitness: " + fitness)
+            elif type == 2:
+                global last_result
+                last_result = result
+                gui.log("Received results:\n" + str(result))
+        else:
+            if delay_ms < 300000:  # tenth of a second
+                delay_ms = round(delay_ms * 1.5)
+                print(delay_ms)
+                delay_s = delay_ms * 0.000001
+            time.sleep(delay_s)
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
     gui.disable_buttons([0, 1, 2, 3])
-    gui.disable_entry(11)
     gui.log("Starting")
     try:
         gui.check_values(checkboxes_one_set)
@@ -36,7 +52,6 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.log("Start aborted")
         gui.enable_button(0)
         return
-    generations = gui.get_entry_value(1)
     population_chance_bonus = gui.get_entry_value(5)
     population_size = gui.get_entry_value(2)
     population_noise = gui.get_entry_value(4)
@@ -47,14 +62,14 @@ def start_button_action(controller, gui, checkboxes_one_set):
     random_high = gui.get_entry_value(9)
     number_of_values = gui.get_entry_value(10)
 
+    recreate_usb = True
+    gui.disable_entry(1)
     global paused
     if not paused:
         global parameter_per_cycle
-        selected = gui.get_entry_value(11)
+        selected = gui.get_entry_value(1)
         if "size" in selected:
             parameter_per_cycle.append(population_size)
-        elif "generations" in selected:
-            parameter_per_cycle.append(generations)
         elif "discard" in selected:
             parameter_per_cycle.append(population_discard)
         elif "noise" in selected:
@@ -63,8 +78,8 @@ def start_button_action(controller, gui, checkboxes_one_set):
             parameter_per_cycle.append(population_chance_bonus)
         elif "values" in selected:
             parameter_per_cycle.append(number_of_values)
-    paused = False
-
+    else:
+        recreate_usb = False
 
     crossover_options = []
 
@@ -73,15 +88,11 @@ def start_button_action(controller, gui, checkboxes_one_set):
             crossover_options.append(x + 1)
         x += 1
 
-    config = {
-        'config': create_config(population_size, population_discard, population_noise,
-                           reverse_fitness, random_low, random_high, crossover_options),
-        'num_values': int(number_of_values),
-        'accuracy': 0.005  # TODO get from user
-    }
-    print(config)
+    member_config = create_member_config(random_low, random_high, number_of_values, crossover_options)
+    config = create_config(population_size, population_discard, population_chance_bonus, population_noise,
+                           reverse_fitness, member_config)
     try:
-        pyboard_port = controller.start_algorithm(config, pyboard_port)
+        pyboard_port = controller.start_algorithm(config, pyboard_port, recreate_usb=recreate_usb)
         gui.log("PyBoard port is set to " + pyboard_port)
         global reply_thread
         reply_thread = threading.Thread(target=board_reply)
@@ -106,28 +117,30 @@ def pause_button_action(controller, gui):
 
 
 def save_results():
-    with open("results.txt", "r") as file:
-        data = file.read()
     try:
-        result = json.loads(data)
+        result = last_result
         gui.log_info("Result: ")
         for key, value in result.items():
             gui.log_info(str(key) + ": " + str(value))
         global full_times
         global run_number
         global full_memory_usage
-        # full_times.append(str(result['time_us'])) TODO
-        full_memory_usage.append(str(result['alloc_memory']))
+        parmeter = parameter_per_cycle[run_number - 1]
+        time = str(result['time_us'])
+        memory = str(result['memory_usage'])
+        # TODO remove comment below, when board will send time
+        # full_times.append(time)
 
-        gui.insert_listbox_data(0, run_number,
-                                str(run_number) + "[" + parameter_per_cycle[
-                                    run_number - 1] + "]" + " - " +
-                                full_times[run_number - 1] + "s")
+        full_memory_usage.append(memory)
+
+        # TODO remove comment below, when board will send time
+        # gui.insert_listbox_data(0, run_number,
+        #                         str(run_number) + "[" + parmeter + "]" + " - " +
+        #                         time + "s")
         gui.insert_listbox_data(1, run_number,
-                                str(run_number) + "[" + parameter_per_cycle[
-                                    run_number - 1] + "]" + " - " +
-                                full_memory_usage[run_number - 1] + "B")
-    except ValueError or json.decoder.JSONDecodeError:
+                                str(run_number) + "[" + parmeter + "]" + " - " +
+                                memory + "B")
+    except AttributeError or ValueError:
         gui.log_error("Could not read results")
     run_number += 1
 
@@ -140,19 +153,21 @@ def stop_button_action(controller, gui):
     gui.log("Stopping")
     save_results()
     controller.stop_algorithm()
+    global paused
+    paused = False
     gui.enable_entry(0)
     gui.enable_button(0)
 
 
 def restart_button_action(controller, gui, checkboxes_one_set):
     stop_button_action(controller, gui)
-    gui.draw_graph()
     start_button_action(controller, gui, checkboxes_one_set)
 
 
 def draw_graph_button_action():
     graph = Graph("Graph", "run number", "value", parameter_per_cycle)
-    graph.add_y_axis_data("time", full_times, 'lines+markers')
+    # TODO remove comment below, when board will send time
+    # graph.add_y_axis_data("time", full_times, 'lines+markers')
     graph.add_y_axis_data("memory usage", full_memory_usage, 'lines+markers')
     graph.show()
 
@@ -165,7 +180,7 @@ if __name__ == '__main__':
     gui = GUI("Desktop STM GA Control Panel", 10)
 
     gui.add_text_entry("PyBoard port:")
-    gui.add_spinbox("Generations:", 0, 9999, '%1.f', 1)
+    gui.add_combo_box("Graph parameter:", ["size", "discard", "noise", "chance bonus", "no. of operator values"])
     gui.add_spinbox("Population size:", 0, 9999, '%1.f', 1)
     gui.add_spinbox("Population discard:", 0, 1, '%0.3f', 0.001)
     gui.add_spinbox("Population noise:", 0, 1, '%0.3f', 0.001)
@@ -174,12 +189,11 @@ if __name__ == '__main__':
     gui.add_checkboxes("Population reverse fitness:", [""], False)
     gui.add_checkboxes("Member crossover options:", ["One point", "Multi point"], False)
     # rows with checkboxes that must have at least one option set
-    checkboxes_one_set = [8]
+    checkboxes_one_set = [7]
 
     gui.add_spinbox("Member min random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Member max random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Number of operator values:", 1, 100, '%1.f', 1)
-    gui.add_combo_box("Graph parameter:", ["generations","size","discard","noise","chance bonus","no. of operator values"])
 
     gui.add_console()
     gui.log("Fitness caclulating function is located in fintess.py")
