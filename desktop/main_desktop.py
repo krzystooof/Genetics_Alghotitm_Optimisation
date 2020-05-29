@@ -23,7 +23,6 @@ def board_reply():
             gui.log(result)
 
 
-
 def start_button_action(controller, gui, checkboxes_one_set):
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Starting")
@@ -45,6 +44,7 @@ def start_button_action(controller, gui, checkboxes_one_set):
     random_high = gui.get_entry_value(9)
     number_of_values = gui.get_entry_value(10)
 
+    recreate_usb = True
     gui.disable_entry(1)
     global paused
     if not paused:
@@ -60,8 +60,9 @@ def start_button_action(controller, gui, checkboxes_one_set):
             parameter_per_cycle.append(population_chance_bonus)
         elif "values" in selected:
             parameter_per_cycle.append(number_of_values)
+    else:
+        recreate_usb=False
     paused = False
-
 
     crossover_options = []
 
@@ -74,7 +75,7 @@ def start_button_action(controller, gui, checkboxes_one_set):
     config = create_config(population_size, population_discard, population_chance_bonus, population_noise,
                            reverse_fitness, member_config)
     try:
-        pyboard_port = controller.start_algorithm(config, pyboard_port)
+        pyboard_port = controller.start_algorithm(config, pyboard_port, recreate_usb=recreate_usb)
         gui.log("PyBoard port is set to " + pyboard_port)
         global reply_thread
         reply_thread = threading.Thread(target=board_reply)
@@ -158,7 +159,7 @@ if __name__ == '__main__':
     gui = GUI("Desktop STM GA Control Panel", 10)
 
     gui.add_text_entry("PyBoard port:")
-    gui.add_combo_box("Graph parameter:", ["size","discard","noise","chance bonus","no. of operator values"])
+    gui.add_combo_box("Graph parameter:", ["size", "discard", "noise", "chance bonus", "no. of operator values"])
     gui.add_spinbox("Population size:", 0, 9999, '%1.f', 1)
     gui.add_spinbox("Population discard:", 0, 1, '%0.3f', 0.001)
     gui.add_spinbox("Population noise:", 0, 1, '%0.3f', 0.001)
