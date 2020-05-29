@@ -26,7 +26,6 @@ def board_reply():
 
 def start_button_action(controller, gui, checkboxes_one_set):
     gui.disable_buttons([0, 1, 2, 3])
-    gui.disable_entry(11)
     gui.log("Starting")
     try:
         gui.check_values(checkboxes_one_set)
@@ -36,7 +35,6 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.log("Start aborted")
         gui.enable_button(0)
         return
-    generations = gui.get_entry_value(1)
     population_chance_bonus = gui.get_entry_value(5)
     population_size = gui.get_entry_value(2)
     population_noise = gui.get_entry_value(4)
@@ -47,14 +45,13 @@ def start_button_action(controller, gui, checkboxes_one_set):
     random_high = gui.get_entry_value(9)
     number_of_values = gui.get_entry_value(10)
 
+    gui.disable_entry(1)
     global paused
     if not paused:
         global parameter_per_cycle
-        selected = gui.get_entry_value(11)
+        selected = gui.get_entry_value(1)
         if "size" in selected:
             parameter_per_cycle.append(population_size)
-        elif "generations" in selected:
-            parameter_per_cycle.append(generations)
         elif "discard" in selected:
             parameter_per_cycle.append(population_discard)
         elif "noise" in selected:
@@ -74,9 +71,8 @@ def start_button_action(controller, gui, checkboxes_one_set):
         x += 1
 
     member_config = create_member_config(random_low, random_high, number_of_values, crossover_options)
-    config = create_config(generations, population_size, population_discard, population_chance_bonus, population_noise,
+    config = create_config(population_size, population_discard, population_chance_bonus, population_noise,
                            reverse_fitness, member_config)
-    print(config)
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port)
         gui.log("PyBoard port is set to " + pyboard_port)
@@ -162,7 +158,7 @@ if __name__ == '__main__':
     gui = GUI("Desktop STM GA Control Panel", 10)
 
     gui.add_text_entry("PyBoard port:")
-    gui.add_spinbox("Generations:", 0, 9999, '%1.f', 1)
+    gui.add_combo_box("Graph parameter:", ["size","discard","noise","chance bonus","no. of operator values"])
     gui.add_spinbox("Population size:", 0, 9999, '%1.f', 1)
     gui.add_spinbox("Population discard:", 0, 1, '%0.3f', 0.001)
     gui.add_spinbox("Population noise:", 0, 1, '%0.3f', 0.001)
@@ -176,7 +172,6 @@ if __name__ == '__main__':
     gui.add_spinbox("Member min random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Member max random:", -9999, 9999, '%1.f', 1)
     gui.add_spinbox("Number of operator values:", 1, 100, '%1.f', 1)
-    gui.add_combo_box("Graph parameter:", ["generations","size","discard","noise","chance bonus","no. of operator values"])
 
     gui.add_console()
     gui.log("Fitness caclulating function is located in fintess.py")
