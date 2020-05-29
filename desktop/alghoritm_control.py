@@ -83,11 +83,11 @@ class Controller:
                     self.usb.attach('index', index)
                     self.usb.attach('fitness', fitness)
                     self.usb.send()
-                    to_ret = "Operator: " + str(operator) + ", returned fitness: " + str(fitness)
+                    to_ret = {"type": 9,
+                              "operator": operator,
+                              "fitness":fitness}
                 elif reply['type'] == 2:
-                    to_ret = "Received generation results: \n" + str(reply)
-                    with open("results.txt", "w") as file:
-                        json.dump(reply, file)
+                    to_ret = reply
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
             finally:

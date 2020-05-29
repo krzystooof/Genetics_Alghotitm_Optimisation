@@ -11,6 +11,7 @@ full_times = []
 full_memory_usage = []
 parameter_per_cycle = []
 paused = False
+last_result = None
 
 reply_thread = None
 
@@ -20,7 +21,15 @@ def board_reply():
     while getattr(thread, "do_run", True):
         result = controller.fitness_reply()
         if result is not None:
-            gui.log(result)
+            type = result['type']
+            if type == 9:
+                operator = str(result['operator'])
+                fitness = str(result['fitness'])
+                gui.log("Received operator: " + operator + ", sent fitness: " + fitness)
+            elif type == 2:
+                global last_result
+                last_result = result
+                gui.log("Received results:\n" + str(result))
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -61,7 +70,7 @@ def start_button_action(controller, gui, checkboxes_one_set):
         elif "values" in selected:
             parameter_per_cycle.append(number_of_values)
     else:
-        recreate_usb=False
+        recreate_usb = False
     paused = False
 
     crossover_options = []
@@ -100,10 +109,8 @@ def pause_button_action(controller, gui):
 
 
 def save_results():
-    with open("results.txt", "r") as file:
-        data = file.read()
     try:
-        result = json.loads(data)
+        result = last_result
         gui.log_info("Result: ")
         for key, value in result.items():
             gui.log_info(str(key) + ": " + str(value))
@@ -121,7 +128,7 @@ def save_results():
                                 str(run_number) + "[" + parameter_per_cycle[
                                     run_number - 1] + "]" + " - " +
                                 full_memory_usage[run_number - 1] + "B")
-    except ValueError or json.decoder.JSONDecodeError:
+    except ValueError:
         gui.log_error("Could not read results")
     run_number += 1
 
