@@ -15,7 +15,6 @@ class FitnessDifferencesTooSmall(Exception):
 
 
 class Config:
-    """Keeps data so it can be passed easily"""
     def __init__(self, population_size=100,
                  population_discard=0.5,
                  population_chance_bonus=1,
@@ -25,20 +24,6 @@ class Config:
                  random_high=100,
                  num_values=10,
                  crossover_options=None):
-        """
-        Loads configuration variables. Variables:
-          - population_size - Size of population (Value <1-x>)
-          - population_discard - Percentage of discarded members with each generation (Value <0-1>)
-          - noise - Percentage of random mutations for each generation (Value <0-1>)
-          - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
-          - reverse - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
-          - random_low - initial values lower limit
-          - random_high - initial values higher limit
-          - num_values - how many values does operator keep
-          - member_crossover_options - List of allowed crossover types. Possible values:
-              1. One point
-              2. Multi point
-        """
         self.crossover_options = [1, 2]
         if crossover_options is not None:
             self.crossover_options = crossover_options
@@ -60,10 +45,10 @@ class Population:
         @version: 2.4
     """
 
-    def __init__(self, config=Config()):
+    def __init__(self, **kwargs):
         """Creates new random population"""
         # Configuration variables
-        self.config = config
+        self.config = Config(**kwargs)
 
         # Filling population with random members
         self.member_list = []
