@@ -1,8 +1,10 @@
 import math
 import numpy as np
 
+def get_fitness(list_of_values):
+    return (list_of_values[0] - 1.0) * (list_of_values[0] - 1.0)
 
-def get_fitness(operator):
+def get_fitness1(operator):
     """Function that calculates fitness, edit before running client"""
     # model
     M = np.array([1.995908286, -0.996008084, 0.000024949, 0.000049899, 0.000024949])

@@ -116,8 +116,8 @@ def save_results():
         global full_times
         global run_number
         global full_memory_usage
-        full_times.append(str(result['time_us']))
-        full_memory_usage.append(str(result['memory_usage']))
+        # full_times.append(str(result['time_us'])) TODO
+        full_memory_usage.append(str(result['alloc_memory']))
 
         gui.insert_listbox_data(0, run_number,
                                 str(run_number) + "[" + parameter_per_cycle[

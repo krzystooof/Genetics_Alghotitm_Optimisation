@@ -10,6 +10,7 @@ class VCP:
     """
 
     usb = None
+    pushed_back = None
     dictionary = {}
     fifo = []  # TODO make this a bytes array
 
@@ -76,11 +77,14 @@ class VCP:
     @staticmethod
     def pop():
         """Reads messages from fifo"""
+        if VCP.pushed_back is not None:
+            message = VCP.pushed_back
+            VCP.pushed_back = None
+            return message
         if len(VCP.fifo) != 0:
             message = VCP.fifo.pop()
             return ujson.loads(message)
         return {'type': 0}
-
 
 
 class Inform:

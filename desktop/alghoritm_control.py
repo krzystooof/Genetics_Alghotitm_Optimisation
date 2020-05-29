@@ -63,11 +63,9 @@ class Controller:
         if not reply['type'] == 0:
             try:
                 if reply['type'] == 9:
-                    index = reply['index']
                     operator = reply['operator']
                     fitness = get_fitness(operator)
                     self.usb.attach("type", 9)
-                    self.usb.attach('index', index)
                     self.usb.attach('fitness', fitness)
                     self.usb.send()
                     to_ret = "Operator: " + str(operator) + ", returned fitness: " + str(fitness)
@@ -75,6 +73,8 @@ class Controller:
                     to_ret = "Received generation results: \n" + str(reply)
                     with open("results.txt", "w") as file:
                         json.dump(reply, file)
+                elif reply['type'] == 4:
+                    to_ret = "Pyboard performed operation: " + reply['operation']
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
             finally:

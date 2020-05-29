@@ -10,17 +10,15 @@ def ask_via_usb(list_of_values):
     import src.port as port
     port.VCP.attach('operator', list_of_values)
     port.VCP.attach('type', 9)
+    port.VCP.send()
     data = port.VCP.read()
     while data['type'] == 0:
         data = port.VCP.read()
     if data['type'] == 9:
         return data['fitness']
     else:
-        port.VCP.unread(data)
+        VCP.pushed_back = data
         raise StopIteration
-
-def simple_fit_func(list_of_values):
-    return (list_of_values[0] - 1.0) * (list_of_values[0] - 1.0)
 
 class Main:
 
@@ -80,7 +78,7 @@ class Main:
     def load_config(self):
         """Feeds configuration variables into algorithm"""
         if self.algorithm is None:
-            self.algorithm = Algorithm(simple_fit_func,
+            self.algorithm = Algorithm(ask_via_usb,
                                        self.data['config']['num_values'],
                                        self.data['config']['accuracy'],
                                        **self.data['config']['config'])
@@ -88,15 +86,26 @@ class Main:
     def control(self):
         """Starts, stops, pauses algorithm"""
         if self.data['operation'] == "STOP":
-            self.send_stats()
+            VCP.attach('type', 4)
+            VCP.attach('operation', 'STOP')
+            VCP.send()
             self.algorithm = None
-            gc.collect()
+            self.send_stats()
         elif self.data['operation'] == "PAUSE":
+            VCP.attach('type', 4)
+            VCP.attach('operation', 'PAUSE')
+            VCP.send()
             self.send_stats()
         elif self.data['operation'] == "START":
+            VCP.attach('type', 4)
+            VCP.attach('operation', 'START')
+            VCP.send()
             try:
                 self.current_best = self.algorithm.optimise()
                 self.send_stats()
+                VCP.attach('type', 4)
+                VCP.attach('operation', 'STOP')
+                VCP.send()
             except StopIteration:
                 self.current_best = self.algorithm.population.best_member.operator.values
 
@@ -104,6 +113,9 @@ class Main:
         VCP.attach('type', 2)
         VCP.attach('best_operator', self.current_best)
         VCP.attach('generation', self.algorithm.population.generation)
+        gc.collect()
+        VCP.attach('free_memory', gc.mem_free())
+        VCP.attach('alloc_memory', gc.mem_alloc())
         VCP.send()
 
 

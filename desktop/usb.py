@@ -89,6 +89,5 @@ class USB:
         """Reads messages from fifo"""
         if len(self.fifo) != 0:
             message = self.fifo.pop()
-            print("INCOMING MESSAGE: " + message)
             return json.loads(message)
         return {'type': 0}
