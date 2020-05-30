@@ -62,6 +62,7 @@ class Main:
                                        num_values=self.data['config']['num_values'],
                                        log=False,
                                        accuracy=self.data['config']['accuracy'],
+                                       time_function=time.ticks_cpu,
                                        **self.data['config']['config'])
 
     def control(self):
@@ -98,6 +99,7 @@ class Main:
         if self.algorithm is not None:
             VCP.attach('best_operator', self.current_best)
             VCP.attach('generation', self.algorithm.population.generation)
+            VCP.attach('total_time', self.algorithm.time)
         gc.collect()
         VCP.attach('free_memory', gc.mem_free())
         VCP.attach('alloc_memory', gc.mem_alloc())

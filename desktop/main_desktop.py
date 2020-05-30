@@ -27,7 +27,7 @@ def board_reply(controller, gui):
             if type == 9:
                 operator = str(result['operator'])
                 fitness = str(result['fitness'])
-                gui.log("Received operator: " + operator + ", sent fitness: " + fitness)
+                print("Received operator: " + operator + ", sent fitness: " + fitness)
             elif type == 2:
                 global last_result
                 last_result = result
