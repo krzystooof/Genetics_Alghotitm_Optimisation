@@ -33,7 +33,7 @@ def board_reply(controller, gui):
                 last_result = result
                 gui.log("Received results:\n" + str(result))
             elif type == 4:
-                gui.log("Pyboard performed: " + result['operation'])
+                print("Pyboard performed: " + result['operation'])
                 if result['operation'] == "STOP":
                     stop_button_action(controller, gui,send_stop=False)
         else:

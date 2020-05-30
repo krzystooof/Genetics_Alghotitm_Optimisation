@@ -72,6 +72,7 @@ class Main:
             VCP.send()
             self.send_stats()
             self.algorithm = None
+            gc.collect()
         elif self.data['operation'] == "PAUSE":
             VCP.attach('type', 4)
             VCP.attach('operation', 'PAUSE')
@@ -84,11 +85,12 @@ class Main:
             try:
                 self.current_best = self.algorithm.optimise()
                 self.send_stats()
+                self.algorithm = None
+                gc.collect()
                 VCP.attach('type', 4)
                 VCP.attach('operation', 'STOP')
                 VCP.send()
             except StopIteration:
-                VCP.debug_message('Quit due to StopIteration')
                 self.current_best = self.algorithm.population.best_member.operator.values
 
     def send_stats(self):
