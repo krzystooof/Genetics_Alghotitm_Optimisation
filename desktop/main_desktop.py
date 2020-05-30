@@ -16,7 +16,7 @@ last_result = None
 reply_thread = None
 
 
-def board_reply():
+def board_reply(controller, gui):
     thread = threading.current_thread()
     delay_ms = 5
     while getattr(thread, "do_run", True):
@@ -33,10 +33,12 @@ def board_reply():
                 global last_result
                 last_result = result
                 gui.log("Received results:\n" + str(result))
+            elif type == 4:
+                if result['operation'] == "STOP":
+                    stop_button_action(controller, gui,send_stop=False)
         else:
             if delay_ms < 300000:  # tenth of a second
                 delay_ms = round(delay_ms * 1.5)
-                print(delay_ms)
                 delay_s = delay_ms * 0.000001
             time.sleep(delay_s)
 
@@ -88,14 +90,13 @@ def start_button_action(controller, gui, checkboxes_one_set):
             crossover_options.append(x + 1)
         x += 1
 
-
     config = create_config(number_of_values, stop_accuracy, population_size, population_discard, population_noise,
-                  reverse_fitness, random_low, random_high, crossover_options)
+                           reverse_fitness, random_low, random_high, crossover_options)
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port, recreate_usb=recreate_usb)
         gui.log("PyBoard port is set to " + pyboard_port)
         global reply_thread
-        reply_thread = threading.Thread(target=board_reply)
+        reply_thread = threading.Thread(target=board_reply, args=(controller, gui))
         reply_thread.do_run = True
         reply_thread.start()
         gui.enable_buttons([1, 2, 3])
@@ -145,14 +146,15 @@ def save_results():
     run_number += 1
 
 
-def stop_button_action(controller, gui):
+def stop_button_action(controller, gui, send_stop=True):
     global reply_thread
     reply_thread.do_run = False
     reply_thread = None
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
     save_results()
-    controller.stop_algorithm()
+    if send_stop:
+        controller.stop_algorithm()
     global paused
     paused = False
     gui.enable_entry(0)

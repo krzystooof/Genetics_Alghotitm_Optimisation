@@ -69,7 +69,8 @@ class Controller:
         reply = self.usb.read()
         if reply:
             try:
-                if reply['type'] == 9:
+                type = reply['type']
+                if type == 9:
                     index = reply['index']
                     operator = reply['operator']
                     fitness = get_fitness(operator)
@@ -80,7 +81,7 @@ class Controller:
                     to_ret = {"type": 9,
                               "operator": operator,
                               "fitness": fitness}
-                elif reply['type'] == 2:
+                elif type == 2 or type == 4:
                     to_ret = reply
             except KeyError as error:
                 raise IOError("Pyboard reply without expected field" + repr(error))
