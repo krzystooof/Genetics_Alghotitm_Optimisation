@@ -52,7 +52,7 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.log("Start aborted")
         gui.enable_button(0)
         return
-    population_chance_bonus = gui.get_entry_value(5)
+    stop_accuracy = gui.get_entry_value(5)
     population_size = gui.get_entry_value(2)
     population_noise = gui.get_entry_value(4)
     population_discard = gui.get_entry_value(3)
@@ -74,8 +74,8 @@ def start_button_action(controller, gui, checkboxes_one_set):
             parameter_per_cycle.append(population_discard)
         elif "noise" in selected:
             parameter_per_cycle.append(population_noise)
-        elif "bonus" in selected:
-            parameter_per_cycle.append(population_chance_bonus)
+        elif "accuracy" in selected:
+            parameter_per_cycle.append(stop_accuracy)
         elif "values" in selected:
             parameter_per_cycle.append(number_of_values)
     else:
@@ -88,9 +88,9 @@ def start_button_action(controller, gui, checkboxes_one_set):
             crossover_options.append(x + 1)
         x += 1
 
-    member_config = create_member_config(random_low, random_high, number_of_values, crossover_options)
-    config = create_config(population_size, population_discard, population_chance_bonus, population_noise,
-                           reverse_fitness, member_config)
+
+    config = create_config(number_of_values, stop_accuracy, population_size, population_discard, population_noise,
+                  reverse_fitness, random_low, random_high, crossover_options)
     try:
         pyboard_port = controller.start_algorithm(config, pyboard_port, recreate_usb=recreate_usb)
         gui.log("PyBoard port is set to " + pyboard_port)
@@ -177,14 +177,14 @@ def debug_button_action(controller, gui):
 
 
 if __name__ == '__main__':
-    gui = GUI("Desktop STM GA Control Panel", 10)
+    gui = GUI("Desktop STM GA Control Panel", 15)
 
     gui.add_text_entry("PyBoard port:")
-    gui.add_combo_box("Graph parameter:", ["size", "discard", "noise", "chance bonus", "no. of operator values"])
+    gui.add_combo_box("Graph parameter:", ["size", "discard", "noise", "stop accuracy", "no. of operator values"])
     gui.add_spinbox("Population size:", 0, 9999, '%1.f', 1)
     gui.add_spinbox("Population discard:", 0, 1, '%0.3f', 0.001)
     gui.add_spinbox("Population noise:", 0, 1, '%0.3f', 0.001)
-    gui.add_spinbox("Population chance bonus::", 1, 9999, '%1.3f', 0.001)
+    gui.add_spinbox("Stop condition accuracy:", 0, 1, '%1.9f', 0.000000001)
 
     gui.add_checkboxes("Population reverse fitness:", [""], False)
     gui.add_checkboxes("Member crossover options:", ["One point", "Multi point"], False)

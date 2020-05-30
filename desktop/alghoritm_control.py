@@ -6,27 +6,21 @@ from fitness import get_fitness
 from usb import USB
 
 
-def create_member_config(random_low, random_high, num_values, crossover_options):
-    for x in range(0, len(crossover_options)):
-        crossover_options[x] = int(crossover_options[x])
-    return {
-        "random_low": float(random_low),
-        "random_high": float(random_high),
-        "num_values": int(num_values),
-        "crossover_options": crossover_options
-    }
-
-
-def create_config(population_size, population_discard, population_chance_bonus, population_noise,
-                  reverse_fitness, member_config):
-    return {
-        # This is read by load_config in main_pyb.py. Needs to be compatible on both sides
+def create_config(num_values, accuracy, population_size, population_discard, population_noise,
+                  reverse_fitness, random_low, random_high, crossover_options):
+    config = {
         "population_size": int(population_size),
         "population_discard": float(population_discard),
-        "population_chance_bonus": float(population_chance_bonus),
         "population_noise": float(population_noise),
         "population_reverse_fitness": bool(reverse_fitness),
-        "member_config": member_config
+        "random_low": float(random_low),
+        "random_high": float(random_high),
+        "crossover_options": crossover_options
+    }
+    return {
+        "num_values": int(num_values),
+        "accuracy": float(accuracy),
+        "config": config
     }
 
 
@@ -85,7 +79,7 @@ class Controller:
                     self.usb.send()
                     to_ret = {"type": 9,
                               "operator": operator,
-                              "fitness":fitness}
+                              "fitness": fitness}
                 elif reply['type'] == 2:
                     to_ret = reply
             except KeyError as error:
