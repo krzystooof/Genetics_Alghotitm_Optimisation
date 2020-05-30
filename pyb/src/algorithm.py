@@ -1,6 +1,8 @@
-from src.algorithm_core import Population
-from src.algorithm_core import Config
-from src.algorithm_core import FitnessDifferencesTooSmall
+from pyb.src.algorithm_core import Population
+from pyb.src.algorithm_core import Config
+from pyb.src.algorithm_core import FitnessDifferencesTooSmall
+import math
+import time
 
 
 class Algorithm:
@@ -25,23 +27,33 @@ class Algorithm:
         self.accuracy = accuracy
         self.best_fitness_in_gen = []
         self.print_logs = log
+        #time of algorithm
+        self.time = 0
 
     def optimise(self):
+        start_timer = time.time()
+        stop_timer = 0
         while self.population.generation < self.population.config.population_size:
             try:
+                stop_timer = time.time()
+                self.time = stop_timer - start_timer
                 self.__calculate_generation_fitness()
+                start_timer = time.time()
             except StopIteration:
                 raise
             else:
                 self.best_fitness_in_gen.append(self.population.best_member.operator.values[0])
+                self.__check_stop_condition1(self.best_fitness_in_gen)
                 self.population.update_stats()
                 if self.print_logs:
                     self.__print_stats()
-                if self.population.generation > 5 and self.__check_stop_condition(self.best_fitness_in_gen):
-                    return self.population.best_member.operator.values
+                # if self.population.generation > 5 and self.__check_stop_condition(self.best_fitness_in_gen):
+                #     return self.population.best_member.operator.values
                 try:
                     self.population.new_gen()
                 except FitnessDifferencesTooSmall:
+                    stop_timer = time.time()
+                    self.time = stop_timer-start_timer + self.time
                     return self.population.best_member.operator.values
 
     def __calculate_generation_fitness(self):
@@ -59,6 +71,46 @@ class Algorithm:
         avg_fitness = sum_of_fitness / 5
 
         return newest_fitness - self.accuracy < avg_fitness < newest_fitness + self.accuracy
+
+    # using standard deviation
+    def __check_stop_condition1(self, best_fitness_in_gen):
+        #
+        standard_deviation = 0
+        # average fitness of last 3 generations
+        avg_fitness = 0
+        # sum fitness of last 3 generations
+        sum_fitness = 0
+        # variance
+        variance = 0
+        # list of variables for variance
+        list_of_fitness = []
+        # final value
+        coefficient_of_variation = 0
+        # check if there are minimum 3 generations
+        if self.population.generation > 2:
+            for x in range(self.population.generation): # 3
+                # sum only last 3 generations
+                if x+3 >= self.population.generation:
+                    sum_fitness += best_fitness_in_gen[x]
+                    list_of_fitness.append(best_fitness_in_gen[x])
+                    # print(list_of_fitness)
+                    # print(x, best_fitness_in_gen[x], sum_fitness)
+            # arithmetic average
+            avg_fitness = sum_fitness / list_of_fitness.__sizeof__()
+            for x in list_of_fitness:
+                variance += (x - avg_fitness)*(x - avg_fitness)
+            variance = variance / list_of_fitness.__sizeof__()
+            standard_deviation = math.sqrt(variance)
+            coefficient_of_variation = standard_deviation/avg_fitness
+            print(self.population.generation)
+            print("Odchylenie standardowe", standard_deviation)
+            print("Wspolczynnik zmiennosci", coefficient_of_variation, "%")
+            #a) Zrobic accuracy do wspolczynnika zmiennosci czyli jezeli bedzie roznica 0.00001 to konczy
+            #b) Zrobic accuracy do odchylenia standardowego czyli jezeli bedzie roznica 0.00001 to konczy
+
+
+
+
 
     def __print_stats(self):
         print("Generation:", self.population.generation)
