@@ -47,8 +47,8 @@ class Algorithm:
                 self.population.update_stats()
                 if self.print_logs:
                     self.__print_stats()
-                # if self.population.generation > 5 and self.__check_stop_condition(self.best_fitness_in_gen):
-                #     return self.population.best_member.operator.values
+                if self.population.generation > 5 and self.__check_stop_condition(self.best_fitness_in_gen):
+                    return self.population.best_member.operator.values
                 try:
                     self.population.new_gen()
                 except FitnessDifferencesTooSmall:
