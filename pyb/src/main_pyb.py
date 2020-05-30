@@ -20,6 +20,7 @@ def ask_via_usb(list_of_values):
         VCP.pushed_back = data
         raise StopIteration
 
+
 class Main:
 
     def __init__(self, ):
@@ -27,7 +28,6 @@ class Main:
 
         # Variables
         self.algorithm = None
-        self.finished = False
         self.current_best = []
 
         VCP.open()
@@ -49,7 +49,7 @@ class Main:
         self.data = VCP.read()
         delay = 5
         while self.data['type'] == 0:
-            if delay < 10000000:  # tenth of a second
+            if delay < 100000:  # tenth of a second
                 delay = round(delay * 1.5)
             time.sleep_us(delay)
             Inform.waiting()
@@ -59,8 +59,9 @@ class Main:
         """Feeds configuration variables into algorithm"""
         if self.algorithm is None:
             self.algorithm = Algorithm(ask_via_usb,
-                                       self.data['config']['num_values'],
-                                       self.data['config']['accuracy'],
+                                       num_values=self.data['config']['num_values'],
+                                       log=False,
+                                       accuracy=self.data['config']['accuracy'],
                                        **self.data['config']['config'])
 
     def control(self):
@@ -69,8 +70,8 @@ class Main:
             VCP.attach('type', 4)
             VCP.attach('operation', 'STOP')
             VCP.send()
-            self.algorithm = None
             self.send_stats()
+            self.algorithm = None
         elif self.data['operation'] == "PAUSE":
             VCP.attach('type', 4)
             VCP.attach('operation', 'PAUSE')
@@ -87,12 +88,14 @@ class Main:
                 VCP.attach('operation', 'STOP')
                 VCP.send()
             except StopIteration:
+                VCP.debug_message('Quit due to StopIteration')
                 self.current_best = self.algorithm.population.best_member.operator.values
 
     def send_stats(self):
         VCP.attach('type', 2)
-        VCP.attach('best_operator', self.current_best)
-        VCP.attach('generation', self.algorithm.population.generation)
+        if self.algorithm is not None:
+            VCP.attach('best_operator', self.current_best)
+            VCP.attach('generation', self.algorithm.population.generation)
         gc.collect()
         VCP.attach('free_memory', gc.mem_free())
         VCP.attach('alloc_memory', gc.mem_alloc())

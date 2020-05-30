@@ -1,6 +1,6 @@
-from pyb.src.algorithm_core import Population
-from pyb.src.algorithm_core import Config
-from pyb.src.algorithm_core import FitnessDifferencesTooSmall
+from src.algorithm_core import Population
+from src.algorithm_core import Config
+from src.algorithm_core import FitnessDifferencesTooSmall
 import math
 import time
 
@@ -96,15 +96,16 @@ class Algorithm:
                     # print(list_of_fitness)
                     # print(x, best_fitness_in_gen[x], sum_fitness)
             # arithmetic average
-            avg_fitness = sum_fitness / list_of_fitness.__sizeof__()
+            avg_fitness = sum_fitness / len(list_of_fitness)
             for x in list_of_fitness:
                 variance += (x - avg_fitness)*(x - avg_fitness)
-            variance = variance / list_of_fitness.__sizeof__()
+            variance = variance / len(list_of_fitness)
             standard_deviation = math.sqrt(variance)
             coefficient_of_variation = standard_deviation/avg_fitness
-            print(self.population.generation)
-            print("Odchylenie standardowe", standard_deviation)
-            print("Wspolczynnik zmiennosci", coefficient_of_variation, "%")
+            if self.print_logs:
+                print(self.population.generation)
+                print("Odchylenie standardowe", standard_deviation)
+                print("Wspolczynnik zmiennosci", coefficient_of_variation, "%")
             #a) Zrobic accuracy do wspolczynnika zmiennosci czyli jezeli bedzie roznica 0.00001 to konczy
             #b) Zrobic accuracy do odchylenia standardowego czyli jezeli bedzie roznica 0.00001 to konczy
 

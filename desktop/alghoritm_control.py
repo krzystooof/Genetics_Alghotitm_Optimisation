@@ -11,8 +11,8 @@ def create_config(num_values, accuracy, population_size, population_discard, pop
     config = {
         "population_size": int(population_size),
         "population_discard": float(population_discard),
-        "population_noise": float(population_noise),
-        "population_reverse_fitness": bool(reverse_fitness),
+        "noise": float(population_noise),
+        "reverse": bool(reverse_fitness),
         "random_low": float(random_low),
         "random_high": float(random_high),
         "crossover_options": crossover_options
@@ -67,15 +67,13 @@ class Controller:
 
     def fitness_reply(self):
         reply = self.usb.read()
-        if reply:
+        type = reply['type']
+        if type != 0:
             try:
-                type = reply['type']
                 if type == 9:
-                    index = reply['index']
                     operator = reply['operator']
                     fitness = get_fitness(operator)
                     self.usb.attach("type", 9)
-                    self.usb.attach('index', index)
                     self.usb.attach('fitness', fitness)
                     self.usb.send()
                     to_ret = {"type": 9,

@@ -27,13 +27,13 @@ def board_reply(controller, gui):
             if type == 9:
                 operator = str(result['operator'])
                 fitness = str(result['fitness'])
-                index = str(result['index'])
-                gui.log("Received operator: " + operator + " for index: " + index + ", sent fitness: " + fitness)
+                gui.log("Received operator: " + operator + ", sent fitness: " + fitness)
             elif type == 2:
                 global last_result
                 last_result = result
                 gui.log("Received results:\n" + str(result))
             elif type == 4:
+                gui.log("Pyboard performed: " + result['operation'])
                 if result['operation'] == "STOP":
                     stop_button_action(controller, gui,send_stop=False)
         else:
@@ -127,8 +127,9 @@ def save_results():
         global run_number
         global full_memory_usage
         parmeter = parameter_per_cycle[run_number - 1]
-        time = str(result['time_us'])
-        memory = str(result['memory_usage'])
+        # TODO remove comment below, when board will send time
+        # time = str(result['time_us'])
+        memory = str(result['alloc_memory'])
         # TODO remove comment below, when board will send time
         # full_times.append(time)
 

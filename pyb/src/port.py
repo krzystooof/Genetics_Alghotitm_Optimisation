@@ -86,6 +86,11 @@ class VCP:
             return ujson.loads(message)
         return {'type': 0}
 
+    @staticmethod
+    def debug_message(text):
+        VCP.attach('type', 4)
+        VCP.attach('operation', 'Debug message: ' + text)
+        VCP.send()
 
 class Inform:
     """
