@@ -106,3 +106,6 @@ class TestPopulation(unittest.TestCase):
             counting = counting - 1
         self.population.update_stats()
         self.assertEqual(self.population.best_member.fitness, 1)
+
+if __name__ == '__main__':
+    unittest.main()
