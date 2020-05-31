@@ -40,8 +40,8 @@ class Config:
 
 class Population:
     """
-        Class governing member reproduction and beeding mechanics. Throws ValueError when no further generations
-        are possible.
+        Class governing member reproduction and beeding mechanics. Throws FitnessDifferencesTooSmall when no further
+        generations are possible.
         @author: Jakub Chodubski
         @version: 2.4
     """
