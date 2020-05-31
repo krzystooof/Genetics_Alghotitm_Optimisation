@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 This module contains necessary code to start work of algorithm. It includes setting parameters for algorithm,
 running of algorithm and calculating the result of algorithm .
@@ -8,17 +7,13 @@ running of algorithm and calculating the result of algorithm .
 from pyb.src.algorithm_core import Population
 from pyb.src.algorithm_core import Config
 from pyb.src.algorithm_core import FitnessDifferencesTooSmall
-=======
-from src.algorithm_core import Population
-from src.algorithm_core import FitnessDifferencesTooSmall
->>>>>>> 36e87da4af5ce3bb649f96f610e7a974ef2a97aa
+from pyb.src.algorithm_core import Population
+from pyb.src.algorithm_core import FitnessDifferencesTooSmall
 import math
 import time
 
 
 class Algorithm:
-<<<<<<< HEAD
-
     """Keeps data so it can be passed easily
 
       Loads configuration variables. Variables:
@@ -40,20 +35,13 @@ class Algorithm:
         - list_coefficient_of_variation - List of coefficient of variation in generations
         - time - amount of time of working algorithm
     """
-    def __init__(self, fitness_callback, num_values, log=False, accuracy=0.0005, **kwargs):
-=======
     def __init__(self, fitness_callback, num_values, log=False, accuracy=0.0005, time_function=time.time, **kwargs):
-        """Keeps data so it can be passed easily
->>>>>>> 36e87da4af5ce3bb649f96f610e7a974ef2a97aa
-
         self.population = Population(num_values=num_values, **kwargs)
         self.execute_callback = fitness_callback
         self.accuracy = accuracy
         self.best_fitness_in_gen = []
         self.print_logs = log
-        # time of algorithm
         self.time = 0
-        # list for coefficient of variation
         self.list_coefficient_of_variation = []
         self.time_function = time_function
 
@@ -117,15 +105,12 @@ class Algorithm:
             coefficient_of_variation = standard_deviation / avg_fitness
             self.list_coefficient_of_variation.append(coefficient_of_variation)
             if self.print_logs:
-                print(self.population.generation)
                 print("Standard deviation:", standard_deviation)
                 print("Coefficient of variation:", coefficient_of_variation, "%")
             for x in range(len(self.list_coefficient_of_variation) - 1):
                 if (self.list_coefficient_of_variation[x] - self.accuracy < self.list_coefficient_of_variation[x + 1]
                         < self.list_coefficient_of_variation[x] + self.accuracy):
                     return True
-
-
 
     def __print_stats(self):
         print("Generation:", self.population.generation)
