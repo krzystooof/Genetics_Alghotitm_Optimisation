@@ -62,7 +62,7 @@ class Main:
                                        num_values=self.data['config']['num_values'],
                                        log=False,
                                        accuracy=self.data['config']['accuracy'],
-                                       time_function=time.ticks_cpu,
+                                       time_function=time.ticks_us,
                                        **self.data['config']['config'])
 
     def control(self):

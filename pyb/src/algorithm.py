@@ -4,11 +4,11 @@ running of algorithm and calculating the result of algorithm .
 @author: Grzegorz Drozda
 @author: Roland Jałoszyński
 """
-from pyb.src.algorithm_core import Population
-from pyb.src.algorithm_core import Config
-from pyb.src.algorithm_core import FitnessDifferencesTooSmall
-from pyb.src.algorithm_core import Population
-from pyb.src.algorithm_core import FitnessDifferencesTooSmall
+from src.algorithm_core import Population
+from src.algorithm_core import Config
+from src.algorithm_core import FitnessDifferencesTooSmall
+from src.algorithm_core import Population
+from src.algorithm_core import FitnessDifferencesTooSmall
 import math
 import time
 

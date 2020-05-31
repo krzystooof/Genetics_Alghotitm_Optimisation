@@ -168,18 +168,15 @@ def save_results(gui):
         global run_number
         global full_memory_usage
         parmeter = parameter_per_cycle[run_number - 1]
-        # TODO remove comment below, when board will send time
-        # time = str(result['time_us'])
+        time = str(result['total_time'])
         memory = str(result['alloc_memory'])
-        # TODO remove comment below, when board will send time
-        # full_times.append(time)
+        full_times.append(time)
 
         full_memory_usage.append(memory)
 
-        # TODO remove comment below, when board will send time
-        # gui.insert_listbox_data(0, run_number,
-        #                         str(run_number) + "[" + parmeter + "]" + " - " +
-        #                         time + "s")
+        gui.insert_listbox_data(0, run_number,
+                                str(run_number) + "[" + parmeter + "]" + " - " +
+                                time + "s")
         gui.insert_listbox_data(1, run_number,
                                 str(run_number) + "[" + parmeter + "]" + " - " +
                                 memory + "B")
@@ -227,8 +224,7 @@ Draw time from run number graph with two lines: time and memory
 
 def draw_graph_button_action():
     graph = Graph("Graph", "run number", "value", parameter_per_cycle)
-    # TODO remove comment below, when board will send time
-    # graph.add_y_axis_data("time", full_times, 'lines+markers')
+    graph.add_y_axis_data("time", full_times, 'lines+markers')
     graph.add_y_axis_data("memory usage", full_memory_usage, 'lines+markers')
     graph.show()
 
