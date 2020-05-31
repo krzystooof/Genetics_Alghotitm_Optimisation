@@ -116,6 +116,7 @@ class Population:
 
     def assign_cross_chances(self):
         self.sort_by_fitness()
+
         high = self.member_list[0].fitness
         low = self.member_list[len(self.member_list) - 1].fitness
 

@@ -1,3 +1,9 @@
+"""
+This module contains necessary code to start work of algorithm. It includes setting parameters for algorithm,
+running of algorithm and calculating the result of algorithm .
+@author: Grzegorz Drozda
+@author: Roland Jałoszyński
+"""
 from pyb.src.algorithm_core import Population
 from pyb.src.algorithm_core import Config
 from pyb.src.algorithm_core import FitnessDifferencesTooSmall
@@ -6,22 +12,30 @@ import time
 
 
 class Algorithm:
-    def __init__(self, fitness_callback, num_values, log=False, accuracy=0.0005, **kwargs):
-        """Keeps data so it can be passed easily
 
-           Loads configuration variables. Variables:
-             - population_size - Size of population (Value <1-x>)
-             - population_discard - Percentage of discarded members with each generation (Value <0-1>)
-             - noise - Percentage of random mutations for each generation (Value <0-1>)
-             - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
-             - reverse - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
-             - random_low - initial values lower limit
-             - random_high - initial values higher limit
-             - num_values - how many values does operator keep
-             - member_crossover_options - List of allowed crossover types. Possible values:
-                 1. One point
-                 2. Multi point
-        """
+    """Keeps data so it can be passed easily
+
+      Loads configuration variables. Variables:
+        - population_size - Size of population (Value <1-x>)
+        - population_discard - Percentage of discarded members with each generation (Value <0-1>)
+        - noise - Percentage of random mutations for each generation (Value <0-1>)
+        - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
+        - reverse - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
+        - random_low - initial values lower limit
+        - random_high - initial values higher limit
+        - num_values - how many values does operator keep
+        - member_crossover_options - List of allowed crossover types. Possible values:
+            1. One point
+            2. Multi point
+        - fitness_callback - the function, which algorithm works for
+        - print_logs - prints the stats of generations in algorithm
+        - accuracy - algorithm accuracy that affects the start of the stop condition
+        - best_fitness_in_gen - List of best fitness member in generations
+        - list_coefficient_of_variation - List of coefficient of variation in generations
+        - time - amount of time of working algorithm
+    """
+    def __init__(self, fitness_callback, num_values, log=False, accuracy=0.0005, **kwargs):
+
         self.population = Population(num_values=num_values, **kwargs)
         self.execute_callback = fitness_callback
         self.accuracy = accuracy
@@ -63,7 +77,6 @@ class Algorithm:
 
     # using standard deviation
     def __check_stop_condition(self, best_fitness_in_gen):
-        #
         standard_deviation = 0
         # average fitness of last 4 generations
         avg_fitness = 0
@@ -94,8 +107,8 @@ class Algorithm:
             self.list_coefficient_of_variation.append(coefficient_of_variation)
             if self.print_logs:
                 print(self.population.generation)
-                print("Odchylenie standardowe", standard_deviation)
-                print("Wspolczynnik zmiennosci", coefficient_of_variation, "%")
+                print("Standard deviation:", standard_deviation)
+                print("Coefficient of variation:", coefficient_of_variation, "%")
             for x in range(len(self.list_coefficient_of_variation) - 1):
                 if (self.list_coefficient_of_variation[x] - self.accuracy < self.list_coefficient_of_variation[x + 1]
                         < self.list_coefficient_of_variation[x] + self.accuracy):
