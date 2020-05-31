@@ -1,9 +1,14 @@
-"""This module contains code used to control the algorithm on board"""
-import json
-import time
+"""
+This module contains code used to control the algorithm on board
+@author Krzysztof Greczka
+"""
 
 from fitness import get_fitness
 from usb import USB
+
+"""
+Creates board readable communicate with given parameters
+"""
 
 
 def create_config(num_values, accuracy, population_size, population_discard, population_noise,
@@ -26,12 +31,16 @@ def create_config(num_values, accuracy, population_size, population_discard, pop
 
 class Controller:
     """
-            Handles controlling PyBoard
+            Handles Board controlling and communication
             @author: Krzysztof Greczka
     """
 
     def __init__(self):
         self.is_running = False
+
+    """
+    Send STOP command
+    """
 
     def stop_algorithm(self):
         self.is_running = False
@@ -39,6 +48,14 @@ class Controller:
         operation = "STOP"
         self.usb.attach("operation", operation)
         self.usb.send()
+
+    """
+    Connect with board using usb, send config and START command
+    
+    @:param config board readable communicate with required parameters 
+    @:param pyboard_port `board communciation USB port
+    @:param recreate_usb if False usb is not initialized (when unpausing)
+    """
 
     def start_algorithm(self, config, pyboard_port, recreate_usb=True):
         operation = "START"
@@ -59,13 +76,20 @@ class Controller:
         self.is_running = True
         return pyboard_port
 
+    """
+        Send PAUSE command
+    """
+
     def pause_algorithm(self):
         self.usb.attach("type", 4)
         operation = "PAUSE"
         self.usb.attach("operation", operation)
         self.usb.send()
 
-    def fitness_reply(self):
+    """
+    Function handling board replies and requests
+    """
+    def board_reply(self):
         reply = self.usb.read()
         type = reply['type']
         if type != 0:

@@ -1,4 +1,11 @@
+"""
+Main desktop file handling interactions with user. Getting parameters, sending and receiving board communicates,
+displaying connection, progress info and drawing graphs.
+
+@author Krzysztof Greczka
+"""
 import threading
+import time
 
 import serial
 
@@ -15,12 +22,19 @@ last_result = None
 
 reply_thread = None
 
+"""
+Function handling board replies with fitness requests or alghoritm summary
+
+@:param controller used to communicate with board
+@:param gui used to display results
+"""
+
 
 def board_reply(controller, gui):
     thread = threading.current_thread()
     delay_ms = 5
     while getattr(thread, "do_run", True):
-        result = controller.fitness_reply()
+        result = controller.board_reply()
         if result is not None:
             delay_ms = 5
             type = result['type']
@@ -35,12 +49,24 @@ def board_reply(controller, gui):
             elif type == 4:
                 print("Pyboard performed: " + result['operation'])
                 if result['operation'] == "STOP":
-                    stop_button_action(controller, gui,send_stop=False)
+                    stop_button_action(controller, gui, send_stop=False)
         else:
             if delay_ms < 300000:  # tenth of a second
                 delay_ms = round(delay_ms * 1.5)
                 delay_s = delay_ms * 0.000001
             time.sleep(delay_s)
+
+
+"""
+Function handling algorithm starting
+
+Disable gui buttons for working time, connect with board, get configuration from gui entries and send it to board with 
+starting command. Additional save selected parameter for further displaying (listboxes and graphs)
+
+@:param controller used to communicate with board
+@:param gui used to display results
+@:param checkboxes_one_set rows with gui checkboxes that at least one option must be selected
+"""
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -108,6 +134,16 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.enable_entry(0)
 
 
+"""
+Function handling algorithm pausing
+
+Disable gui buttons for working time, send communicate to board.
+
+@:param controller used to communicate with board
+@:param gui used to display results
+"""
+
+
 def pause_button_action(controller, gui):
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Pausing")
@@ -117,7 +153,12 @@ def pause_button_action(controller, gui):
     gui.enable_buttons([0, 1, 2])
 
 
-def save_results():
+"""
+Save results for further displaying (listboxes and graphs), display most recent results
+"""
+
+
+def save_results(gui):
     try:
         result = last_result
         gui.log_info("Result: ")
@@ -147,13 +188,25 @@ def save_results():
     run_number += 1
 
 
+"""
+Function handling algorithm stopping 
+
+Disable gui buttons for working time, send command to board. Additional save results for further displaying (listboxes
+and graphs)
+
+@:param controller used to communicate with board
+@:param gui used to display results
+@:param send_stop if false not sending command to board (only when board will stop by itself)
+"""
+
+
 def stop_button_action(controller, gui, send_stop=True):
     global reply_thread
     reply_thread.do_run = False
     reply_thread = None
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Stopping")
-    save_results()
+    save_results(gui)
     if send_stop:
         controller.stop_algorithm()
     global paused
@@ -165,6 +218,11 @@ def stop_button_action(controller, gui, send_stop=True):
 def restart_button_action(controller, gui, checkboxes_one_set):
     stop_button_action(controller, gui)
     start_button_action(controller, gui, checkboxes_one_set)
+
+
+"""
+Draw time from run number graph with two lines: time and memory
+"""
 
 
 def draw_graph_button_action():
@@ -179,6 +237,9 @@ def debug_button_action(controller, gui):
     gui.log(controller.usb.read_debug())
 
 
+"""
+Populating and starting gui
+"""
 if __name__ == '__main__':
     gui = GUI("Desktop STM GA Control Panel", 15)
 
