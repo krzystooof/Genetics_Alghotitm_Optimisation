@@ -1,6 +1,6 @@
 """
 This module contains necessary code to start work of algorithm. It includes setting parameters for algorithm,
-running of algorithm and calculating the result of algorithm .
+running of algorithm and calculating the result of algorithm.
 @author: Grzegorz Drozda
 @author: Roland Jałoszyński
 """
@@ -74,7 +74,6 @@ class Algorithm:
         for member in self.population.member_list:
             member.fitness = self.execute_callback(member.operator.values)
 
-    # using standard deviation
     def __check_stop_condition(self, best_fitness_in_gen):
         standard_deviation = 0
         # average fitness of last 4 generations
@@ -94,8 +93,6 @@ class Algorithm:
                 if x + 4 >= self.population.generation:
                     sum_fitness += best_fitness_in_gen[x]
                     list_of_fitness.append(best_fitness_in_gen[x])
-                    # print(list_of_fitness)
-                    # print(x, best_fitness_in_gen[x], sum_fitness)
             # arithmetic average
             avg_fitness = sum_fitness / len(list_of_fitness)
             for x in list_of_fitness:
