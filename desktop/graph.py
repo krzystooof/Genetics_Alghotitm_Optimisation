@@ -23,7 +23,7 @@ class Graph:
     def add_y_axis_data(self, data_name, data, mode='lines+markers'):
         self.figure.add_trace(go.Scatter(x=self.x, y=data, mode=mode, name=data_name))
 
-    def load_data_from_file(self, filename,x_entry, data, mode='lines+markers'):
+    def load_data_from_file(self, filename:str,x_entry:str, data:list, mode='lines+markers'):
         figures = []
         names = []
         for i in range(len(data)):
@@ -46,6 +46,3 @@ class Graph:
 
     def show(self):
         self.figure.show()
-
-
-
