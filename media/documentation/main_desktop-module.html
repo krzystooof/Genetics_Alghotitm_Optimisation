@@ -57,6 +57,11 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module main_desktop</h1><p class="nomargin-top"><span class="codelink"><a href="main_desktop-pysrc.html">source&nbsp;code</a></span></p>
+<p>Main desktop file handling interactions with user. Getting parameters,
+  sending and receiving board communicates, displaying connection, progress
+  info and drawing graphs.</p>
+  <p>@author Krzysztof Greczka</p>
+
 <!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -80,9 +85,29 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="start_button_action"></a><span class="summary-sig-name">start_button_action</span>(<span class="summary-sig-arg">controller</span>,
+          <td><span class="summary-sig"><a href="main_desktop-module.html#board_reply" class="summary-sig-name">board_reply</a>(<span class="summary-sig-arg">controller</span>,
+        <span class="summary-sig-arg">gui</span>)</span><br />
+      Function handling board replies with fitness requests or alghoritm 
+      summary</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="main_desktop-pysrc.html#board_reply">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="main_desktop-module.html#start_button_action" class="summary-sig-name">start_button_action</a>(<span class="summary-sig-arg">controller</span>,
         <span class="summary-sig-arg">gui</span>,
-        <span class="summary-sig-arg">checkboxes_one_set</span>)</span></td>
+        <span class="summary-sig-arg">checkboxes_one_set</span>)</span><br />
+      Function handling algorithm starting</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="main_desktop-pysrc.html#start_button_action">source&nbsp;code</a></span>
             
@@ -98,8 +123,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="pause_button_action"></a><span class="summary-sig-name">pause_button_action</span>(<span class="summary-sig-arg">controller</span>,
-        <span class="summary-sig-arg">gui</span>)</span></td>
+          <td><span class="summary-sig"><a href="main_desktop-module.html#pause_button_action" class="summary-sig-name">pause_button_action</a>(<span class="summary-sig-arg">controller</span>,
+        <span class="summary-sig-arg">gui</span>)</span><br />
+      Function handling algorithm pausing</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="main_desktop-pysrc.html#pause_button_action">source&nbsp;code</a></span>
             
@@ -115,8 +141,28 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="stop_button_action"></a><span class="summary-sig-name">stop_button_action</span>(<span class="summary-sig-arg">controller</span>,
-        <span class="summary-sig-arg">gui</span>)</span></td>
+          <td><span class="summary-sig"><a name="save_results"></a><span class="summary-sig-name">save_results</span>(<span class="summary-sig-arg">gui</span>)</span><br />
+      Save results for further displaying (listboxes and graphs), display 
+      most recent results</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="main_desktop-pysrc.html#save_results">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="main_desktop-module.html#stop_button_action" class="summary-sig-name">stop_button_action</a>(<span class="summary-sig-arg">controller</span>,
+        <span class="summary-sig-arg">gui</span>,
+        <span class="summary-sig-arg">send_stop</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Function handling algorithm stopping</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="main_desktop-pysrc.html#stop_button_action">source&nbsp;code</a></span>
             
@@ -150,7 +196,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_graph_button_action"></a><span class="summary-sig-name">draw_graph_button_action</span>(<span class="summary-sig-arg">gui</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_graph_button_action"></a><span class="summary-sig-name">draw_graph_button_action</span>()</span><br />
+      Draw time from run number graph with two lines: time and memory</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="main_desktop-pysrc.html#draw_graph_button_action">source&nbsp;code</a></span>
             
@@ -199,10 +246,185 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="p2"></a><span class="summary-name">p2</span> = <code title="None">None</code>
+        <a name="run_number"></a><span class="summary-name">run_number</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="full_times"></a><span class="summary-name">full_times</span> = <code title="[]">[]</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="full_memory_usage"></a><span class="summary-name">full_memory_usage</span> = <code title="[]">[]</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="parameter_per_cycle"></a><span class="summary-name">parameter_per_cycle</span> = <code title="[]">[]</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="paused"></a><span class="summary-name">paused</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="last_result"></a><span class="summary-name">last_result</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="reply_thread"></a><span class="summary-name">reply_thread</span> = <code title="None">None</code>
     </td>
   </tr>
 </table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="board_reply"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">board_reply</span>(<span class="sig-arg">controller</span>,
+        <span class="sig-arg">gui</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="main_desktop-pysrc.html#board_reply">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Function handling board replies with fitness requests or alghoritm 
+  summary</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>controller</code></strong> - used to communicate with board</li>
+        <li><strong class="pname"><code>gui</code></strong> - used to display results</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="start_button_action"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">start_button_action</span>(<span class="sig-arg">controller</span>,
+        <span class="sig-arg">gui</span>,
+        <span class="sig-arg">checkboxes_one_set</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="main_desktop-pysrc.html#start_button_action">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Function handling algorithm starting</p>
+  <p>Disable gui buttons for working time, connect with board, get 
+  configuration from gui entries and send it to board with starting 
+  command. Additional save selected parameter for further displaying 
+  (listboxes and graphs)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>controller</code></strong> - used to communicate with board</li>
+        <li><strong class="pname"><code>gui</code></strong> - used to display results</li>
+        <li><strong class="pname"><code>checkboxes_one_set</code></strong> - rows with gui checkboxes that at least one option must be 
+          selected</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="pause_button_action"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">pause_button_action</span>(<span class="sig-arg">controller</span>,
+        <span class="sig-arg">gui</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="main_desktop-pysrc.html#pause_button_action">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Function handling algorithm pausing</p>
+  <p>Disable gui buttons for working time, send communicate to board.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>controller</code></strong> - used to communicate with board</li>
+        <li><strong class="pname"><code>gui</code></strong> - used to display results</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="stop_button_action"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">stop_button_action</span>(<span class="sig-arg">controller</span>,
+        <span class="sig-arg">gui</span>,
+        <span class="sig-arg">send_stop</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="main_desktop-pysrc.html#stop_button_action">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Function handling algorithm stopping</p>
+  <p>Disable gui buttons for working time, send command to board. 
+  Additional save results for further displaying (listboxes and graphs)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>controller</code></strong> - used to communicate with board</li>
+        <li><strong class="pname"><code>gui</code></strong> - used to display results</li>
+        <li><strong class="pname"><code>send_stop</code></strong> - if false not sending command to board (only when board will stop 
+          by itself)</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -231,7 +453,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat May 23 16:11:39 2020
+    Generated by Epydoc 3.0.1 on Tue Jun  2 11:40:16 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -6,13 +6,14 @@ This module contains code used to control the algorithm on board
 from fitness import get_fitness
 from usb import USB
 
-"""
-Creates board readable communicate with given parameters
-"""
+
 
 
 def create_config(num_values, accuracy, population_size, population_discard, population_noise,
                   reverse_fitness, random_low, random_high, crossover_options):
+    """
+    Creates board readable communicate with given parameters
+    """
     config = {
         "population_size": int(population_size),
         "population_discard": float(population_discard),
@@ -38,26 +39,27 @@ class Controller:
     def __init__(self):
         self.is_running = False
 
-    """
-    Send STOP command
-    """
+
 
     def stop_algorithm(self):
+        """
+        Send STOP command
+        """
         self.is_running = False
         self.usb.attach("type", 4)
         operation = "STOP"
         self.usb.attach("operation", operation)
         self.usb.send()
 
-    """
-    Connect with board using usb, send config and START command
-    
-    @:param config board readable communicate with required parameters 
-    @:param pyboard_port `board communciation USB port
-    @:param recreate_usb if False usb is not initialized (when unpausing)
-    """
+
 
     def start_algorithm(self, config, pyboard_port, recreate_usb=True):
+        """
+        Connect with board using usb, send config and START command
+        @param config: board readable communicate with required parameters
+        @param pyboard_port: `board communciation USB port
+        @param recreate_usb: if False usb is not initialized (when unpausing)
+        """
         operation = "START"
         print(recreate_usb)
         if recreate_usb:
@@ -76,20 +78,21 @@ class Controller:
         self.is_running = True
         return pyboard_port
 
-    """
-        Send PAUSE command
-    """
+
 
     def pause_algorithm(self):
+        """
+            Send PAUSE command
+        """
         self.usb.attach("type", 4)
         operation = "PAUSE"
         self.usb.attach("operation", operation)
         self.usb.send()
 
-    """
-    Function handling board replies and requests
-    """
     def board_reply(self):
+        """
+       Function handling board replies and requests
+       """
         reply = self.usb.read()
         type = reply['type']
         if type != 0:

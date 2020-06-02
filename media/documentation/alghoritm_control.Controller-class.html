@@ -58,7 +58,7 @@
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class Controller</h1><p class="nomargin-top"><span class="codelink"><a href="alghoritm_control-pysrc.html#Controller">source&nbsp;code</a></span></p>
-<p>Handles controlling PyBoard</p>
+<p>Handles Board controlling and communication</p>
 
 <hr />
 <div class="fields">      <p><strong>Author:</strong>
@@ -103,7 +103,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="stop_algorithm"></a><span class="summary-sig-name">stop_algorithm</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="stop_algorithm"></a><span class="summary-sig-name">stop_algorithm</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Send STOP command</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="alghoritm_control-pysrc.html#Controller.stop_algorithm">source&nbsp;code</a></span>
             
@@ -119,9 +120,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="start_algorithm"></a><span class="summary-sig-name">start_algorithm</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="alghoritm_control.Controller-class.html#start_algorithm" class="summary-sig-name">start_algorithm</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">config</span>,
-        <span class="summary-sig-arg">pyboard_port</span>)</span></td>
+        <span class="summary-sig-arg">pyboard_port</span>,
+        <span class="summary-sig-arg">recreate_usb</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Connect with board using usb, send config and START command</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="alghoritm_control-pysrc.html#Controller.start_algorithm">source&nbsp;code</a></span>
             
@@ -137,7 +140,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="pause_algorithm"></a><span class="summary-sig-name">pause_algorithm</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="pause_algorithm"></a><span class="summary-sig-name">pause_algorithm</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Send PAUSE command</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="alghoritm_control-pysrc.html#Controller.pause_algorithm">source&nbsp;code</a></span>
             
@@ -153,9 +157,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="fitness_reply"></a><span class="summary-sig-name">fitness_reply</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="board_reply"></a><span class="summary-sig-name">board_reply</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Function handling board replies and requests</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="alghoritm_control-pysrc.html#Controller.fitness_reply">source&nbsp;code</a></span>
+            <span class="codelink"><a href="alghoritm_control-pysrc.html#Controller.board_reply">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -164,6 +169,53 @@
     </td>
   </tr>
 </table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="start_algorithm"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">start_algorithm</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">config</span>,
+        <span class="sig-arg">pyboard_port</span>,
+        <span class="sig-arg">recreate_usb</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="alghoritm_control-pysrc.html#Controller.start_algorithm">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Connect with board using usb, send config and START command</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>config</code></strong> - board readable communicate with required parameters</li>
+        <li><strong class="pname"><code>pyboard_port</code></strong> - `board communciation USB port</li>
+        <li><strong class="pname"><code>recreate_usb</code></strong> - if False usb is not initialized (when unpausing)</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -192,7 +244,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat May 23 16:11:39 2020
+    Generated by Epydoc 3.0.1 on Tue Jun  2 11:40:16 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -1,3 +1,4 @@
+"""Main class for pyboard"""
 import time
 import gc
 import pyb

@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyb.src.main_pyb.Main</title>
+  <title>pyb.src.algorithm_core.FitnessDifferencesTooSmall</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -41,8 +41,8 @@
       <span class="breadcrumbs">
         Package&nbsp;pyb ::
         Package&nbsp;src ::
-        <a href="pyb.src.main_pyb-module.html">Module&nbsp;main_pyb</a> ::
-        Class&nbsp;Main
+        <a href="pyb.src.algorithm_core-module.html">Module&nbsp;algorithm_core</a> ::
+        Class&nbsp;FitnessDifferencesTooSmall
       </span>
     </td>
     <td>
@@ -52,14 +52,25 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyb.src.main_pyb.Main-class.html"
+            >]&nbsp;|&nbsp;<a href="pyb.src.algorithm_core.FitnessDifferencesTooSmall-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Main</h1><p class="nomargin-top"><span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class FitnessDifferencesTooSmall</h1><p class="nomargin-top"><span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#FitnessDifferencesTooSmall">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+              object --+        
+                       |        
+exceptions.BaseException --+    
+                           |    
+        exceptions.Exception --+
+                               |
+                              <strong class="uidshort">FitnessDifferencesTooSmall</strong>
+</pre>
+
+<hr />
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -83,10 +94,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyb.src.main_pyb.Main-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Main function.</td>
+          <td><span class="summary-sig"><a href="pyb.src.algorithm_core.FitnessDifferencesTooSmall-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">message</span>=<span class="summary-sig-default">&quot;Algorithm cannot produce more accurate result. Please stop in<code class="variable-ellipsis">...</code></span>)</span><br />
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#FitnessDifferencesTooSmall.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -94,70 +106,59 @@
       
     </td>
   </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="read_data"></a><span class="summary-sig-name">read_data</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main.read_data">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.Exception</code></b>:
+      <code>__new__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__getitem__</code>,
+      <code>__getslice__</code>,
+      <code>__reduce__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__setstate__</code>,
+      <code>__str__</code>,
+      <code>__unicode__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__format__</code>,
+      <code>__hash__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
     </td>
   </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="load_config"></a><span class="summary-sig-name">load_config</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Feeds configuration variables into algorithm</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main.load_config">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="control"></a><span class="summary-sig-name">control</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Starts, stops, pauses algorithm</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main.control">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="send_stats"></a><span class="summary-sig-name">send_stats</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main.send_stats">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
+      <code>args</code>,
+      <code>message</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
     </td>
   </tr>
 </table>
@@ -186,16 +187,21 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">message</span>=<span class="sig-default">&quot;Algorithm cannot produce more accurate result. Please stop in<code class="variable-ellipsis">...</code></span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyb.src.main_pyb-pysrc.html#Main.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#FitnessDifferencesTooSmall.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Main function. First to run</p>
+  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
   <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
   </dl>
 </td></tr></table>
 </div>

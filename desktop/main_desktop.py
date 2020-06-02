@@ -22,15 +22,16 @@ last_result = None
 
 reply_thread = None
 
-"""
-Function handling board replies with fitness requests or alghoritm summary
 
-@:param controller used to communicate with board
-@:param gui used to display results
-"""
 
 
 def board_reply(controller, gui):
+    """
+    Function handling board replies with fitness requests or alghoritm summary
+
+    @param controller: used to communicate with board
+    @param gui: used to display results
+    """
     thread = threading.current_thread()
     delay_ms = 5
     while getattr(thread, "do_run", True):
@@ -57,19 +58,20 @@ def board_reply(controller, gui):
             time.sleep(delay_s)
 
 
-"""
-Function handling algorithm starting
 
-Disable gui buttons for working time, connect with board, get configuration from gui entries and send it to board with 
-starting command. Additional save selected parameter for further displaying (listboxes and graphs)
-
-@:param controller used to communicate with board
-@:param gui used to display results
-@:param checkboxes_one_set rows with gui checkboxes that at least one option must be selected
-"""
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
+    """
+    Function handling algorithm starting
+
+    Disable gui buttons for working time, connect with board, get configuration from gui entries and send it to board with 
+    starting command. Additional save selected parameter for further displaying (listboxes and graphs)
+
+    @param controller: used to communicate with board
+    @param gui: used to display results
+    @param checkboxes_one_set: rows with gui checkboxes that at least one option must be selected
+    """
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Starting")
     try:
@@ -134,17 +136,18 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.enable_entry(0)
 
 
-"""
-Function handling algorithm pausing
 
-Disable gui buttons for working time, send communicate to board.
-
-@:param controller used to communicate with board
-@:param gui used to display results
-"""
 
 
 def pause_button_action(controller, gui):
+    """
+    Function handling algorithm pausing
+
+    Disable gui buttons for working time, send communicate to board.
+
+    @param controller: used to communicate with board
+    @param gui: used to display results
+    """
     gui.disable_buttons([0, 1, 2, 3])
     gui.log("Pausing")
     global paused
@@ -153,12 +156,13 @@ def pause_button_action(controller, gui):
     gui.enable_buttons([0, 1, 2])
 
 
-"""
-Save results for further displaying (listboxes and graphs), display most recent results
-"""
+
 
 
 def save_results(gui):
+    """
+    Save results for further displaying (listboxes and graphs), display most recent results
+    """
     try:
         result = last_result
         gui.log_info("Result: ")
@@ -185,19 +189,20 @@ def save_results(gui):
     run_number += 1
 
 
-"""
-Function handling algorithm stopping 
 
-Disable gui buttons for working time, send command to board. Additional save results for further displaying (listboxes
-and graphs)
-
-@:param controller used to communicate with board
-@:param gui used to display results
-@:param send_stop if false not sending command to board (only when board will stop by itself)
-"""
 
 
 def stop_button_action(controller, gui, send_stop=True):
+    """
+    Function handling algorithm stopping
+
+    Disable gui buttons for working time, send command to board. Additional save results for further displaying (listboxes
+    and graphs)
+
+    @param controller: used to communicate with board
+    @param gui: used to display results
+    @param send_stop: if false not sending command to board (only when board will stop by itself)
+    """
     global reply_thread
     reply_thread.do_run = False
     reply_thread = None
@@ -217,12 +222,13 @@ def restart_button_action(controller, gui, checkboxes_one_set):
     start_button_action(controller, gui, checkboxes_one_set)
 
 
-"""
-Draw time from run number graph with two lines: time and memory
-"""
 
 
 def draw_graph_button_action():
+    """
+    Draw time from run number graph with two lines: time and memory
+    """
+
     graph = Graph("Graph", "run number", "value", parameter_per_cycle)
     graph.add_y_axis_data("time", full_times, 'lines+markers')
     graph.add_y_axis_data("memory usage", full_memory_usage, 'lines+markers')
@@ -233,10 +239,11 @@ def debug_button_action(controller, gui):
     gui.log(controller.usb.read_debug())
 
 
-"""
-Populating and starting gui
-"""
+
 if __name__ == '__main__':
+    """
+    Populating and starting gui
+    """
     gui = GUI("Desktop STM GA Control Panel", 15)
 
     gui.add_text_entry("PyBoard port:")

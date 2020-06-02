@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>alghoritm_control</title>
+  <title>pyb.src.algorithm_core.Member</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -39,7 +39,10 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        Module&nbsp;alghoritm_control
+        Package&nbsp;pyb ::
+        Package&nbsp;src ::
+        <a href="pyb.src.algorithm_core-module.html">Module&nbsp;algorithm_core</a> ::
+        Class&nbsp;Member
       </span>
     </td>
     <td>
@@ -49,54 +52,32 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="alghoritm_control-module.html"
+            >]&nbsp;|&nbsp;<a href="pyb.src.algorithm_core.Member-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
-<!-- ==================== MODULE DESCRIPTION ==================== -->
-<h1 class="epydoc">Module alghoritm_control</h1><p class="nomargin-top"><span class="codelink"><a href="alghoritm_control-pysrc.html">source&nbsp;code</a></span></p>
-<p>This module contains code used to control the algorithm on board 
-  @author Krzysztof Greczka</p>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Member</h1><p class="nomargin-top"><span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Member">source&nbsp;code</a></span></p>
+<p>One such solution to the given problem.</p>
+  <p>operator - input (see operator class)</p>
 
-<!-- ==================== CLASSES ==================== -->
-<a name="section-Classes"></a>
+<hr />
+<div class="fields">      <p><strong>Author:</strong>
+        Krzysztof Greczka
+      </p>
+</div><!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td colspan="2" class="table-header">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr valign="top">
-        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="left"><span class="table-header">Instance Methods</span></td>
         <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Classes"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="alghoritm_control.Controller-class.html" class="summary-name">Controller</a><br />
-      Handles Board controlling and communication
-    </td>
-  </tr>
-</table>
-<!-- ==================== FUNCTIONS ==================== -->
-<a name="section-Functions"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Functions</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Functions"
+         ><span class="options">[<a href="#section-InstanceMethods"
          class="privatelink" onclick="toggle_private();"
          >hide private</a>]</span></td>
       </tr>
@@ -109,18 +90,47 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="create_config"></a><span class="summary-sig-name">create_config</span>(<span class="summary-sig-arg">num_values</span>,
-        <span class="summary-sig-arg">accuracy</span>,
-        <span class="summary-sig-arg">population_size</span>,
-        <span class="summary-sig-arg">population_discard</span>,
-        <span class="summary-sig-arg">population_noise</span>,
-        <span class="summary-sig-arg">reverse_fitness</span>,
-        <span class="summary-sig-arg">random_low</span>,
-        <span class="summary-sig-arg">random_high</span>,
-        <span class="summary-sig-arg">crossover_options</span>)</span><br />
-      Creates board readable communicate with given parameters</td>
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">config</span>)</span><br />
+      Config must be of config class</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="alghoritm_control-pysrc.html#create_config">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Member.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="mutate_value"></a><span class="summary-sig-name">mutate_value</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>,
+        <span class="summary-sig-arg">scale</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Member.mutate_value">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="crossover"></a><span class="summary-sig-name">crossover</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">parent</span>)</span><br />
+      Returns a child of self and parent</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Member.crossover">source&nbsp;code</a></span>
             
           </td>
         </tr>

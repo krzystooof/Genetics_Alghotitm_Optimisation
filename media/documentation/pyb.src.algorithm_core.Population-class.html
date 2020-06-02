@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyb.src.port.VCP</title>
+  <title>pyb.src.algorithm_core.Population</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -41,8 +41,8 @@
       <span class="breadcrumbs">
         Package&nbsp;pyb ::
         Package&nbsp;src ::
-        <a href="pyb.src.port-module.html">Module&nbsp;port</a> ::
-        Class&nbsp;VCP
+        <a href="pyb.src.algorithm_core-module.html">Module&nbsp;algorithm_core</a> ::
+        Class&nbsp;Population
       </span>
     </td>
     <td>
@@ -52,31 +52,35 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyb.src.port.VCP-class.html"
+            >]&nbsp;|&nbsp;<a href="pyb.src.algorithm_core.Population-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class VCP</h1><p class="nomargin-top"><span class="codelink"><a href="pyb.src.port-pysrc.html#VCP">source&nbsp;code</a></span></p>
-<p>Class used to communicate via USB VCP. Needs initialization.</p>
+<h1 class="epydoc">Class Population</h1><p class="nomargin-top"><span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population">source&nbsp;code</a></span></p>
+<p>Class governing member reproduction and beeding mechanics. Throws 
+  FitnessDifferencesTooSmall when no further generations are possible.</p>
 
 <hr />
 <div class="fields">      <p><strong>Author:</strong>
         Jakub Chodubski
       </p>
-</div><!-- ==================== STATIC METHODS ==================== -->
-<a name="section-StaticMethods"></a>
+      <p><strong>Version:</strong>
+        2.4
+      </p>
+</div><!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td colspan="2" class="table-header">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr valign="top">
-        <td align="left"><span class="table-header">Static Methods</span></td>
+        <td align="left"><span class="table-header">Instance Methods</span></td>
         <td align="right" valign="top"
-         ><span class="options">[<a href="#section-StaticMethods"
+         ><span class="options">[<a href="#section-InstanceMethods"
          class="privatelink" onclick="toggle_private();"
          >hide private</a>]</span></td>
       </tr>
@@ -89,10 +93,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="open"></a><span class="summary-sig-name">open</span>()</span><br />
-      Opens VCP and waits for connection</td>
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Creates new random population</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.open">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -106,11 +111,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="attach"></a><span class="summary-sig-name">attach</span>(<span class="summary-sig-arg">key</span>,
-        <span class="summary-sig-arg">element</span>)</span><br />
-      Drop data to the package before sending it</td>
+          <td><span class="summary-sig"><a href="pyb.src.algorithm_core.Population-class.html#new_gen" class="summary-sig-name">new_gen</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Generate new generation based on current generation.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.attach">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.new_gen">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -124,9 +128,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="send"></a><span class="summary-sig-name">send</span>()</span></td>
+          <td><span class="summary-sig"><a name="sort_by_fitness"></a><span class="summary-sig-name">sort_by_fitness</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Sorts member_list so [0] is best member</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.send">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.sort_by_fitness">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -140,10 +145,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyb.src.port.VCP-class.html#read" class="summary-sig-name">read</a>()</span><br />
-      Reads data from USB VCP.</td>
+          <td><span class="summary-sig"><a name="update_stats"></a><span class="summary-sig-name">update_stats</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.read">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.update_stats">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -157,10 +161,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="push"></a><span class="summary-sig-name">push</span>(<span class="summary-sig-arg">line</span>)</span><br />
-      Splits jsons string into single messages and puts in fifo</td>
+          <td><span class="summary-sig"><a name="discard_unfit"></a><span class="summary-sig-name">discard_unfit</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.push">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.discard_unfit">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -174,10 +177,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="pop"></a><span class="summary-sig-name">pop</span>()</span><br />
-      Reads messages from fifo</td>
+          <td><span class="summary-sig"><a name="breed_to_fill"></a><span class="summary-sig-name">breed_to_fill</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.pop">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.breed_to_fill">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -185,50 +187,20 @@
       
     </td>
   </tr>
-</table>
-<!-- ==================== CLASS VARIABLES ==================== -->
-<a name="section-ClassVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Class Variables</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-ClassVariables"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="usb"></a><span class="summary-name">usb</span> = <code title="None">None</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="pushed_back"></a><span class="summary-name">pushed_back</span> = <code title="None">None</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="dictionary"></a><span class="summary-name">dictionary</span> = <code title="{}">{}</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="fifo"></a><span class="summary-name">fifo</span> = <code title="[]">[]</code>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="assign_cross_chances"></a><span class="summary-sig-name">assign_cross_chances</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.assign_cross_chances">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
     </td>
   </tr>
 </table>
@@ -250,28 +222,23 @@
   </td>
 </tr>
 </table>
-<a name="read"></a>
+<a name="new_gen"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>()</span>
-    <br /><em class="fname">Static Method</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">new_gen</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyb.src.port-pysrc.html#VCP.read">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyb.src.algorithm_core-pysrc.html#Population.new_gen">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Reads data from USB VCP. Always returns python dictionary with at 
-  least 'type' field. Type values: 0 means there was no new data on usb 
-  buffer 1 means desktop client encountered a problem 2 means config was 
-  transferred 3 means data was successfully transferred 4 means there is 
-  data regarding algorithm control ... 9 means there is data to feed to 
-  algorithm</p>
-  <p>Type 3 is internal type and will not be forwarded.</p>
+  <p>Generate new generation based on current generation. Some members will
+  be discarded, new members will be created due to crossovers, mutations 
+  may appear.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
