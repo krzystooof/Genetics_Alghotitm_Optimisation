@@ -37,7 +37,6 @@ class Config:
         self.num_values = num_values
 
 
-
 class Population:
     """
         Class governing member reproduction and beeding mechanics. Throws FitnessDifferencesTooSmall when no further

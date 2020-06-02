@@ -100,7 +100,7 @@ class Main:
         if self.algorithm is not None:
             VCP.attach('best_operator', self.current_best)
             VCP.attach('generation', self.algorithm.population.generation)
-            VCP.attach('total_time', self.algorithm.time)
+            VCP.attach('total_time', self.algorithm.elapsed_time)
         gc.collect()
         VCP.attach('free_memory', gc.mem_free())
         VCP.attach('alloc_memory', gc.mem_alloc())

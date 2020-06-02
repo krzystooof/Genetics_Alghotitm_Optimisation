@@ -1,47 +1,45 @@
 """
-This module contains necessary code to start work of algorithm. It includes setting parameters for algorithm,
-running of algorithm and calculating the result of algorithm.
+Contains necessary code to run algorithm.
 @author: Grzegorz Drozda
 @author: Roland Jałoszyński
 """
-from src.algorithm_core import Population
-from src.algorithm_core import Config
-from src.algorithm_core import FitnessDifferencesTooSmall
-from src.algorithm_core import Population
-from src.algorithm_core import FitnessDifferencesTooSmall
+
 import math
 import time
 
+from src.algorithm_core import Population, FitnessDifferencesTooSmall
+
 
 class Algorithm:
-    """Keeps data so it can be passed easily
+    """Initializes runnable instance with given parameters.
 
-      Loads configuration variables. Variables:
-        - population_size - Size of population (Value <1-x>)
-        - population_discard - Percentage of discarded members with each generation (Value <0-1>)
-        - noise - Percentage of random mutations for each generation (Value <0-1>)
-        - population_chance_bonus - Higher values = less accurate crossovers = faster runtime (Value <1-x>)
-        - reverse - Tells algorithm which is better: Lower fitness or higher. (Value [True,False])
-        - random_low - initial values lower limit
-        - random_high - initial values higher limit
-        - num_values - how many values does operator keep
-        - member_crossover_options - List of allowed crossover types. Possible values:
+    Mandatory arguments:
+        @param fitness_callback Callback function to calculate fitness
+        @param num_values Number of fitness function variables
+    Optional parameters:
+        @param print_logs Print algorithm runtime metadata
+        @param time_function Function responsible for measuring time
+        @param population_size - Size of population (Value in range <1:x>)
+        @param population_discard Percentage of discarded members with each generation (Value in range <0:1>)
+        @param noise Percentage of random mutations for each generation (Value in range <0:1>)
+        @param population_chance_bonus Higher values = less accurate crossovers = faster runtime (Value <1-x>)
+        @param reverse Tells algorithm which is better: Lower fitness or higher (bool)
+        @param random_low Initial values lower limit
+        @param random_high Initial values higher limit
+        @param member_crossover_options - List of allowed crossover types. Possible values:
             1. One point
             2. Multi point
-        - fitness_callback - the function, which algorithm works for
-        - print_logs - prints the stats of generations in algorithm
-        - accuracy - algorithm accuracy that affects the start of the stop condition
-        - best_fitness_in_gen - List of best fitness member in generations
-        - list_coefficient_of_variation - List of coefficient of variation in generations
-        - time - amount of time of working algorithm
+        @param accuracy - Algorithm accuracy that affects the start of the stop condition
     """
-    def __init__(self, fitness_callback, num_values, log=False, accuracy=0.0005, time_function=time.time, **kwargs):
+
+    def __init__(self, fitness_callback, num_values, print_logs=False, accuracy=0.0005, time_function=time.time,
+                 **kwargs):
         self.population = Population(num_values=num_values, **kwargs)
         self.execute_callback = fitness_callback
         self.accuracy = accuracy
         self.best_fitness_in_gen = []
-        self.print_logs = log
-        self.time = 0
+        self.print_logs = print_logs
+        self.elapsed_time = 0
         self.list_coefficient_of_variation = []
         self.time_function = time_function
 
@@ -51,7 +49,7 @@ class Algorithm:
         while self.population.generation < self.population.config.population_size:
             try:
                 stop_timer = self.time_function()
-                self.time = stop_timer - start_timer
+                self.elapsed_time = stop_timer - start_timer
                 self.__calculate_generation_fitness()
                 start_timer = self.time_function()
             except StopIteration:
@@ -67,7 +65,7 @@ class Algorithm:
                     self.population.new_gen()
                 except FitnessDifferencesTooSmall:
                     stop_timer = self.time_function()
-                    self.time = stop_timer - start_timer + self.time
+                    self.elapsed_time = stop_timer - start_timer + self.elapsed_time
                     return self.population.best_member.operator.values
 
     def __calculate_generation_fitness(self):
@@ -75,17 +73,8 @@ class Algorithm:
             member.fitness = self.execute_callback(member.operator.values)
 
     def __check_stop_condition(self, best_fitness_in_gen):
-        standard_deviation = 0
-        # average fitness of last 4 generations
-        avg_fitness = 0
-        # sum fitness of last 4 generations
-        sum_fitness = 0
-        # variance
-        variance = 0
-        # list of variables for variance
+        sum_fitness, variance = 0, 0
         list_of_fitness = []
-        # final value
-        coefficient_of_variation = 0
         # check if there are minimum 4 generations
         if self.population.generation > 3:
             for x in range(self.population.generation):
