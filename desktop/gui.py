@@ -37,6 +37,12 @@ class GUI:
         self.buttons = []
         self.listboxes = []
 
+    def add_label(self,text,font="default"):
+        new_label = Label(self.window, text=text,font=font)
+        new_label.grid(column=self.labels_column, row=self.free_row, sticky=self.labels_column_anchor)
+        self.labels.append(new_label)
+        self.free_row += 1
+
     def add_text_entry(self, text):
         new_label = Label(self.window, text=text)
         new_label.grid(column=self.labels_column, row=self.free_row, sticky=self.labels_column_anchor)
@@ -215,3 +221,4 @@ class GUI:
                         found_true = True
                 if found_true is False:
                     raise ValueError('At least one ' + self.get_label_text(key) + ' must be selected')
+

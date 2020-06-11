@@ -23,8 +23,6 @@ last_result = None
 reply_thread = None
 
 
-
-
 def board_reply(controller, gui):
     """
     Function handling board replies with fitness requests or alghoritm summary
@@ -56,9 +54,6 @@ def board_reply(controller, gui):
                 delay_ms = round(delay_ms * 1.5)
                 delay_s = delay_ms * 0.000001
             time.sleep(delay_s)
-
-
-
 
 
 def start_button_action(controller, gui, checkboxes_one_set):
@@ -136,9 +131,6 @@ def start_button_action(controller, gui, checkboxes_one_set):
         gui.enable_entry(0)
 
 
-
-
-
 def pause_button_action(controller, gui):
     """
     Function handling algorithm pausing
@@ -154,9 +146,6 @@ def pause_button_action(controller, gui):
     paused = True
     controller.pause_algorithm()
     gui.enable_buttons([0, 1, 2])
-
-
-
 
 
 def save_results(gui):
@@ -189,9 +178,6 @@ def save_results(gui):
     run_number += 1
 
 
-
-
-
 def stop_button_action(controller, gui, send_stop=True):
     """
     Function handling algorithm stopping
@@ -222,8 +208,6 @@ def restart_button_action(controller, gui, checkboxes_one_set):
     start_button_action(controller, gui, checkboxes_one_set)
 
 
-
-
 def draw_graph_button_action():
     """
     Draw time from run number graph with two lines: time and memory
@@ -238,6 +222,32 @@ def draw_graph_button_action():
 def debug_button_action(controller, gui):
     gui.log(controller.usb.read_debug())
 
+
+def info_button_action():
+    info = GUI("Parameters info", labels_column_anchor="w")
+    boldfont = "default 12 bold"
+    info.add_label("PyBoard port:", font=boldfont)
+    info.add_label("Location of port used to communicate with PyBoard ex. /dev/ttyACM1")
+    info.add_label("Graph parameter:", font=boldfont)
+    info.add_label("The Y axis parameter for drawing data")
+    info.add_label("Population size:", font=boldfont)
+    info.add_label("Size of population (Value in range <1:x>)")
+    info.add_label("Population discard:", font=boldfont)
+    info.add_label("Percentage of discarded members with each generation (Value in range <0:1>)")
+    info.add_label("Population noise:", font=boldfont)
+    info.add_label("Percentage of random mutations for each generation (Value in range <0:1>)")
+    info.add_label("Stop condition accuracy:", font=boldfont)
+    info.add_label("Algorithm accuracy that affects the start of the stop condition")
+    info.add_label("Population reverse fitness:", font=boldfont)
+    info.add_label("Tells algorithm which is better: Lower fitness or higher")
+    info.add_label("Member crossover options:", font=boldfont)
+    info.add_label("List of allowed crossover types. Possible values: 1. One point 2. Multi point")
+    info.add_label("Member min random:", font=boldfont)
+    info.add_label("Initial values lower limit")
+    info.add_label("Member max random:", font=boldfont)
+    info.add_label("Initial values higher limit")
+    info.add_label("Number of operator values:", font=boldfont)
+    info.add_label("Number of fitness function variables")
 
 
 if __name__ == '__main__':
@@ -274,6 +284,7 @@ if __name__ == '__main__':
     gui.add_button("PAUSE", lambda: pause_button_action(controller, gui))
     gui.add_button("DRAW GRAPH", lambda: draw_graph_button_action())
     gui.add_button("DEBUG", lambda: debug_button_action(controller, gui))
+    gui.add_button("INFO", lambda: info_button_action())
     gui.disable_buttons([1, 2, 3])
 
     gui.add_listbox()
