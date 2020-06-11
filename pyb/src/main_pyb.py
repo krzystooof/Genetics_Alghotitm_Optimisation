@@ -61,7 +61,7 @@ class Main:
         if self.algorithm is None:
             self.algorithm = Algorithm(ask_via_usb,
                                        num_values=self.data['config']['num_values'],
-                                       log=False,
+                                       print_logs=False,
                                        accuracy=self.data['config']['accuracy'],
                                        time_function=time.ticks_us,
                                        **self.data['config']['config'])
