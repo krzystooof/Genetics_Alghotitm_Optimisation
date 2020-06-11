@@ -235,7 +235,7 @@ def info_button_action():
     info.add_label("Population discard:", font=boldfont)
     info.add_label("Percentage of discarded members with each generation (Value in range <0:1>)")
     info.add_label("Population noise:", font=boldfont)
-    info.add_label("Percentage of random mutations for each generation (Value in range <0:1>)")
+    info.add_label("Chance of random mutation for each member (Value in range <0:1>)")
     info.add_label("Stop condition accuracy:", font=boldfont)
     info.add_label("Algorithm accuracy that affects the start of the stop condition")
     info.add_label("Population reverse fitness:", font=boldfont)
