@@ -29,6 +29,7 @@ class Main:
 
         # Variables
         self.algorithm = None
+        self.current_best_fitness = 0
         self.current_best = []
 
         VCP.open()
@@ -86,6 +87,7 @@ class Main:
             VCP.send()
             try:
                 self.current_best = self.algorithm.optimise()
+                self.current_best_fitness = self.algorithm.population.best_member.fitness
                 self.send_stats()
                 self.algorithm = None
                 gc.collect()
@@ -99,6 +101,7 @@ class Main:
         VCP.attach('type', 2)
         if self.algorithm is not None:
             VCP.attach('best_operator', self.current_best)
+            VCP.attach('fitness', self.current_best_fitness)
             VCP.attach('generation', self.algorithm.population.generation)
             VCP.attach('total_time', self.algorithm.elapsed_time)
         gc.collect()
